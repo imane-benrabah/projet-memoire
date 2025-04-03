@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affectation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/affectation_r.css">
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar">
+    <h2 class="titre">Gestion projet</h2>
+    <nav>
+        <ul>
+            <li>
+                <a href="dashboard.html">
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
+                </a>
+            </li>
+            <li  class="active">
+                <a href="consulter_binome_r.html" >
+                    <i class="fas fa-users"></i> Voir Binomes
+                </a>
+            </li>
+            <li >
+                <a href="decrire_sujet.html">
+                    <i class="fas fa-eye"></i> Decrire Sujet
+                </a>
+            </li>
+            <li >
+                <a href="voir_profil_r.html">
+                    <i class="fas fa-user"></i> Voir profil
+                </a>
+            </li>
+        </ul>
+    </nav>
+</aside>
+
+
+
+<main class="content">
+    <div class="container mt-4">
+        <h2 id="groupe-name"></h2> <!-- Affichage dynamique du nom du groupe -->
+        <div id="btn-affecter-container">
+            <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    Affecter
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="affecter_cas_r.html">Affecter Cas</a></li>
+                    <li><a class="dropdown-item" href="affecter_responsab_r.html">Affecter Responsabilité</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div id="etudiant-section" class="mt-4">
+            <table class="table table-bordered table-responsive">
+                <thead>
+                    <tr>
+                        <th>Numéro</th>
+                        <th>Matricule</th>
+                        <th>Nom</th>
+                        <th>Prénom</th>
+                        
+                    </tr>
+                </thead>
+                <tbody id="binome-list"> 
+                    <!-- Les lignes de la table seront insérées ici via JavaScript -->
+                </tbody>
+            </table>
+
+            
+            
+        </div>
+    </div>
+</main>
+
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../js/affectation_r.js"></script>
+
+
+</body>
+</html>
