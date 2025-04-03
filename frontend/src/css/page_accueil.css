@@ -1,0 +1,69 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f8f9fa;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+}
+
+.illustration {
+    flex: 1;
+    background-color: white; /* إضافة خلفية بيضاء تحت الصورة */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.illustration img {
+    width: 100%;
+    height: 150%;
+    object-fit: contain; /* يضمن أن الصورة تبقى كاملة بدون قص */
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1px;
+    text-align: left;
+    background-color: white; /* إضافة خلفية بيضاء تحت الكتابة */
+    position: relative; /* لتمكين وضع الزر بشكل صحيح */
+}
+
+h1 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.btn {
+    padding: 8px 16px; /* تصغير الزر */
+    font-size: 14px; /* تصغير النص داخل الزر */
+    color: white;
+    background-color: #6a5acd;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: absolute; /* تمكين وضع الزر في الأسفل */
+    bottom: 200px; /* وضع الزر في أسفل الcontent */
+    right: 150px; /* وضع الزر في الجهة اليمنى */
+}
+
+.btn:hover {
+    background-color: #5848c2;
+}
