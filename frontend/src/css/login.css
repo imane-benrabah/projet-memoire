@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #E6E6FA;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    background-color: #fff;
+    width: 85%;
+    max-width: 1000px;
+    display: flex;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Partie gauche (illustration) */
+.illustration {
+    width: 65%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.illustration img {
+    width: 100%;
+}
+
+/* Partie droite (formulaire) */
+.login-box {
+    width: 65%;
+    padding: 60px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centre verticalement */
+    height: 100%;
+    margin-top: 30px;
+}
+
+h2 {
+    color: #333;
+    font-size: 26px;
+    margin-bottom: 30px;
+   
+}
+
+/* Champ de saisie avec style moderne */
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box i {
+    position: absolute;
+    left: 360px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #777;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 14px;
+    background: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+
+.input-box input:focus {
+    outline: none;
+    background: #e8e8e8;
+    box-shadow: inset 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Options sous les champs */
+.options {
+    display: flex;
+    justify-content: space-between; /* Aligne à droite */
+    font-size: 14px;
+    color: #6F00FF;
+}
+
+.options a {
+    color: #6F00FF;
+    text-decoration: none;
+    display: block;
+    margin-left: auto;
+}
+
+.login-btn {
+    width: 100%;
+    padding: 14px;
+    background-color: #8F00FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 30px; 
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #6F00FF;
+    transform: scale(1.02);
+}
+
+p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+

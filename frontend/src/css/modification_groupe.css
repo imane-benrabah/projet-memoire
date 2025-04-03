@@ -1,0 +1,363 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* Style du corps */
+body {
+    display: flex;
+    background: #E6E6FA;
+}
+
+/* Titre principal */
+.titre {
+    color: #8A2BE2;
+    position: relative;
+    top: 10px;
+}
+
+/* Barre latérale */
+.sidebar {
+    width: 250px;
+    background: white;
+    color: #BEBFC5;
+    padding: 20px;
+    height: 100vh;
+    position: fixed; /* Fixe la barre latérale à l'écran */
+    top: 0; /* Positionne-la en haut de la page */
+    left: 0; /* Positionne-la sur la gauche de la page */
+    transition: width 0.3s ease;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 5px;
+    gap: 10px;
+    color: #BEBFC5;
+}
+
+.sidebar nav ul li:hover {
+    transform: none;
+}
+
+main h1 {
+    text-align: center;
+}
+
+/* Styles pour les items de la sidebar */
+.sidebar nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: gray;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a i {
+    margin-right: 10px;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a:hover {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:hover i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li:hover,
+.sidebar .active {
+    color: #8A2BE2;
+    transform: scale(1.05);
+}
+
+/* Table */
+.table-bordered {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 40px auto; /* Centrer la table et ajouter de l'espacement autour */
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsive {
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 100%;
+    max-height: 400px;
+}
+
+table {
+    width: 100%;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+tr:nth-child(odd) {
+    background-color: #f7f7f7;
+}
+
+tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+
+
+.table-bordered th, .table-bordered td {
+    padding: 10px 30px;
+    text-align: center;
+    font-size: 1rem;
+    word-wrap: break-word;
+    max-width: none;  /* Retirer la limite de largeur */
+    height: 45px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.table-bordered th {
+    background-color: white;
+    color: grey;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-top: 1px solid #ddd;
+}
+
+table th {
+    background-color: #E6E6FA;
+    width: auto;
+}
+table td {
+    width: auto; /* S'assurer que les cellules prennent la largeur nécessaire */
+    padding: 5px; /* Ajuster le padding si nécessaire */
+}
+
+td {
+    white-space: nowrap;  /* Empêche le texte d'être coupé dans les cellules */
+}
+
+/* Autres styles */
+#btn-creer-groupe, #creer {
+    width: 15%;
+    padding: 10px;
+    background-color: #8F00FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#etudiants-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 50px; /* Ajuster l'espacement sous la section étudiants */
+}
+main {
+    margin-left: 250px; /* Espace à gauche pour la barre latérale */
+    padding: 20px;
+    width: calc(100% - 250px); /* Ajuste la largeur du contenu principal */
+}
+
+/* Container pour centrer le contenu sans dépasser la largeur */
+/* Assure-toi que le parent du conteneur des boutons utilise flex */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    margin-top: 30px; /* Ajoute un espacement autour du conteneur */
+    gap: 40px; /* Espacement entre les différents éléments dans le conteneur */
+}
+
+
+/* Titre principal */
+#group-name {
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+    color: black;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px;
+    margin-top: 10px; /* Ajuster la marge pour déplacer le titre du groupe */
+    margin-bottom: 20px; /* Espacement entre le titre et le prochain élément */
+    width: 100%;
+    display: block;
+}
+
+/* Ligne décorative sous le titre */
+#group-name::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    background-color: black;
+    margin: 10px auto 0;
+    border-radius: 2px;
+}
+
+.titre1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    color: #4666FF;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding: 10px 0;
+    animation: fadeInUp 1s ease-out;
+    margin-top: -70px; /* Déplace le titre vers le haut */
+    margin-left: -20px; /* Déplace le titre vers la gauche */
+}
+
+
+
+/* Style pour les boutons */
+/* Conteneur des boutons */
+.buttons-container {
+    display: flex;
+    justify-content: center; /* Centrer les boutons horizontalement */
+    gap: 20px;               /* Espacement entre les boutons */
+    margin-top: 20px;
+    margin-left: auto;        /* Centrer le conteneur à l'intérieur de la page */
+    margin-right: auto;       /* Centrer aussi à droite */
+}
+
+/* Boutons */
+.buttons-container button {
+    width: 150px;             /* Réduire la largeur des boutons */
+    font-size: 1rem;
+    padding: 12px;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    color: white;
+    text-align: center;       /* Centrer le texte dans le bouton */
+}
+
+/* Effet au survol des boutons */
+.buttons-container button:hover {
+    transform: scale(1.05);   /* Agrandir le bouton au survol */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: white;
+}
+
+/* Style du conteneur des boutons */
+.btn-cell {
+    width: 100%; /* Utiliser toute la largeur disponible */
+    text-align: center;
+    box-sizing: border-box; /* Assurer que le padding et la bordure sont inclus dans la largeur */
+}
+
+.btn-group {
+    display: flex;
+    justify-content: space-between; /* Espacer les boutons */
+}
+
+.btn {
+    font-size: 14px;
+    padding: 5px 8px;
+}
+
+/* Style général des boutons */
+.btn-group button {
+    width: 100% !important; 
+    padding: 10px 18px;
+    margin: 0 10px; 
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    flex-grow: 1; 
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    font-weight: bold;
+}
+
+/* Style du bouton Modifier */
+.btn-modifier {
+    background-color: #2281e7; /* Bleu */
+    color: white;
+    border-radius: 8px;
+}
+
+/* Style du bouton Supprimer */
+.btn-supprimer {
+    background-color: #dc3545; /* Rouge */
+    color: white;
+    border-radius: 8px;
+}
+
+/* Effet au survol */
+.btn-group button:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+/* Effet au clic */
+.btn-group button:active {
+    transform: scale(0.95);
+    box-shadow: none;
+}
+#btn-ajouter{
+    background-color: rgb(15, 229, 65);
+}
+
+#btn-ajouter:hover{
+    background-color: rgb(15, 229, 65);
+    transform: scale(1.05);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    color: white;
+}
+
+.btn-modifier:hover {
+    background-color: #2281e7; /* Bleu */
+    color: white;
+}
+
+.btn-supprimer:hover {
+    background-color: #dc3545; /* Rouge */
+    color: white;
+}

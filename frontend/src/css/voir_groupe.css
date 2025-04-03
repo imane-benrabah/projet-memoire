@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* Style du corps */
+body {
+    display: flex;
+    background: #E6E6FA;
+}
+
+.titre {
+    color: #8A2BE2;
+    position: relative;
+    top: 10px;
+}
+
+/* Barre latérale */
+.sidebar {
+   
+    width: 250px;
+    background: white;
+    color: #BEBFC5;
+    padding: 20px;
+    height: 100vh;
+    transition: width 0.3s ease;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 5px;
+    gap: 10px;
+    color: #BEBFC5;
+}
+
+.sidebar nav ul li:hover {
+    transform: none;
+}
+
+main h1{
+    text-align: center;
+}
+
+/* Styles pour les items de la sidebar */
+.sidebar nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: gray;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a i {
+    margin-right: 10px;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a:hover {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:hover i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li:hover,
+.sidebar .active {
+    color: #8A2BE2;
+    transform: scale(1.05);
+}
+
+.content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    justify-content: flex-start; 
+}
+
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 100px;
+    height: 40%;
+    transition: box-shadow 0.3s ease-in-out; /* Suppression de transform */
+}
+
+.container:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); /* Effet ombré plus marqué sans déplacement */
+}
+
+
+
+
+button {
+    margin: 80px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 200px;
+    display: inline-block;
+    color: white;
+    font-size: 16px;
+}
+.btn-primary {
+    background-color: #8F00FF;
+    transform: scale(1.02);
+    position: absolute;
+    left: 700px;
+    transition: background 0.3s, transform 0.2s;
+}
+#affecter-theme:hover{
+    background-color: #6F00FF;
+    transform: scale(1.04);
+}
+
+#suivant:hover{
+    background-color: #888;
+    transform: scale(1.02);
+    }
+
+.btn-secondary {
+    background: #888;
+    color: white;
+    position: absolute;
+    right: 100px;
+    border: none;
+    transition: background 0.3s, transform 0.2s;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+#group-select{
+    position:absolute;
+    top: 160px;
+    width:55%;
+    right: 165px;
+    
+}
+
+.btn-warning {
+    background: #ffc107;
+    color: white;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.8;
+}
+

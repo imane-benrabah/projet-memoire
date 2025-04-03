@@ -1,0 +1,239 @@
+/* Réinitialisation */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:'Sarabun',sans-serif;
+    
+}
+
+/* Style du corps */
+body {
+    display: flex;
+    background:#E6E6FA ;
+}
+.titre{
+    color:#8A2BE2 ;
+}
+
+/* Barre latérale */
+.sidebar {
+    position: fixed; /* Fixe la barre latérale à l'écran */
+    top: 0; /* Positionne-la en haut de la page */
+    left: 0; /* Positionne-la sur la gauche de la page */
+    width: 255px;
+    background: white;
+    color: #BEBFC5;
+    padding: 20px;
+    height: 100vh;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    display: flex;
+    align-items: center;  
+
+
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 5px;
+    gap: 10px;
+    color: #BEBFC5; 
+}
+
+.sidebar nav ul li i { 
+    color: #BEBFC5; /* Icônes en gris */
+    transition: color 0.3s;
+}
+
+/* Styles pour les items de la sidebar */
+.sidebar nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: gray; /* Couleur par défaut (gris) */
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a i {
+    margin-right: 10px; /* Espace entre l'icône et le texte */
+    color: inherit; /* L'icône prend la couleur du texte */
+    transition: color 0.3s ease;
+}
+
+/* Lorsque l'élément est survolé */
+.sidebar nav ul li a:hover {
+    color: #8A2BE2; /* Couleur violet lorsque survolé */
+}
+
+.sidebar nav ul li a:hover i {
+    color: #8A2BE2; /* Icône devient violette également */
+}
+
+/* Lorsque l'élément est activé (lorsqu'il est cliqué et relâché) */
+.sidebar nav ul li.active a {
+    color: #8A2BE2; /* Couleur violette lorsque l'élément est actif */
+}
+
+.sidebar nav ul li.active a i {
+    color: #8A2BE2; /* Icône devient violette lorsque l'élément est actif */
+}
+
+/* Effet lorsque vous relâchez le clic (mouse up) */
+.sidebar nav ul li a:active {
+    color: #8A2BE2; /* Couleur pendant l'activation (quand l'élément est cliqué) */
+}
+
+.sidebar nav ul li a:active i {
+    color: #8A2BE2; /* Icône pendant l'activation */
+}
+
+
+.sidebar nav ul li:hover,
+.sidebar .active {
+    color: #8A2BE2; /* La couleur violet */
+    transform: scale(1.05); /* Agrandissement de l'élément au survol */
+}
+
+
+.sidebar nav ul li:hover,
+.sidebar .active {
+    color:#8A2BE2;
+    transform: scale(1.05);
+}
+
+/* Contenu principal */
+.content {
+    flex: 1;
+    padding: 20px;
+}
+
+.link{
+    text-decoration: none;
+    color: #BEBFC5; 
+
+}
+
+.link:hover{
+    color:#8A2BE2;
+    transform: scale(1.05);
+
+}
+
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
+    
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+#menu-creer-groupes {
+    color: #8A2BE2;
+    transform: scale(1.05);
+}
+
+.container {
+    margin-left: 270px;
+    width: 100%;
+    padding: 40px;
+}
+
+/* Carte de profil */
+.profile-card {
+    background: white;
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    margin: auto;
+}
+
+/* Image de profil */
+.profile-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #8A2BE2;
+    transition: transform 0.3s ease;
+}
+
+/* Effet au survol */
+.profile-card img:hover {
+    transform: scale(1.1);
+}
+
+/* Nom */
+.profile-card h3 {
+    margin-top: 15px;
+    font-size: 24px;
+    color: #333;
+}
+
+/* Email */
+.profile-card p {
+    font-size: 16px;
+    color: #666;
+}
+
+/* Rôle */
+.profile-card .role {
+    font-weight: bold;
+    color: #8A2BE2;
+    margin-bottom: 15px;
+}
+
+/* Bouton Modifier */
+.profile-card .btn-modifier {
+    background: #8A2BE2;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+    font-weight: bold;
+}
+
+.profile-card .btn-modifier:hover {
+    background: #6A1BBE;
+    transform: scale(1.05);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        margin-left: 0;
+        padding: 20px;
+    }
+}
+
+
+

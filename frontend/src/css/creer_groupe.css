@@ -1,0 +1,258 @@
+/* Réinitialisation */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* Style du corps */
+body {
+    display: flex;
+    background: #E6E6FA;
+}
+
+.titre {
+    color: #8A2BE2;
+}
+
+/* Barre latérale */
+.sidebar {
+    width: 250px;
+    position: fixed; /* Fixe la barre latérale à l'écran */
+    top: 0; /* Positionne-la en haut de la page */
+    left: 0; /* Positionne-la sur la gauche de la page */
+    background: white;
+    color: #BEBFC5;
+    padding: 20px;
+    height: 100vh;
+    transition: width 0.3s ease;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 5px;
+    gap: 10px;
+    color: #BEBFC5;
+}
+
+.sidebar nav ul li:hover {
+    transform: none;
+}
+
+main h1{
+    font-size: 2.5rem; /* Taille de police plus grande */
+    font-weight: bold; /* Mettre en gras */
+    text-align: center; /* Centrer le texte */
+    color: #4666FF; /* Couleur violet moderne */
+    text-transform: uppercase; /* Tout en majuscules pour plus de modernité */
+    letter-spacing: 2px; /* Espacement léger entre les lettres */
+    padding: 10px 0; /* Un peu d'espace autour du texte */
+    animation: fadeInUp 1s ease-out; /* Animation d'apparition */
+}
+
+
+/* Styles pour les items de la sidebar */
+.sidebar nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: gray;
+    padding: 10px;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a i {
+    margin-right: 10px;
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+.sidebar nav ul li a:hover {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:hover i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active i {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li:hover,
+.sidebar .active {
+    color: #8A2BE2;
+    transform: scale(1.05);
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+/* Table */
+.table-container {
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #ffffff;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.table-responsive {
+    overflow-x: auto;
+    max-height: 400px;
+}
+
+.table-bordered th {
+    background-color: white !important;
+    color: grey;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+
+/* Structure et apparence de la table */
+.table-bordered {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    text-align: center !important;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table-bordered th, 
+.table-bordered td {
+    padding: 12px 20px;
+    text-align: center;
+    font-size: 1rem;
+    word-wrap: break-word;
+    max-width: 150px;
+    height: 45px;
+    border-bottom: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+}
+
+.table-bordered th {
+    background-color: #E6E6FA;
+    color: grey;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Alternance des couleurs */
+.table-bordered tr:nth-child(odd) {
+    background-color: #f7f7f7;
+}
+
+.table-bordered tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* Effet au survol */
+
+
+/* Boutons */
+#btn-creer-groupe {
+    width: 15%;
+    padding: 10px;
+    background-color: #8F00FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-left: auto;
+    margin-right: 130px; /* Ajoute une marge à droite pour un peu d'espace */
+}
+
+ 
+
+
+#creer {
+    width: 15%;
+    padding: 10px;
+    background-color: #8F00FF;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+}
+
+#btn-creer-groupe:hover, #creer:hover {
+    background-color: #6F00FF;
+    transform: scale(1.02);
+}
+
+#menu-creer-groupes {
+    color: #8A2BE2;
+    transform: scale(1.05);
+}
+
+#btn-ajouter-binome{
+    width: 11%;
+    padding: 10px;
+    margin-left: auto;
+    margin-right: 400px; 
+    margin-top: 100px;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+
+}
+
+
+#btn-ajouter-binome:hover{
+    transform: scale(1.02);
+}
