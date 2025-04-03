@@ -29,7 +29,7 @@ body {
 
 .illustration img {
     width: 100%;
-    height: 150%;
+    height: 100%;
     object-fit: contain; /* يضمن أن الصورة تبقى كاملة بدون قص */
 }
 
