@@ -65,9 +65,14 @@ body, html {
 
 .illustration img {
     width: 100%;
+<<<<<<< HEAD
     max-width: 600px;
     height: auto;
     object-fit: contain;
+=======
+    height: 100%;
+    object-fit: contain; /* يضمن أن الصورة تبقى كاملة بدون قص */
+>>>>>>> 99842fa8f047160c5135e243faf82819a926f303
 }
 
 /* القسم الخاص بالمحتوى */
