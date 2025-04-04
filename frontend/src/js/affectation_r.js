@@ -60,11 +60,17 @@ return normalizedGroupeName === normalizedSelectedGroup;
     }
     
     row1.innerHTML += `
-        <td>${binome.etudiant1_matricule || "N/A"}</td>
-        <td>${binome.etudiant1_nom || "Inconnu"}</td>
-        <td>${binome.etudiant1_prenom || ""}</td>
-        
-    `;
+    <td>${binome.etudiant1_matricule || "N/A"}</td>
+    <td>${binome.etudiant1_nom || "Inconnu"}</td>
+    <td>${binome.etudiant1_prenom || ""}</td>
+    <td><input type="date" class="form-control date-input" value="${new Date().toISOString().split('T')[0]}"></td>
+    <td>
+        <select class="form-select presence-select">
+            <option value="present">Présent</option>
+            <option value="absent">Absent</option>
+        </select>
+    </td>
+`;
     
     studentsList.appendChild(row1);
     
@@ -72,11 +78,17 @@ return normalizedGroupeName === normalizedSelectedGroup;
     if (binome.etudiant2_matricule) {
         const row2 = document.createElement("tr");
         row2.innerHTML = `
-            <td>${binome.etudiant2_matricule || "N/A"}</td>
-            <td>${binome.etudiant2_nom || "Inconnu"}</td>
-            <td>${binome.etudiant2_prenom || ""}</td>
-           
-        `;
+        <td>${binome.etudiant2_matricule || "N/A"}</td>
+        <td>${binome.etudiant2_nom || "Inconnu"}</td>
+        <td>${binome.etudiant2_prenom || ""}</td>
+        <td><input type="date" class="form-control date-input" value="${new Date().toISOString().split('T')[0]}"></td>
+        <td>
+            <select class="form-select presence-select">
+                <option value="present">Présent</option>
+                <option value="absent">Absent</option>
+            </select>
+        </td>
+    `;
         studentsList.appendChild(row2);
     }
     

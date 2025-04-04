@@ -279,7 +279,7 @@ main {
 
 /* Effet au survol des boutons */
 .buttons-container button:hover {
-    transform: scale(1.05);   /* Agrandir le bouton au survol */
+transform: scale(1.02);  /* Agrandir le bouton au survol */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     color: white;
 }
