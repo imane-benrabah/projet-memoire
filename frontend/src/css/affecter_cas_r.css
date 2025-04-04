@@ -250,13 +250,14 @@ button:hover {
     font-size: 18px;
 }
 
-#binome-select {
+#binome-select-page2 {
     position:absolute;
     top: 40px;
     width:20%;
     right: 680px;
     border: none;
-    border-radius: 10px;
+    border-radius: 18px;
+    height: 7%;
 }
 
 
