@@ -227,7 +227,7 @@ main {
 }
 #groupe-name {
     text-align: left;
-    margin-left: 100px; /* Ajuste cette valeur pour déplacer l'élément vers la droite */
+    margin-left: 50px; /* Ajuste cette valeur pour déplacer l'élément vers la droite */
     
     font-size: 1.2rem; /* Taille plus compacte */
     font-weight: 700;
@@ -236,7 +236,7 @@ main {
     letter-spacing: 1px;
     padding: 8px 15px;
     margin-top: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     width: fit-content;
     display: inline-block;
     position: relative;
@@ -355,7 +355,7 @@ main {
 #btn-affecter-container {
     position: absolute;  /* Position absolue pour pouvoir le déplacer facilement */
     top: 60px;  /* Espacement du haut */
-    right: 130px;  /* Espacement de la droite */
+    right: 65px;  /* Espacement de la droite */
     z-index: 100;  /* S'assurer que le bouton est au-dessus des autres éléments */
 }
 
@@ -398,4 +398,31 @@ main {
     background-color: #E6E6FA;  /* Fond au survol */
     color: #8A2BE2;  /* Changer la couleur du texte au survol */
 
+}
+
+.date-input {
+    max-width: 150px;
+}
+
+.presence-select {
+    max-width: 120px;
+}
+
+.table td, .table th {
+    vertical-align: middle;
+}
+#save-attendance {
+    padding: 10px 25px;
+    font-size: 1rem;
+    margin-top: -80px;
+    margin-right: 25px;
+    
+}
+
+#save-attendance i {
+    margin-right: 8px;
+}
+
+#save-attendance:hover {
+    transform: scale(1.02);
 }
