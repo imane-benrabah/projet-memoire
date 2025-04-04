@@ -1,69 +1,136 @@
+/* إعادة تعيين القيم الافتراضية */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
+body, html {
+    width: 100%;
+    height: 100%;
     font-family: Arial, sans-serif;
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #f8f9fa;
+    overflow: hidden; /* منع التمرير غير المرغوب فيه */
 }
 
+/* شريط التنقل */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 50px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white; /* خلفية بيضاء للشريط */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.nav {
+    display: flex;
+    gap: 30px;
+}
+
+.nav a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    transition: color 0.3s ease;
+}
+
+.nav a:hover {
+    color: #6a5acd;
+}
+
+/* الحاوية الرئيسية */
 .container {
     display: flex;
     width: 100%;
     height: 100vh;
+    margin-top: 80px; /* لمنع تغطية المحتوى بشريط التنقل */
+    overflow: hidden; /* منع التمرير داخل الحاوية */
 }
 
+/* القسم الخاص بالصورة */
 .illustration {
     flex: 1;
-    background-color: white; /* إضافة خلفية بيضاء تحت الصورة */
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: white;
 }
 
 .illustration img {
     width: 100%;
-    height: 150%;
-    object-fit: contain; /* يضمن أن الصورة تبقى كاملة بدون قص */
+    max-width: 600px;
+    height: auto;
+    object-fit: contain;
 }
 
+/* القسم الخاص بالمحتوى */
 .content {
     flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: flex-start;
-    padding: 1px;
+    padding: 50px;
+    background-color: white; /* خلفية بيضاء للنصوص */
     text-align: left;
-    background-color: white; /* إضافة خلفية بيضاء تحت الكتابة */
-    position: relative; /* لتمكين وضع الزر بشكل صحيح */
 }
 
 h1 {
-    font-size: 28px;
+    font-size: 32px;
     color: #333;
     margin-bottom: 20px;
 }
 
+.description {
+    font-size: 14px;
+    color: #555;
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+/* زر "En savoir plus" */
 .btn {
-    padding: 8px 16px; /* تصغير الزر */
-    font-size: 14px; /* تصغير النص داخل الزر */
+    padding: 12px 20px;
+    font-size: 16px;
     color: white;
     background-color: #6a5acd;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    position: absolute; /* تمكين وضع الزر في الأسفل */
-    bottom: 200px; /* وضع الزر في أسفل الcontent */
-    right: 150px; /* وضع الزر في الجهة اليمنى */
+    text-decoration: none;
+    margin-top: 20px;
 }
 
 .btn:hover {
     background-color: #5848c2;
+}
+
+/* تحسين استجابة التصميم للأجهزة الصغيرة */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .illustration {
+        order: -1;
+    }
+
+    .content {
+        align-items: center;
+        padding: 20px;
+    }
+
+    .btn {
+        position: static;
+        margin-top: 20px;
+    }
 }

@@ -1,0 +1,90 @@
+/* Réinitialisation */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* Style du corps */
+body {
+    display: flex;
+    background: #E6E6FA;
+    height: 100vh;
+    overflow: hidden; /* يمنع التمرير الأفقي */
+}
+
+/* Barre latérale */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 255px;
+    height: 100vh;
+    background: white;
+    color: #BEBFC5;
+    padding: 20px;
+    overflow-y: auto; /* يجعل القائمة قابلة للتمرير إذا احتاج الأمر */
+}
+
+/* عنوان القائمة */
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #8A2BE2;
+}
+
+/* عناصر القائمة */
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
+    border-radius: 5px;
+    color: #555;
+}
+
+.sidebar nav ul li i {
+    margin-right: 10px;
+    color: inherit;
+    transition: color 0.3s;
+}
+
+.sidebar nav ul li a {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.sidebar nav ul li:hover {
+    background: rgba(138, 43, 226, 0.1);
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active {
+    background: #8A2BE2;
+    color: white;
+}
+
+.sidebar nav ul li.active i {
+    color: white;
+}
+
+/* Contenu principal */
+.content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 270px; /* حتى لا يكون المحتوى فوق القائمة */
+    overflow-y: auto;
+}
