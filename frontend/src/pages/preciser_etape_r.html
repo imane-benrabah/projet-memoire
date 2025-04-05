@@ -262,7 +262,7 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="preciser_etape_r.html">
+                    <a href="preciser_sujet.html">
                         <i class="fas fa-tasks"></i> Gestion Etape
                     </a>
                 </li>
@@ -385,12 +385,11 @@
         }
         
         // Gestion de l'annulation
-        document.getElementById('cancelBtn').addEventListener('click', function() {
-            if(confirm('Voulez-vous vraiment annuler ? Toutes les modifications seront perdues.')) {
-                document.getElementById('stepsForm').reset();
-                document.getElementById('steps-container').innerHTML = '';
-            }
-        });
+        document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("cancelBtn").addEventListener("click", function() {
+        window.location.href = "preciser_sujet.html"; 
+    });
+});
         
         // Gestion de la soumission
         document.getElementById('stepsForm').addEventListener('submit', function(e) {
