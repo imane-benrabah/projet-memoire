@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Consulter annonce </title>
+    
+    <link rel="stylesheet" href="../css/dashboard_admin.css">
+    <style>
+        
+        .container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 119px;
+    margin-right: 110px;
+    height: 37vh;
+    transition: box-shadow 0.3s ease-in-out; 
+}
+
+.container:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); 
+}
+
+        
+        button {
+    margin: 80px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 200px;
+    display: inline-block;
+    color: white;
+    font-size: 16px;
+}
+
+/* Bouton Valider */
+.btn-success {
+    background-color: #8F00FF;
+    transform: scale(1.02);
+    position: absolute;
+    left: 940px;
+    border: none;
+    transition: background 0.3s, transform 0.2s;
+    
+}
+
+.btn-success:hover {
+    background-color: #6F00FF;
+    transform: scale(1.04);
+}
+
+/* Titre */
+h2 {
+    color: #8A2BE2;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#rapport-select{
+    position:absolute;
+    top: 160px;
+    width:55%;
+    right: 165px;
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="titre">Gestion projet</h2>
+        <nav>
+            <ul>
+                <li><a href="dash_admin.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="consulter_liste_u.html"><i class="fas fa-tasks"></i> Consulter liste d'utilisateur</a></li>
+                <li class="active"><a href="#"><i class="fas fa-upload"></i> Consulter annonce</a></li>
+                <li><a href="ajouter_annonce.html"><i class="fas fa-plus-circle"></i> Ajouter annonce</a></li>
+                <li><a href="profil_admin.html"><i class="fas fa-user"></i> Profil</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Partie principale pour consulter les annonces -->
+    <div class="container">
+        <h2>Consulter les annonces</h2>
+
+        <!-- Sélecteur d'annonces -->
+        <div id="rapport-select">
+            <label for="select-annonce" class="form-label">Sélectionner une annonce :</label>
+            <select id="select-annonce" class="form-select" onchange="afficherAnnonceDetails()">
+                <option value="">Choisir une annonce...</option>
+                <option value="1">Annonce 1</option>
+                <option value="2">Annonce 2</option>
+                <option value="3">Annonce 3</option>
+                <option value="4">Annonce 4</option>
+            </select>
+        </div>
+
+        <!-- Détails de l'annonce -->
+        <div id="details-annonce" class="mt-4">
+            <h3>Détails de l'annonce</h3>
+            <div id="annonce-content">
+                <p>Choisissez une annonce pour afficher ses détails.</p>
+            </div>
+        </div>
+
+        <!-- Bouton pour afficher l'annonce sélectionnée -->
+        <button class="btn-success">Valider</button>
+    </div>
+
+    <script>
+        // Fonction pour afficher les détails de l'annonce
+        function afficherAnnonceDetails() {
+            const selectAnnonce = document.getElementById("select-annonce");
+            const annonceContent = document.getElementById("annonce-content");
+
+            const annonceId = selectAnnonce.value;
+
+            // Simuler les données d'annonces
+            const annonces = {
+                1: {
+                    titre: "Annonce 1",
+                    description: "Voici la description de l'annonce 1.",
+                    image: "https://via.placeholder.com/150"
+                },
+                2: {
+                    titre: "Annonce 2",
+                    description: "Voici la description de l'annonce 2.",
+                    image: "https://via.placeholder.com/150"
+                },
+                3: {
+                    titre: "Annonce 3",
+                    description: "Voici la description de l'annonce 3.",
+                    image: "https://via.placeholder.com/150"
+                },
+                4: {
+                    titre: "Annonce 4",
+                    description: "Voici la description de l'annonce 4.",
+                    image: "https://via.placeholder.com/150"
+                }
+            };
+
+            if (annonceId) {
+                // Afficher les détails de l'annonce sélectionnée
+                const annonce = annonces[annonceId];
+                annonceContent.innerHTML = `
+                    <h4>${annonce.titre}</h4>
+                    <p>${annonce.description}</p>
+                    <img src="${annonce.image}" alt="${annonce.titre}" style="max-width: 100%; height: auto;"/>
+                `;
+            } else {
+                // Si aucune annonce n'est sélectionnée
+                annonceContent.innerHTML = "<p>Choisissez une annonce pour afficher ses détails.</p>";
+            }
+        }
+    </script>
+</body>
+</html>
