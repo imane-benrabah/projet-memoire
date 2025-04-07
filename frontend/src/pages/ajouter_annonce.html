@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ajouter annonce</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+  <link rel="stylesheet" href="../css/dashboard_admin.css" />
+  <style>
+    body {
+      font-family: 'Sarabun', sans-serif;
+      background-color: #f3e8ff;
+    }
+
+    .main-content {
+      margin-left: 280px;
+      padding: 20px;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    h1 {
+      color: #8a2be2;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .form-group input[type="file"] {
+      background-color: #e0d4f0;
+      display: none;
+    }
+
+    .custom-file-label {
+      background-color: #8a2be2;
+      color: white;
+      padding: 10px;
+      display: inline-block;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .file-wrapper {
+      display: flex;
+      align-items: center;
+    }
+
+    .file-icon {
+      font-size: 18px;
+      margin-right: 10px;
+    }
+
+    .selected-file-name {
+      font-size: 14px;
+      color: #8a2be2;
+    }
+
+    .button-group {
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+
+    .btn-cancel {
+      background-color: #ccc;
+      color: #000;
+    }
+
+    .btn-submit {
+      background-color: #8a2be2;
+      color: white;
+    }
+
+    .btn-submit:hover {
+      background-color: #6b1fc2;
+    }
+
+    .btn-cancel:hover {
+      background-color: #aaa;
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 700px;
+      margin-right: 20px;
+    }
+
+    .error-message {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 5px;
+    }
+
+    .form-group select, .form-group textarea {
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    .image-preview {
+      max-width: 300px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2>Gestion projet</h2>
+    <nav>
+      <ul>
+        <li><a href="dash_admin.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="consulter_liste_u.html"><i class="fas fa-tasks"></i> Consulter liste d'utilisateur</a></li>
+        <li><a href="consulter_annonce.html"><i class="fas fa-upload"></i> Consulter annonce</a></li>
+        <li class="active"><a href="ajouter_annonce.html"><i class="fas fa-plus-circle"></i> Ajouter annonce</a></li>
+        <li><a href="profil_admin.html"><i class="fas fa-user"></i> Profil</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="main-content">
+    <div class="form-container">
+      <h1>Ajouter une annonce</h1>
+      <form id="annonceForm">
+        <div class="form-group">
+          <label for="etape">Titre</label>
+          <input type="text" id="etape" placeholder="Entrez le titre " />
+          <div class="error-message" id="error-etape"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Description</label>
+          <textarea rows="5" id="description"></textarea>
+          <div class="error-message" id="error-description"></div>
+        </div>
+
+        <div class="form-group">
+          <label>Choisir une image</label>
+          <div class="file-wrapper">
+            <i class="fas fa-image file-icon"></i>
+            <input type="file" id="photo" accept="image/*" />
+            <label for="photo" class="custom-file-label">Sélectionner une image</label>
+          </div>
+          <div id="selected-file" class="selected-file-name"></div>
+          <div id="imagePreview" class="image-preview"></div>
+          <div class="error-message" id="error-photo"></div>
+        </div>
+
+        <div class="button-group">
+          <button type="button" class="btn btn-cancel" onclick="resetForm()">Annuler</button>
+          <button type="submit" class="btn btn-submit">Publier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const photoInput = document.getElementById('photo');
+    const fileLabel = document.querySelector('.custom-file-label');
+    const selectedFileDiv = document.getElementById('selected-file');
+    const imagePreview = document.getElementById('imagePreview');
+
+    photoInput.addEventListener('change', function () {
+      if (this.files && this.files.length > 0) {
+        fileLabel.textContent = `Photo sélectionnée : ${this.files[0].name}`;
+        selectedFileDiv.textContent = `Nom de l'image: ${this.files[0].name}`;
+
+        // Créer un lien pour afficher l'image
+        const file = this.files[0];
+        const reader = new FileReader();
+
+        reader.onload = function(e) {
+          // Créer un élément image
+          const img = document.createElement('img');
+          img.src = e.target.result;
+          img.style.maxWidth = "300px"; // Limiter la largeur de l'image
+          img.style.marginTop = "10px";
+          imagePreview.innerHTML = ''; // Réinitialiser l'aperçu précédent
+          imagePreview.appendChild(img);
+        };
+
+        reader.readAsDataURL(file);
+      } else {
+        fileLabel.textContent = "Sélectionner une image";
+        selectedFileDiv.textContent = '';
+        imagePreview.innerHTML = ''; // Réinitialiser l'aperçu d'image
+      }
+    });
+
+    document.getElementById('annonceForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Réinitialiser les messages d’erreur
+      document.getElementById('error-etape').textContent = '';
+      document.getElementById('error-description').textContent = '';
+      document.getElementById('error-photo').textContent = '';
+
+      const etape = document.getElementById('etape').value.trim();
+      const description = document.getElementById('description').value.trim();
+      const photo = document.getElementById('photo').files[0];
+
+      let isValid = true;
+
+      if (!etape) {
+        document.getElementById('error-etape').textContent = "Veuillez entrer l'étape.";
+        isValid = false;
+      }
+
+      if (!description) {
+        document.getElementById('error-description').textContent = "Veuillez ajouter une description.";
+        isValid = false;
+      }
+
+      if (!photo) {
+        document.getElementById('error-photo').textContent = "Veuillez choisir une image.";
+        isValid = false;
+      }
+
+      if (isValid) {
+        alert("Annonce publiée avec succès !");
+        // Ici tu peux ajouter la logique d’envoi réelle
+        this.reset();
+        imagePreview.innerHTML = ''; // Réinitialiser l'aperçu d'image après soumission
+      }
+    });
+
+    function resetForm() {
+      document.getElementById('annonceForm').reset();
+      document.querySelector('.custom-file-label').textContent = "Sélectionner une image";
+      document.getElementById('selected-file').textContent = '';
+      document.getElementById('imagePreview').innerHTML = ''; // Réinitialiser l'aperçu d'image
+      document.getElementById('error-etape').textContent = '';
+      document.getElementById('error-description').textContent = '';
+      document.getElementById('error-photo').textContent = '';
+    }
+  </script>
+</body>
+</html>
+

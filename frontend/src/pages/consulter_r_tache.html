@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Consulter les rapports des taches </title>
+    
+    <link rel="stylesheet" href="../css/dashboard_r.css">
+    <style>
+        
+        .container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 119px;
+    margin-right: 110px;
+    height: 37vh;
+    transition: box-shadow 0.3s ease-in-out; 
+}
+
+.container:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); 
+}
+
+        
+        button {
+    margin: 80px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 200px;
+    display: inline-block;
+    color: white;
+    font-size: 16px;
+}
+
+/* Bouton Valider */
+.btn-success {
+    background-color: #8F00FF;
+    transform: scale(1.02);
+    position: absolute;
+    left: 940px;
+    border: none;
+    transition: background 0.3s, transform 0.2s;
+    
+}
+
+.btn-success:hover {
+    background-color: #6F00FF;
+    transform: scale(1.04);
+}
+
+/* Titre */
+h2 {
+    color: #8A2BE2;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+#rapport-select{
+    position:absolute;
+    top: 160px;
+    width:55%;
+    right: 165px;
+}
+
+
+    </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h2 class="titre">Gestion projet</h2>
+    <nav>
+      <ul>
+        <li><a href="dashboard_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li class="active"><a href="#"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+        <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+        <li><a href="profil_e_r.html"><i class="fas fa-user"></i> Profil</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container">
+    <select id="rapport-select" class="form-select mb-3">
+        <option value="">Sélectionner un rapport </option>
+        <!-- Options chargées dynamiquement -->
+    </select>
+    <button class="btn btn-success" id="valider-theme">Suivant</button>
+       
+</div>
+<script>
+
+document.addEventListener("DOMContentLoaded", function() {
+document.getElementById("valider-theme").addEventListener("click", function() {
+    window.location.href = "preciser_etape_r.html"; 
+});
+});
+</script>
+</body>
+</html>
+
