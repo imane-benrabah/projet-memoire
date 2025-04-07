@@ -34,8 +34,8 @@
             </a>
         </li>
         <li>
-            <a href="preciser_sujet.html.html">
-                <i class="fas fa-eye"></i>  Gestion Etape
+            <a href="preciser_sujet.html">
+                <i class="fas fa-tasks"></i> Gestion Etape
             </a>
         </li>
             <li >
@@ -91,7 +91,7 @@
     console.log("Groupe sélectionné:", selectedGroupe);
 
     // Récupérer uniquement les binômes du groupe sélectionné
-    fetch(`http://localhost:3000/binomes?group=${encodeURIComponent(selectedGroupe)}`)
+    fetch(`http://localhost:3000/api/binomes?group=${encodeURIComponent(selectedGroupe)}`)
         .then(response => response.json())
         .then(data => {
             const binomeSelect = document.getElementById('binome-select');

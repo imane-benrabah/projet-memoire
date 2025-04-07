@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Charger les groupes depuis l'API
-    fetch("http://localhost:3000/groupes")
+    fetch("http://localhost:3000/api/groupes")
         .then(response => response.json())
         .then(groupes => {
             console.log("✅ Groupes reçus :", groupes);
