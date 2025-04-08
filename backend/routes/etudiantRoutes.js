@@ -78,4 +78,25 @@ router.delete("/:matricule/binomes/:binomeId", (req, res) => {
     });
 });
 
+router.put('/:matricule', async (req, res) => {
+    const { matricule } = req.params;
+    const { nom, prenom } = req.body;
+
+    try {
+        const [result] = await db.execute(
+            'UPDATE etudiants SET nom = ?, prenom = ? WHERE matricule = ?',
+            [nom, prenom, matricule]
+        );
+
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ message: "Étudiant non trouvé" });
+        }
+
+        res.json({ message: "Étudiant mis à jour" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Erreur serveur" });
+    }
+});
+
 module.exports = router;

@@ -44,4 +44,4 @@ router.post("/associer", (req, res) => {
     });
 });
 
-
+module.exports = router;

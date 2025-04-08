@@ -23,13 +23,9 @@ app.use(cors({
 app.use(express.json());
 app.use(express.static("public"));
 
-// Connexion DB
-db.connect((err) => {
-  if (err) return console.error("Erreur de connexion:", err);
-  console.log("✅ Connexion réussie à la base de données");
-});
 
 // Routes
+console.log(typeof etudiantRoutes); 
 app.use("/api/etudiants", etudiantRoutes);
 app.use("/api/binomes", binomeRoutes);
 app.use("/api/groupes", groupeRoutes);

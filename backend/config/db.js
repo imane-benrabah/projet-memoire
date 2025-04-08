@@ -1,6 +1,5 @@
-const mysql = require("mysql2/promise"); // 1. Utilisez la version promise
+const mysql = require("mysql2"); // Ne pas utiliser "mysql2/promise"
 
-// 2. Configurez le pool de connexions
 const pool = mysql.createPool({
     host: "localhost",
     user: "root",
@@ -11,29 +10,17 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// 3. Test de connexion
-async function testConnection() {
-    let conn;
-    try {
-        conn = await pool.getConnection();
-        console.log("✅ Connecté à MySQL avec succès!");
-    } catch (err) {
-        console.error("❌ Erreur de connexion:", err);
-    } finally {
-        if (conn) conn.release();
-    }
-}
-
-testConnection();
-
-// 4. Exportez les méthodes
+// Export des méthodes pour effectuer des requêtes SQL avec des callbacks
 module.exports = {
-    // Pour les requêtes simples
-    query: (sql, params) => pool.query(sql, params),
-    
-    // Pour les transactions
-    getConnection: () => pool.getConnection(),
-    
-    // Pour fermer le pool
+    query: (sql, params, callback) => {
+        pool.query(sql, params, (err, results, fields) => {
+            callback(err, results); // Appel du callback avec les résultats
+        });
+    },
+    getConnection: (callback) => {
+        pool.getConnection((err, connection) => {
+            callback(err, connection); // Retourne la connexion avec le callback
+        });
+    },
     close: () => pool.end()
 };
