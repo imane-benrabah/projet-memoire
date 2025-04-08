@@ -1,0 +1,171 @@
+/* Réinitialisation */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Sarabun', sans-serif;
+}
+
+/* Style du corps */
+body {
+    display: flex;
+    background: #E6E6FA;
+    overflow-x: hidden; /* Empêche le défilement horizontal */
+    width: 100%;
+    min-height: 100vh;
+    overflow-y: hidden; /* Ajouté pour supprimer le défilement vertical */
+}
+
+.titre {
+    color: #8A2BE2;
+}
+
+/* Barre latérale */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 255px;
+    background: white;
+    color: #BEBFC5;
+    padding: 20px;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sidebar nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar nav ul li {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    font-size: 18px;
+    transition: all 0.3s;
+    border-radius: 5px;
+    gap: 10px;
+    color: #BEBFC5;
+    margin-bottom: 10px;
+}
+
+.sidebar nav ul li i {
+    color: #BEBFC5;
+    transition: color 0.3s;
+}
+
+.sidebar nav ul li a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: gray;
+    padding: 10px;
+    transition: color 0.3s;
+}
+
+.sidebar nav ul li a i {
+    margin-right: 10px;
+    color: inherit;
+}
+
+.sidebar nav ul li:hover,
+.sidebar nav ul li.active {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li:hover i,
+.sidebar nav ul li.active i {
+    color: #8A2BE2;
+}
+
+/* Contenu principal */
+.content {
+    margin-left: 50px;
+    padding: 40px 20px 20px; /* Augmenté le padding-top à 40px */
+    width: calc(100% - 255px);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden; /* Ajouté pour supprimer tout défilement */
+}
+
+/* Formulaire */
+.form-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    width: 100%;
+    max-width: 500px;
+    margin-top: 50px; /* Augmenté pour descendre le formulaire */
+    margin-left: 0; /* Supprimé le margin-left */
+}
+
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #555;
+}
+
+.form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    background-color: #fff;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.submit-btn {
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background-color: #7B1FA2;
+}
+
+/* Styles supplémentaires */
+.hidden {
+    display: none;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background: white;
+    padding: 20px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    z-index: 1000;
+}

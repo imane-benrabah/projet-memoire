@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Voir Profil</title>
+    
+    <link rel="stylesheet" href="../css/dashboard_r.css">
+    <style>
+        /* Réinitialisation */
+ * {
+     margin: 0;
+     padding: 0;
+     box-sizing: border-box;
+     font-family:'Sarabun',sans-serif;
+     
+ }
+ 
+ /* Style du corps */
+ body {
+     display: flex;
+     background:#E6E6FA ;
+ }
+ .titre{
+     color:#8A2BE2 ;
+ }
+ 
+ /* Barre latérale */
+ .sidebar {
+     position: fixed;
+     top: 0;
+     left: 0;
+     width: 255px;
+     background: white;
+     color: #BEBFC5;
+     padding: 20px;
+     height: 100vh;
+     overflow-y: auto;
+ }
+ 
+ .sidebar h2 {
+     text-align: center;
+     margin-bottom: 30px;
+     font-size: 24px;
+     font-weight: bold;
+ }
+ 
+ .sidebar nav ul {
+     list-style: none;
+     padding: 0;
+ }
+ 
+ .sidebar nav ul li {
+     display: flex;
+     align-items: center;  
+     padding: 15px;
+     cursor: pointer;
+     font-size: 18px;
+     transition: background 0.3s, transform 0.2s;
+     border-radius: 5px;
+     gap: 10px;
+     color: #BEBFC5; 
+ }
+ 
+ .sidebar nav ul li i { 
+     color: #BEBFC5;
+     transition: color 0.3s;
+ }
+ 
+ .sidebar nav ul li a {
+     display: flex;
+     align-items: center;
+     text-decoration: none;
+     color: gray;
+     padding: 10px;
+     transition: color 0.3s ease;
+ }
+ 
+ .sidebar nav ul li a i {
+     margin-right: 10px;
+     color: inherit;
+     transition: color 0.3s ease;
+ }
+ 
+ .sidebar nav ul li a:hover {
+     color: #8A2BE2;
+ }
+ 
+ .sidebar nav ul li a:hover i {
+     color: #8A2BE2;
+ }
+ 
+ .sidebar nav ul li.active a {
+     color: #8A2BE2;
+ }
+ 
+ .sidebar nav ul li.active a i {
+     color: #8A2BE2;
+ }
+ 
+ .sidebar nav ul li a:active {
+     color: #8A2BE2;
+ }
+ 
+ .sidebar nav ul li a:active i {
+     color: #8A2BE2;
+ }
+ 
+ .sidebar nav ul li:hover,
+ .sidebar .active {
+     color: #8A2BE2;
+     transform: scale(1.05);
+ }
+ 
+ .content {
+     flex: 1;
+     padding: 20px;
+ }
+ 
+ .link{
+     text-decoration: none;
+     color: #BEBFC5; 
+ }
+ 
+ .link:hover{
+     color:#8A2BE2;
+     transform: scale(1.05);
+ }
+ 
+ .hidden {
+     opacity: 0;
+     visibility: hidden;
+     transition: opacity 0.3s ease-in-out;
+ }
+ 
+ .modal {
+     position: fixed;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: 300px;
+     background: white;
+     padding: 20px;
+     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+     border-radius: 8px;
+ }
+ 
+ #menu-creer-groupes {
+     color: #8A2BE2;
+     transform: scale(1.05);
+ }
+ 
+ .container {
+     margin-left: 270px;
+     width: 100%;
+     padding: 40px;
+ }
+ 
+ .profile-card {
+     background: white;
+     border-radius: 15px;
+     padding: 25px;
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+     text-align: center;
+     max-width: 400px;
+     margin: auto;
+ }
+ 
+ .profile-card img {
+     width: 120px;
+     height: 120px;
+     border-radius: 50%;
+     object-fit: contain;
+     border: 4px solid #8A2BE2;
+     transition: transform 0.3s ease;
+ }
+ 
+ .profile-card img:hover {
+     transform: scale(1.1);
+ }
+ 
+ .profile-card h3 {
+     margin-top: 15px;
+     font-size: 24px;
+     color: #333;
+ }
+ 
+ .profile-card p {
+     font-size: 16px;
+     color: #666;
+ }
+ 
+ .profile-card .role {
+     font-weight: bold;
+     color: #8A2BE2;
+     margin-bottom: 15px;
+ }
+ 
+ .profile-card .btn-modifier {
+     background: #8A2BE2;
+     color: white;
+     padding: 10px 15px;
+     border-radius: 20px;
+     text-decoration: none;
+     display: inline-block;
+     transition: 0.3s;
+     font-weight: bold;
+ }
+ 
+ .profile-card .btn-modifier:hover {
+     background: #6A1BBE;
+     transform: scale(1.05);
+ }
+ 
+ @media (max-width: 768px) {
+     .container {
+         margin-left: 0;
+         padding: 20px;
+     }
+ }
+
+ /* Style du bouton flèche */
+ .scroll-to-top {
+     position: fixed;
+     bottom: 20px;
+     left: 20px;
+     z-index: 999;
+     background-color: #8A2BE2;
+     color: white;
+     border: none;
+     border-radius: 50%;
+     width: 40px;
+     height: 40px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     cursor: pointer;
+     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+     transition: background 0.3s ease;
+ }
+
+ .scroll-to-top:hover {
+     background-color: #6A1BBE;
+ }
+
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="titre">Gestion projet</h2>
+        <nav>
+            <ul>
+                <li><a href="dashboard_etud.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="consulter_des_sujet.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+                <li><a href="consulter_cas.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+                <li><a href="consulter_rapport.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+                <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+                <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+                <li><a href="poser_ques.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+                <li><a href="passer_feedback.html"><i class="fas fa-comments"></i> Passer feedback</a></li>
+                <li><a href="consulter_notifi.html"><i class="fas fa-bell"></i> Consulter les notifications</a></li>
+                <li class="active"><a href="profil_etud.html"><i class="fas fa-user"></i> Profil</a></li>
+            </ul>
+        </nav>
+    </div>
+    <main class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card text-center p-4 shadow">
+                    <img src="../../public/images/photo_profil.png" class="rounded-circle mx-auto d-block" width="120" height="120" alt="Avatar">
+                    <h3 id="nomUtilisateur" class="mt-3">Nom de l'utilisateur</h3>
+                    <p id="emailUtilisateur" class="text-muted">email@example.com</p>
+                    <p id="roleUtilisateur"><strong>Rôle:</strong> Etudiant </p>
+                    <button class="btn btn-primary mt-3" onclick="modifierProfil()">Modifier</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+   
+</body>
+</html>
