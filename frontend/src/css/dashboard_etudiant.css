@@ -3,17 +3,17 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Sarabun', sans-serif;
+    font-family:'Sarabun',sans-serif;
+    
 }
 
 /* Style du corps */
 body {
     display: flex;
-    background: #E6E6FA;
+    background:#E6E6FA ;
 }
-
-.titre {
-    color: #8A2BE2;
+.titre{
+    color:#8A2BE2 ;
 }
 
 /* Barre latérale */
@@ -26,10 +26,8 @@ body {
     color: #BEBFC5;
     padding: 20px;
     height: 100vh;
-    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
 }
 
-/* Titre dans la sidebar */
 .sidebar h2 {
     text-align: center;
     margin-bottom: 30px;
@@ -37,80 +35,84 @@ body {
     font-weight: bold;
 }
 
-/* Liste des éléments dans la sidebar */
 .sidebar nav ul {
     list-style: none;
     padding: 0;
 }
 
-/* Style des items de la sidebar */
 .sidebar nav ul li {
     display: flex;
-    align-items: center;
+    align-items: center;  
+
+
     padding: 15px;
     cursor: pointer;
     font-size: 18px;
     transition: background 0.3s, transform 0.2s;
     border-radius: 5px;
     gap: 10px;
-    color: #BEBFC5;
-    margin-bottom: 10px; /* Espacement entre les éléments */
+    color: #BEBFC5; 
 }
 
-/* Icônes dans la sidebar */
-.sidebar nav ul li i {
-    color: #BEBFC5;
+.sidebar nav ul li i { 
+    color: #BEBFC5; /* Icônes en gris */
     transition: color 0.3s;
 }
 
-/* Style des liens dans la sidebar */
+/* Styles pour les items de la sidebar */
 .sidebar nav ul li a {
     display: flex;
     align-items: center;
     text-decoration: none;
-    color: gray;
+    color: gray; /* Couleur par défaut (gris) */
     padding: 10px;
     transition: color 0.3s ease;
 }
 
-/* Style des icônes des liens dans la sidebar */
 .sidebar nav ul li a i {
-    margin-right: 10px;
-    color: inherit;
+    margin-right: 10px; /* Espace entre l'icône et le texte */
+    color: inherit; /* L'icône prend la couleur du texte */
     transition: color 0.3s ease;
 }
 
-/* Survol des éléments dans la sidebar */
+/* Lorsque l'élément est survolé */
 .sidebar nav ul li a:hover {
-    color: #8A2BE2;
+    color: #8A2BE2; /* Couleur violet lorsque survolé */
 }
 
 .sidebar nav ul li a:hover i {
-    color: #8A2BE2;
+    color: #8A2BE2; /* Icône devient violette également */
 }
 
-/* Lorsque l'élément est actif */
+/* Lorsque l'élément est activé (lorsqu'il est cliqué et relâché) */
 .sidebar nav ul li.active a {
-    color: #8A2BE2;
+    color: #8A2BE2; /* Couleur violette lorsque l'élément est actif */
 }
 
 .sidebar nav ul li.active a i {
-    color: #8A2BE2;
+    color: #8A2BE2; /* Icône devient violette lorsque l'élément est actif */
 }
 
 /* Effet lorsque vous relâchez le clic (mouse up) */
 .sidebar nav ul li a:active {
-    color: #8A2BE2;
+    color: #8A2BE2; /* Couleur pendant l'activation (quand l'élément est cliqué) */
 }
 
 .sidebar nav ul li a:active i {
-    color: #8A2BE2;
+    color: #8A2BE2; /* Icône pendant l'activation */
 }
 
-/* Effet de survol sur l'élément */
+
 .sidebar nav ul li:hover,
 .sidebar .active {
-    color: #8A2BE2;
+    color: #8A2BE2; /* La couleur violet */
+    transform: scale(1.05); /* Agrandissement de l'élément au survol */
+}
+
+
+.sidebar nav ul li:hover,
+.sidebar .active {
+    color:#8A2BE2;
     transform: scale(1.05);
 }
 
@@ -120,22 +122,23 @@ body {
     padding: 20px;
 }
 
-/* Lien dans le contenu */
-.link {
+.link{
     text-decoration: none;
-    color: #BEBFC5;
+    color: #BEBFC5; 
+
 }
 
-.link:hover {
-    color: #8A2BE2;
+.link:hover{
+    color:#8A2BE2;
     transform: scale(1.05);
+
 }
 
-/* Effet de transition pour les éléments masqués */
 .hidden {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out;
+    
 }
 
 /* Modale (popup) */
