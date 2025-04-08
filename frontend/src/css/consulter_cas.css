@@ -138,6 +138,59 @@ body {
     transition: opacity 0.3s ease-in-out;
 }
 
+/* Tableau */
+.table-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+}
+
+/* Style du tableau */
+.table-container table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-container th, .table-container td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.table-container thead {
+    background-color: #8A2BE2 !important; /* البنفسجي الفاتح */
+    color: white !important;
+}
+
+.table-container tbody tr:hover {
+    background-color: #f2e6ff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* تعديل رأس الجدول ليكون بنفسجي */
+.table-container thead {
+    background-color: #8A2BE2 !important; /* البنفسجي الفاتح */
+    color: white !important;
+}
+
+/* تعديل الأسطر لتكون بيضاء مع التبديل بين اللون البنفسجي الفاتح */
+.table-container tbody tr:nth-child(odd) {
+    background-color: #ffffff; /* أسطر بيضاء */
+}
+
+.table-container tbody tr:nth-child(even) {
+    background-color: #f2e6ff; /* أسطر بنفسجي فاتح */
+}
+
+/* تحسين تأثير التحويم */
+.table-container tbody tr:hover {
+    background-color: #f2e6ff;
+    transition: background-color 0.3s ease-in-out;
+}
+
 /* Modale (popup) */
 .modal {
     position: fixed;

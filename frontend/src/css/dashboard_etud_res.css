@@ -156,3 +156,15 @@ body {
     color: #8A2BE2;
     transform: scale(1.05);
 }
+.rapport-section {
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(138, 43, 226, 0.1);
+    color: #4B4B4B;
+}
+
+.rapport-section h4 {
+    color: #8A2BE2;
+    margin-bottom: 15px;
+}
