@@ -1,20 +1,39 @@
-const mysql = require("mysql2");
+const mysql = require("mysql2/promise"); // 1. Utilisez la version promise
 
-// Création de la connexion MySQL
-const connection = mysql.createConnection({
+// 2. Configurez le pool de connexions
+const pool = mysql.createPool({
     host: "localhost",
     user: "root",
-    password: "Imaiha123@123+=masamou",  // Assure-toi de ne pas laisser ton mot de passe en clair en production
+    password: "Imaiha123@123+=masamou",
     database: "projet",
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
 });
 
-// Connexion à la base de données
-connection.connect((err) => {
-    if (err) {
-        console.error("❌ Erreur de connexion à MySQL :", err);
-        return;
+// 3. Test de connexion
+async function testConnection() {
+    let conn;
+    try {
+        conn = await pool.getConnection();
+        console.log("✅ Connecté à MySQL avec succès!");
+    } catch (err) {
+        console.error("❌ Erreur de connexion:", err);
+    } finally {
+        if (conn) conn.release();
     }
-    console.log("✅ Connecté à MySQL !");
-});
+}
 
-module.exports = connection;  // Exporte la connexion pour l'utiliser dans d'autres fichiers
+testConnection();
+
+// 4. Exportez les méthodes
+module.exports = {
+    // Pour les requêtes simples
+    query: (sql, params) => pool.query(sql, params),
+    
+    // Pour les transactions
+    getConnection: () => pool.getConnection(),
+    
+    // Pour fermer le pool
+    close: () => pool.end()
+};

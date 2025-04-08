@@ -15,7 +15,7 @@ if (cleanedGroupe) {
 }
 
 function fetchGroupInfo(groupId) {
-    const apiUrl = `http://localhost:3000/binomes?group=${encodeURIComponent(groupId)}`;
+    const apiUrl = `http://localhost:3000/api/binomes?group=${encodeURIComponent(groupId)}`;
 
     console.log("Requête envoyée à l'API:", apiUrl);
 

@@ -1,149 +1,169 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Charger les binômes
-    fetch("http://localhost:3000/binomes")
-        .then(response => response.json())
-        .then(data => {
-            const binomeList = document.getElementById("binomeList");
-            binomeList.innerHTML = "";
-            data.forEach(binome => {
-                const item = document.createElement("li");
-                item.textContent = `${binome.etudiant1_nom} ${binome.etudiant1_prenom} et ${binome.etudiant2_nom} ${binome.etudiant2_prenom} - Groupe: ${binome.nom_groupe}`;
-                binomeList.appendChild(item);
+    // Charger initialement les données
+    chargerBinomes();
+    chargerGroupes();
+});
+
+// Fonction pour charger les binômes
+function chargerBinomes() {
+    const tableBody = document.getElementById("table-binomes");
+    const selectBinome = document.getElementById("binome_id");
+    const binomeList = document.getElementById("binomeList");
+
+    fetch("http://localhost:3000/api/binomes")
+        .then(response => {
+            if (!response.ok) throw new Error('Erreur réseau');
+            return response.json();
+        })
+        .then(binomes => {
+            // Vider les contenus existants
+            if (tableBody) tableBody.innerHTML = "";
+            if (selectBinome) selectBinome.innerHTML = "";
+            if (binomeList) binomeList.innerHTML = "";
+
+            // Pour chaque binôme
+            binomes.forEach(binome => {
+                // Ajout à la liste
+                if (binomeList) {
+                    const item = document.createElement("li");
+                    item.textContent = `${binome.etudiant1_nom} ${binome.etudiant1_prenom} et ${binome.etudiant2_nom || ''} ${binome.etudiant2_prenom || ''} - Groupe: ${binome.nom_groupe || 'Aucun'}`;
+                    binomeList.appendChild(item);
+                }
+
+                // Ajout au tableau
+                if (tableBody) {
+                    const row1 = document.createElement("tr");
+                    row1.innerHTML = `
+                        <td rowspan="${binome.etudiant2_nom ? 2 : 1}">${binome.binome_id}</td>
+                        <td>${binome.etudiant1_matricule || "N/A"}</td>
+                        <td>${binome.etudiant1_nom || "Inconnu"}</td>
+                        <td>${binome.etudiant1_prenom || ""}</td>
+                    `;
+                    tableBody.appendChild(row1);
+
+                    if (binome.etudiant2_nom) {
+                        const row2 = document.createElement("tr");
+                        row2.innerHTML = `
+                            <td>${binome.etudiant2_matricule || "N/A"}</td>
+                            <td>${binome.etudiant2_nom || "Inconnu"}</td>
+                            <td>${binome.etudiant2_prenom || ""}</td>
+                        `;
+                        tableBody.appendChild(row2);
+                    }
+                }
+
+                // Ajout au select
+                if (selectBinome) {
+                    const option = document.createElement("option");
+                    option.value = binome.binome_id;
+                    option.textContent = `Binôme ${binome.binome_id}`;
+                    selectBinome.appendChild(option);
+                }
             });
         })
-        .catch(error => console.error("Erreur lors de la récupération des binômes:", error));
+        .catch(error => {
+            console.error("Erreur lors du chargement des binômes:", error);
+            alert("Erreur lors du chargement des binômes");
+        });
+}
 
-    // Charger les groupes
+// Fonction pour charger les groupes
+function chargerGroupes() {
     const selectGroupe = document.getElementById("groupe_nom");
 
     if (!selectGroupe) {
-        console.error("❌ Élément introuvable !");
+        console.error("Élément groupe_nom introuvable !");
         return;
     }
 
-    fetch("http://localhost:3000/groupes")
-        .then(response => response.json())
+    fetch("http://localhost:3000/api/groupes")
+        .then(response => {
+            if (!response.ok) throw new Error('Erreur réseau');
+            return response.json();
+        })
         .then(groupes => {
-            console.log(groupes);  // Vérifier ce que vous obtenez ici
             selectGroupe.innerHTML = '<option value="">Sélectionnez un groupe</option>';
             groupes.forEach(groupe => {
                 const option = document.createElement("option");
-                option.value = groupe.nom_groupe; // Assurez-vous que vous utilisez le bon nom de propriété
-                option.textContent = groupe.nom_groupe; // Afficher le nom du groupe
+                option.value = groupe.nom_groupe;
+                option.textContent = groupe.nom_groupe;
                 selectGroupe.appendChild(option);
             });
         })
-        .catch(error => console.error("❌ Erreur lors du chargement des groupes:", error));
-});
+        .catch(error => {
+            console.error("Erreur lors du chargement des groupes:", error);
+            alert("Erreur lors du chargement des groupes");
+        });
+}
 
-// Route pour associer un binôme à un groupe
-app.post('/associerBinomeGroupe', (req, res) => {
-    const { binome_id, groupe_nom } = req.body;
+// Fonction pour associer un binôme à un groupe
+function associerBinomeGroupe() {
+    const selectedBinomeId = document.getElementById("binome_id").value;
+    const selectedGroupName = document.getElementById("groupe_nom").value;
 
-    if (!binome_id || !groupe_nom) {
-        return res.status(400).json({ success: false, message: "Paramètres manquants !" });
+    if (!selectedBinomeId || !selectedGroupName) {
+        alert("Veuillez sélectionner un binôme ET un groupe !");
+        return;
     }
 
-    // Rechercher l'ID du groupe dans la base de données
-    connection.query("SELECT id FROM groupe WHERE nom_groupe = ?", [groupe_nom], (err, results) => {
-        if (err) {
-            console.error("Erreur lors de la récupération du groupe :", err);
-            return res.status(500).json({ success: false, message: "Erreur serveur" });
-        }
-
-        if (results.length === 0) {
-            return res.status(404).json({ success: false, message: "Groupe non trouvé" });
-        }
-
-        const groupeId = results[0].id;
-
-        // Associer le binôme avec le groupe
-        connection.query("UPDATE binomes SET groupe_id = ? WHERE id = ?", [groupeId, binome_id], (err, result) => {
-            if (err) {
-                console.error("Erreur lors de l'association du binôme :", err);
-                return res.status(500).json({ success: false, message: "Erreur lors de l'association" });
-            }
-
-            // Si l'association a été effectuée avec succès
-            res.json({ success: true, message: "Binôme associé au groupe avec succès" });
-        });
+    fetch('http://localhost:3000/api/binomes/associer', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            binome_id: selectedBinomeId,
+            groupe_nom: selectedGroupName
+        })
+    })
+    .then(response => {
+        if (!response.ok) throw new Error(`Erreur HTTP! statut: ${response.status}`);
+        return response.json();
+    })
+    .then(data => {
+        alert("Binôme associé au groupe avec succès !");
+        chargerBinomes(); // Recharger les données
+    })
+    .catch(error => {
+        console.error("Erreur:", error);
+        alert("Erreur lors de l'association: " + error.message);
     });
-});
+}
 
-document.getElementById("btn-ajouter-binome-modal").addEventListener("click", function() {
+// Fonction pour ajouter un nouveau binôme
+function ajouterBinome() {
     const matricule1 = document.getElementById("matricule1").value.trim();
-    const matricule2 = document.getElementById("matricule2").value.trim() || null;
+    const matricule2 = document.getElementById("matricule2").value.trim();
 
     if (!matricule1) {
         alert("Veuillez remplir le matricule de l'étudiant 1 !");
         return;
     }
 
-    fetch('http://localhost:3000/ajouter-binome', {
+    fetch('http://localhost:3000/api/binomes', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            matricule1: '12345',
-            matricule2: '67890'
+            matricule1: matricule1,
+            matricule2: matricule2 || null
         })
     })
-        .then(response => response.json())
-        .then(data => {
-            console.log('Réponse du serveur:', data);
-        })
-        .catch(error => {
-            console.error('Erreur:', error);
-        });
+    .then(response => {
+        if (!response.ok) throw new Error('Erreur lors de la création du binôme');
+        return response.json();
+    })
+    .then(data => {
+        alert("Binôme créé avec succès !");
+        chargerBinomes(); // Recharger les données
+    })
+    .catch(error => {
+        console.error('Erreur:', error);
+        alert("Erreur lors de la création du binôme: " + error.message);
     });
-
-// Fonction pour recharger la liste des binômes après ajout
-function chargerBinomes() {
-    const tableBody = document.getElementById("table-binomes");
-    const selectBinome = document.getElementById("binome_id");
-
-    if (!tableBody || !selectBinome) {
-        console.error("❌ Élément introuvable !");
-        return;
-    }
-
-    fetch("http://localhost:3000/binomes")
-    .then(response => response.json())
-    .then(binomes => {
-        tableBody.innerHTML = "";
-        selectBinome.innerHTML = "";
-
-        binomes.forEach(binome => {
-            // Création de la ligne pour l'étudiant 1
-            const row1 = document.createElement("tr");
-            row1.innerHTML = `
-                <td rowspan="${binome.etudiant2_nom ? 2 : 1}">${binome.binome_id}</td>
-                <td>${binome.etudiant1_matricule || "N/A"}</td>
-                <td>${binome.etudiant1_nom || "Inconnu"}</td>
-                <td>${binome.etudiant1_prenom || ""}</td>
-            `;
-            tableBody.appendChild(row1);
-
-            // Ajout d'une deuxième ligne si le binôme a un deuxième étudiant
-            if (binome.etudiant2_nom) {
-                const row2 = document.createElement("tr");
-                row2.innerHTML = `
-                    <td>${binome.etudiant2_matricule || "N/A"}</td>
-                    <td>${binome.etudiant2_nom || "Inconnu"}</td>
-                    <td>${binome.etudiant2_prenom || ""}</td>
-                `;
-                tableBody.appendChild(row2);
-            }
-
-            // Ajouter le binôme à la liste déroulante
-            const option = document.createElement("option");
-            option.value = binome.binome_id;
-            option.textContent = `Binôme ${binome.binome_id}`;
-            selectBinome.appendChild(option);
-        });
-    })
-    .catch(error => console.error("❌ Erreur lors du chargement des binômes:", error));
 }
 
-
+// Écouteurs d'événements
+document.getElementById("btn-associer")?.addEventListener("click", associerBinomeGroupe);
+document.getElementById("btn-ajouter-binome-modal")?.addEventListener("click", ajouterBinome);
