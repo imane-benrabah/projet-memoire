@@ -4,47 +4,45 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'Sarabun', sans-serif;
-}
-
-/* Style du corps */
-body {
+  }
+  
+  /* Style du corps */
+  body {
     display: flex;
     background: #E6E6FA;
-}
-
-.titre {
+  }
+  
+  /* Titre */
+  .titre {
     color: #8A2BE2;
-}
-
-/* Barre latérale */
-.sidebar {
-    position: fixed; /* Fixe la barre latérale à l'écran */
-    top: 0; /* Positionne-la en haut de la page */
-    left: 0; /* Positionne-la sur la gauche de la page */
+  }
+  
+  /* Barre latérale */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 255px;
     background: white;
     color: #BEBFC5;
     padding: 20px;
     height: 100vh;
-    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
-}
-
-/* Titre dans la sidebar */
-.sidebar h2 {
+    overflow-y: auto;
+  }
+  
+  .sidebar h2 {
     text-align: center;
     margin-bottom: 30px;
     font-size: 24px;
     font-weight: bold;
-}
-
-/* Liste des éléments dans la sidebar */
-.sidebar nav ul {
+  }
+  
+  .sidebar nav ul {
     list-style: none;
     padding: 0;
-}
-
-/* Style des items de la sidebar */
-.sidebar nav ul li {
+  }
+  
+  .sidebar nav ul li {
     display: flex;
     align-items: center;
     padding: 15px;
@@ -54,145 +52,86 @@ body {
     border-radius: 5px;
     gap: 10px;
     color: #BEBFC5;
-    margin-bottom: 10px; /* Espacement entre les éléments */
-}
-
-/* Icônes dans la sidebar */
-.sidebar nav ul li i {
+    margin-bottom: 10px;
+  }
+  
+  .sidebar nav ul li i {
     color: #BEBFC5;
     transition: color 0.3s;
-}
-
-/* Style des liens dans la sidebar */
-.sidebar nav ul li a {
+  }
+  
+  .sidebar nav ul li a {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: gray;
     padding: 10px;
     transition: color 0.3s ease;
-}
-
-/* Style des icônes des liens dans la sidebar */
-.sidebar nav ul li a i {
+  }
+  
+  .sidebar nav ul li a i {
     margin-right: 10px;
     color: inherit;
     transition: color 0.3s ease;
-}
-
-/* Survol des éléments dans la sidebar */
-.sidebar nav ul li a:hover {
+  }
+  
+  .sidebar nav ul li a:hover {
     color: #8A2BE2;
-}
-
-.sidebar nav ul li a:hover i {
+  }
+  
+  .sidebar nav ul li a:hover i {
     color: #8A2BE2;
-}
-
-/* Lorsque l'élément est actif */
-.sidebar nav ul li.active a {
+  }
+  
+  .sidebar nav ul li.active a {
     color: #8A2BE2;
-}
-
-.sidebar nav ul li.active a i {
+  }
+  
+  .sidebar nav ul li.active a i {
     color: #8A2BE2;
-}
-
-/* Effet lorsque vous relâchez le clic (mouse up) */
-.sidebar nav ul li a:active {
+  }
+  
+  .sidebar nav ul li a:active {
     color: #8A2BE2;
-}
-
-.sidebar nav ul li a:active i {
+  }
+  
+  .sidebar nav ul li a:active i {
     color: #8A2BE2;
-}
-
-/* Effet de survol sur l'élément */
-.sidebar nav ul li:hover,
-.sidebar .active {
+  }
+  
+  .sidebar nav ul li:hover,
+  .sidebar .active {
     color: #8A2BE2;
     transform: scale(1.05);
-}
-
-/* Contenu principal */
-.content {
+  }
+  
+  /* Contenu principal */
+  .content {
     flex: 1;
     padding: 20px;
-}
-
-/* Lien dans le contenu */
-.link {
+    margin-left: 270px;
+  }
+  
+  /* Lien */
+  .link {
     text-decoration: none;
     color: #BEBFC5;
-}
-
-.link:hover {
+  }
+  
+  .link:hover {
     color: #8A2BE2;
     transform: scale(1.05);
-}
-
-/* Effet de transition pour les éléments masqués */
-.hidden {
+  }
+  
+  /* Elément masqué */
+  .hidden {
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease-in-out;
-}
-
-/* Tableau */
-.table-container {
-    max-width: 800px;
-    margin: 0 auto;
-    background-color: white;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
-}
-
-/* Style du tableau */
-.table-container table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.table-container th, .table-container td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-.table-container thead {
-    background-color: #8A2BE2 !important; /* البنفسجي الفاتح */
-    color: white !important;
-}
-
-.table-container tbody tr:hover {
-    background-color: #f2e6ff;
-    transition: background-color 0.3s ease-in-out;
-}
-
-/* تعديل رأس الجدول ليكون بنفسجي */
-.table-container thead {
-    background-color: #8A2BE2 !important; /* البنفسجي الفاتح */
-    color: white !important;
-}
-
-/* تعديل الأسطر لتكون بيضاء مع التبديل بين اللون البنفسجي الفاتح */
-.table-container tbody tr:nth-child(odd) {
-    background-color: #ffffff; /* أسطر بيضاء */
-}
-
-.table-container tbody tr:nth-child(even) {
-    background-color: #f2e6ff; /* أسطر بنفسجي فاتح */
-}
-
-/* تحسين تأثير التحويم */
-.table-container tbody tr:hover {
-    background-color: #f2e6ff;
-    transition: background-color 0.3s ease-in-out;
-}
-
-/* Modale (popup) */
-.modal {
+  }
+  
+  /* Modale */
+  .modal {
     position: fixed;
     top: 50%;
     left: 50%;
@@ -202,10 +141,63 @@ body {
     padding: 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-}
-
-/* Style pour le menu spécifique */
-#menu-creer-groupes {
+  }
+  
+  /* Élément actif spécifique */
+  #menu-creer-groupes {
     color: #8A2BE2;
     transform: scale(1.05);
-}
+  }
+  
+  /* Container du formulaire */
+  
+  .container-form {
+    width: 700px;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    margin: 80px auto;
+  }
+  
+  /* ============================= */
+  /*           TABLEAU            */
+  /* ============================= */
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-size: 16px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .table th {
+    background-color: #8A2BE2;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  
+  .table tr:hover {
+    background-color: #f3e8ff;
+    transition: background-color 0.3s ease;
+  }
+  
+  .table td {
+    color: #333;
+  }
+  
+  /* Pour donner des coins arrondis aux titres */
+  .table th:first-child {
+    border-top-left-radius: 8px;
+  }
+  .table th:last-child {
+    border-top-right-radius: 8px;
+  }
+  

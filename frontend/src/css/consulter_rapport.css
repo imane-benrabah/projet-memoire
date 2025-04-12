@@ -10,10 +10,6 @@
 body {
     display: flex;
     background: #E6E6FA;
-    overflow-x: hidden; /* Empêche le défilement horizontal */
-    width: 100%;
-    min-height: 100vh;
-    overflow-y: hidden; /* Ajouté pour supprimer le défilement vertical */
 }
 
 .titre {
@@ -22,17 +18,18 @@ body {
 
 /* Barre latérale */
 .sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
+    position: fixed; /* Fixe la barre latérale à l'écran */
+    top: 0; /* Positionne-la en haut de la page */
+    left: 0; /* Positionne-la sur la gauche de la page */
     width: 255px;
     background: white;
     color: #BEBFC5;
     padding: 20px;
     height: 100vh;
-    overflow-y: auto;
+    overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse */
 }
 
+/* Titre dans la sidebar */
 .sidebar h2 {
     text-align: center;
     margin-bottom: 30px;
@@ -40,123 +37,108 @@ body {
     font-weight: bold;
 }
 
+/* Liste des éléments dans la sidebar */
 .sidebar nav ul {
     list-style: none;
     padding: 0;
 }
 
+/* Style des items de la sidebar */
 .sidebar nav ul li {
     display: flex;
     align-items: center;
     padding: 15px;
     cursor: pointer;
     font-size: 18px;
-    transition: all 0.3s;
+    transition: background 0.3s, transform 0.2s;
     border-radius: 5px;
     gap: 10px;
     color: #BEBFC5;
-    margin-bottom: 10px;
+    margin-bottom: 10px; /* Espacement entre les éléments */
 }
 
+/* Icônes dans la sidebar */
 .sidebar nav ul li i {
     color: #BEBFC5;
     transition: color 0.3s;
 }
 
+/* Style des liens dans la sidebar */
 .sidebar nav ul li a {
     display: flex;
     align-items: center;
     text-decoration: none;
     color: gray;
     padding: 10px;
-    transition: color 0.3s;
+    transition: color 0.3s ease;
 }
 
+/* Style des icônes des liens dans la sidebar */
 .sidebar nav ul li a i {
     margin-right: 10px;
     color: inherit;
+    transition: color 0.3s ease;
 }
 
+/* Survol des éléments dans la sidebar */
+.sidebar nav ul li a:hover {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:hover i {
+    color: #8A2BE2;
+}
+
+/* Lorsque l'élément est actif */
+.sidebar nav ul li.active a {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li.active a i {
+    color: #8A2BE2;
+}
+
+/* Effet lorsque vous relâchez le clic (mouse up) */
+.sidebar nav ul li a:active {
+    color: #8A2BE2;
+}
+
+.sidebar nav ul li a:active i {
+    color: #8A2BE2;
+}
+
+/* Effet de survol sur l'élément */
 .sidebar nav ul li:hover,
-.sidebar nav ul li.active {
+.sidebar .active {
     color: #8A2BE2;
-}
-
-.sidebar nav ul li:hover i,
-.sidebar nav ul li.active i {
-    color: #8A2BE2;
+    transform: scale(1.05);
 }
 
 /* Contenu principal */
 .content {
-    margin-left: 50px;
-    padding: 40px 20px 20px; /* Augmenté le padding-top à 40px */
-    width: calc(100% - 255px);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    overflow: hidden; /* Ajouté pour supprimer tout défilement */
+    flex: 1;
+    padding: 20px;
 }
 
-/* Formulaire */
-.form-container {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-    width: 100%;
-    max-width: 500px;
-    margin-top: 50px; /* Augmenté pour descendre le formulaire */
-    margin-left: 0; /* Supprimé le margin-left */
+/* Lien dans le contenu */
+.link {
+    text-decoration: none;
+    color: #BEBFC5;
 }
 
-.form-group {
-    margin-bottom: 20px;
-    width: 100%;
+.link:hover {
+    color: #8A2BE2;
+    transform: scale(1.05);
 }
 
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: #555;
-}
-
-.form-group select {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    background-color: #fff;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
-.submit-btn {
-    background-color: #8A2BE2;
-    color: white;
-    border: none;
-    padding: 12px 25px;
-    border-radius: 6px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 100%;
-    margin-top: 10px;
-}
-
-.submit-btn:hover {
-    background-color: #7B1FA2;
-}
-
-/* Styles supplémentaires */
+/* Effet de transition pour les éléments masqués */
 .hidden {
-    display: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out;
 }
 
+/* Modale (popup) */
 .modal {
     position: fixed;
     top: 50%;
@@ -167,5 +149,34 @@ body {
     padding: 20px;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    z-index: 1000;
+}
+
+/* Style pour le menu spécifique */
+#menu-creer-groupes {
+    color: #8A2BE2;
+    transform: scale(1.05);
+}
+/* Formulaire personnalisé */
+.form-rapport {
+    background-color: white;
+    border-radius: 12px;
+    max-width: 500px;
+    width: 100%;
+    margin-left: auto;  /* هذه ستدفع النموذج نحو اليمين */
+    margin-right: 220px;  /* يمكنك تعديل المسافة على اليمين */
+}
+
+/* Bouton violet personnalisé */
+.btn-purple {
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-purple:hover {
+    background-color: #6a1bc7;
 }
