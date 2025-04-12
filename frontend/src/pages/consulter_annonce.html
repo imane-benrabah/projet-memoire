@@ -10,70 +10,68 @@
     
     <link rel="stylesheet" href="../css/dashboard_admin.css">
     <style>
-        
+        body {
+            font-family: 'Sarabun', sans-serif;
+        }
+
         .container {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    max-width: 800px;
-    text-align: center;
-    margin-top: 119px;
-    margin-right: 110px;
-    height: 37vh;
-    transition: box-shadow 0.3s ease-in-out; 
-}
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            margin-top: 150px;
+            margin-left: auto;
+            margin-right: 150px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
 
-.container:hover {
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); 
-}
+        .container:hover {
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
 
-        
         button {
-    margin: 80px;
-    border-radius: 10px;
-    padding: 10px 15px;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    top: 200px;
-    display: inline-block;
-    color: white;
-    font-size: 16px;
-}
+            border-radius: 10px;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            color: white;
+            font-size: 16px;
+        }
 
-/* Bouton Valider */
-.btn-success {
-    background-color: #8F00FF;
-    transform: scale(1.02);
-    position: absolute;
-    left: 940px;
-    border: none;
-    transition: background 0.3s, transform 0.2s;
-    
-}
+        h2 {
+            color: #8A2BE2;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
 
-.btn-success:hover {
-    background-color: #6F00FF;
-    transform: scale(1.04);
-}
+        #rapport-select {
+            width: 80%;
+            margin: 0 auto;
+        }
 
-/* Titre */
-h2 {
-    color: #8A2BE2;
-    margin-bottom: 20px;
-    font-size: 24px;
-}
+        #annonce-content {
+            margin-top: 20px;
+            text-align: left;
+        }
 
-#rapport-select{
-    position:absolute;
-    top: 160px;
-    width:55%;
-    right: 165px;
-}
+        #select-annonce {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
 
+        /* Style des titres et des contenus */
+        h4 {
+            color: #8A2BE2;
+        }
 
+        p {
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -96,13 +94,10 @@ h2 {
 
         <!-- Sélecteur d'annonces -->
         <div id="rapport-select">
-            <label for="select-annonce" class="form-label">Sélectionner une annonce :</label>
             <select id="select-annonce" class="form-select" onchange="afficherAnnonceDetails()">
                 <option value="">Choisir une annonce...</option>
-                <option value="1">Annonce 1</option>
-                <option value="2">Annonce 2</option>
-                <option value="3">Annonce 3</option>
-                <option value="4">Annonce 4</option>
+                <option value="1">Titre 1</option>
+                <option value="2">Titre 2</option>
             </select>
         </div>
 
@@ -110,12 +105,9 @@ h2 {
         <div id="details-annonce" class="mt-4">
             <h3>Détails de l'annonce</h3>
             <div id="annonce-content">
-                <p>Choisissez une annonce pour afficher ses détails.</p>
+                <!-- Les détails de l'annonce seront affichés ici -->
             </div>
         </div>
-
-        <!-- Bouton pour afficher l'annonce sélectionnée -->
-        <button class="btn-success">Valider</button>
     </div>
 
     <script>
@@ -145,7 +137,7 @@ h2 {
                 },
                 4: {
                     titre: "Annonce 4",
-                    description: "Voici la description de l'annonce 4.",
+                    description: "Voici la description de l'annonce 4. C'est un autre exemple d'annonce avec des informations intéressantes.",
                     image: "https://via.placeholder.com/150"
                 }
             };

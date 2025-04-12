@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Consulter rapport tache</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="../css/dashboard_etud_res.css"/>
+
+  <style>
+   
+    .container-cas {
+      margin-left: 500px;
+      padding: 40px 20px;
+    }
+    .rapport-box {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      max-width: 600px;
+      margin-bottom: 30px;
+    }
+    .rapport-title {
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 15px;
+    }
+    .rapport-link {
+      font-size: 1rem;
+      text-decoration: none;
+      color: #084298;
+      transition: color 0.3s ease;
+    }
+    .rapport-link:hover {
+      color: #084298;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2 class="titre">Gestion projet</h2>
+    <nav>
+      <ul>
+        <li><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li class="active"><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+        <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+        <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Contenu Principal -->
+  <div class="container-cas">
+    <!-- Cas 1 -->
+    <div class="rapport-box">
+      <div class="rapport-title"> Nom de cas : Consulter description sujet </div>
+      <div>
+        Rapport : 
+        <a href="https://drive.google.com/uc?export=download&id=1ABCdEFGHIJKLMNOP" class="rapport-link" target="_blank">
+          Télécharger le rapport
+        </a>
+      </div>
+    </div>
+
+    <!-- Cas 2 -->
+    <div class="rapport-box">
+      <div class="rapport-title"> Nom de cas :Consulter notification </div>
+      <div>
+        Rapport : 
+        <a href="https://drive.google.com/uc?export=download&id=1XYZabcdefg123456" class="rapport-link" target="_blank">
+          Télécharger le rapport
+        </a>
+      </div>
+    </div>
+
+    <!-- Cas 3 -->
+    <div class="rapport-box">
+      <div class="rapport-title"> Nom de cas : consulter liste utilisateur </div>
+      <div>
+        Rapport : 
+        <a href="https://drive.google.com/uc?export=download&id=1qwertyuioPLMN789" class="rapport-link" target="_blank">
+          Télécharger le rapport
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+

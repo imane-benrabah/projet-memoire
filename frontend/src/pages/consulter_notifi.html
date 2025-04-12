@@ -1,16 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Dashboard Étudiant</title>
-        
-        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulter Notification</title>
     
-        <link rel="stylesheet" href="../css/dashboard_etudiant.css">
-    </head>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/dashboard_etudiant.css">
+    <style>
+     .form-container {
+    background-color: white;  /* Fond blanc pour le formulaire */
+    padding: 20px;  /* Espace autour du formulaire */
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    max-width: 500px;  /* Taille plus petite du formulaire */
+    margin: 30px auto 0;  /* Centrer le formulaire avec un espace en haut */
+    margin-left: 450px;
+}
+
+
+.btn-primary {
+    background-color: #6f42c1; /* Violet */
+    border-color: #6f42c1;
+}
+
+.btn-primary:hover {
+    background-color: #5a32a3; /* Violet plus foncé */
+    border-color: #5a32a3;
+}
+
+    </style>
+</head>
 <body>
     <div class="sidebar">
         <h2 class="titre">Gestion projet</h2>
@@ -22,13 +45,51 @@
                 <li><a href="consulter_rapport.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
                 <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
                 <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
-                <li><a href="poser_ques.html"><i class="fas fa-question"></i> Poser des questions</a></li>
-                <li><a href="passer_feedback.html"><i class="fas fa-comments"></i> Passer feedback</a></li>
+                <li><a href="mailto:belmerabetkawtar19@gmail.com?subject=Question%20concernant%20le%20projet&body=Bonjour,%20j%27ai%20une%20question%20concernant..." target="_blank"><i class="fas fa-question"></i> Poser des questions</a></li>
                 <li class="active"><a href="consulter_notifi.html"><i class="fas fa-bell"></i> Consulter les notifications</a></li>
                 <li><a href="profil_etud.html"><i class="fas fa-user"></i> Profil</a></li>
             </ul>
         </nav>
     </div>
+    
+    <div class="container">
+        <div class="form-container">
+            <h3 class="text-center mb-4">Notifications</h3>
+            <form action="#" method="get" class="mb-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label for="search" class="form-label">Rechercher par mot-clé</label>
+                        <input type="text" class="form-control" id="search" placeholder="Entrez un mot-clé">
+                    </div>
+                    <div class="col-md-6">
+                        <label for="date-filter" class="form-label">Filtrer par date</label>
+                        <input type="date" class="form-control" id="date-filter">
+                    </div>
+                </div>
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">Filtrer</button>
+                </div>
+            </form>
+
+            <!-- Notifications List -->
+            <div class="notifications">
+                <div class="notification-item p-3 mb-2 bg-light border rounded">
+                    <h5>Notification 1</h5>
+                    <p>Contenu de la notification 1</p>
+                    <small class="text-muted">Date : 09/04/2025</small>
+                    <button class="btn btn-link">Marquer comme lu</button>
+                </div>
+                <div class="notification-item p-3 mb-2 bg-light border rounded">
+                    <h5>Notification 2</h5>
+                    <p>Contenu de la notification 2</p>
+                    <small class="text-muted">Date : 08/04/2025</small>
+                    <button class="btn btn-link">Marquer comme lu</button>
+                </div>
+                <!-- Ajoutez d'autres notifications ici -->
+            </div>
+        </div>
+    </div>
+
     <script src="../js/dashboard_etu.js"></script>
 </body>
 </html>

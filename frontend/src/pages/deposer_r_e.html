@@ -153,38 +153,46 @@
   <div class="form-container">
     <h1>Formulaire</h1>
 
-    <form id="subjectForm">
-      <div class="form-group">
-        <label for="stepName">Sélectionner l'étape</label>
-        <select id="stepName" name="stepName" required>
-          
-        </select>
-      </div>
+    <!-- Sélecteur d'annonces -->
+    <div id="etape-select">
+      <label>    </label>
+      <select id="select-etape" class="form-select" onchange="afficherAnnonceDetails()">
+        <option value="">Choisir une etape...</option>
+          <option value="1"> Specification </option>
+          <option value="2"> Analyse</option>
+      </select>
+    </div>
 
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" name="description" required></textarea>
-      </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" name="description" required></textarea>
+    </div>
 
-      <div class="form-group">
-        <label for="rapport">Importer le rapport</label>
-        <div class="custom-file-upload">
-          <button type="button" class="upload-btn" onclick="document.getElementById('rapport').click()">Choisir un fichier</button>
-          <span id="file-name">Aucun fichier choisi</span>
-          <input type="file" id="rapport" name="rapport" accept=".pdf,.doc,.docx" required hidden />
-        </div>
+    <div class="form-group">
+      <label for="rapport">Importer le rapport</label>
+      <div class="custom-file-upload">
+        <button type="button" class="upload-btn" onclick="document.getElementById('rapport').click()">Choisir un fichier</button>
+        <span id="file-name">Aucun fichier choisi</span>
+        <input type="file" id="rapport" name="rapport" accept=".pdf,.doc,.docx" required hidden />
       </div>
+    </div>
 
+<<<<<<< HEAD
       <div class="form-group">
         <label for="date">Date du depot</label>
         <input type="date" id="date" name="date" required />
       </div>
+=======
+    <div class="form-group">
+      <label for="date">Date de l'étape</label>
+      <input type="date" id="date" name="date" required />
+    </div>
+>>>>>>> 159ee7c930588529f649884a89b81005c540df0c
 
-      <div class="button-group">
-        <button type="button" class="cancel-btn" id="cancelBtn">Annuler</button>
-        <button type="submit" class="submit-btn">Envoyer</button>
-      </div>
-    </form>
+    <div class="button-group">
+      <button type="button" class="cancel-btn" id="cancelBtn">Annuler</button>
+      <button type="button" class="submit-btn" onclick="submitForm()">Envoyer</button>
+    </div>
   </div>
 
   <script>
@@ -195,6 +203,16 @@
 
     // Set the default date to today's date
     document.getElementById('date').valueAsDate = new Date();
+
+    function submitForm() {
+      // Simulate file upload to Google Drive (this is just an example)
+      // You would need to integrate Google Drive API to handle actual file uploads
+
+      alert("Votre rapport a été soumis avec succès !");
+
+      // Open Google Drive (or any other service URL) for the user to upload manually
+      window.open("https://drive.google.com/drive/u/0/my-drive", "_blank");
+    }
   </script>
 </body>
 </html>
