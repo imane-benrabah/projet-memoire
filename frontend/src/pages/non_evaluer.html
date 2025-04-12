@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulter evaluation</title>
+    <title> Consulter evaluation </title>
 
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
@@ -12,14 +12,32 @@
     <link rel="stylesheet" href="../css/dashboard_etudiant.css">
     <style>
         .container-form {
-            margin-left: 450px;
-            max-width: 700px;
-        }
+        margin-left: 600px;
+        max-width: 600px; /* زيادة الحجم */
+        margin-top: 80px; /* جعل النموذج ينزل للأسفل */
+    }
 
-        .card {
-            border-radius: 15px;
-            border-left: 5px solid #8A2BE2; /* Violet */
-        }
+    .card {
+        border-radius: 15px;
+        border-left: 5px solid #8A2BE2;
+        padding: 30px; /* زيادة الحجم الداخلي */
+    }
+
+    h3 {
+        font-family: 'Sarabun', sans-serif;
+        color: #8A2BE2;
+        font-size: 28px; /* تكبير العنوان */
+    }
+
+    .form-select {
+        border-color: #8A2BE2;
+    }
+
+    .btn {
+        font-size: 16px;
+        padding: 12px 24px;
+    }
+
 
         label {
             color: #8A2BE2;
@@ -87,45 +105,19 @@
             </ul>
         </nav>
     </div>
-
-    <div class="container mt-5 container-form">
-        <h3 class="mb-4">Évaluation de votre projet</h3>
-        <div class="card shadow p-4 bg-white">
-            <form>
-                <div class="mt-4">
-                    <h5>Nom du tache :</h5>
-                    <div class="cas-item" id="casClasse">
-                        <span><i class="fas fa-square"></i> Diagramme de classe</span>
-                        <span class="cas-state accept">Accepter</span>
-                    </div>
-                    <div class="cas-item" id="casSequence">
-                        <span><i class="fas fa-square"></i> Diagramme de séquence</span>
-                        <span class="cas-state correct">Corriger</span>
-                    </div>
-                    <div class="cas-item" id="casEtat">
-                        <span><i class="fas fa-square"></i> Diagramme d'état</span>
-                        <span class="cas-state not-evaluated">Non évalué</span>
-                    </div>
+    <div class="container-form">
+        <div class="card">
+            <div class="card-body">
+                <h3 class="text-center">Rapport Non evaluee</h3>
+                <p class="text-center" style="font-weight: bold; color: black;">  </p>
+                <div class="text-center">
+                    <a href="https://drive.google.com" target="_blank" class="btn" style="background-color: #8A2BE2; color: white; font-size: 14px; padding: 10px 20px; border-radius: 5px; text-decoration: none;">
+                        Voir le Rapport
+                    </a>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
-
-    <script>
-        // Event listeners for each cas
-        document.getElementById('casClasse').addEventListener('click', function() {
-            window.location.href = 'accepter.html';
-        });
-
-        document.getElementById('casSequence').addEventListener('click', function() {
-            window.location.href = 'corriger.html';
-        });
-
-        document.getElementById('casEtat').addEventListener('click', function() {
-            window.location.href = 'non_evaluer.html';
-        });
-    </script>
-
-    <script src="../js/dashboard_etu.js"></script>
-</body>
-</html>
+    
+    </body>
+    </html>
