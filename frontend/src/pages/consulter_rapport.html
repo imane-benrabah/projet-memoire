@@ -9,6 +9,30 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" href="../css/consulter_rapp.css">
+        <style>
+            .form-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+    margin-top: 100px;
+    margin-right: 190px ;
+    margin-left: auto;
+}
+
+.btn-purple {
+    background-color: #8A2BE2;
+    color: white;
+    border: none;
+}
+
+.btn-purple:hover {
+    background-color: #6a1bb8;
+}
+
+        </style>
     </head>
 
     <body>
@@ -23,29 +47,40 @@
                     <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
                     <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
                     <li><a href="mailto:belmerabetkawtar19@gmail.com?subject=Question%20concernant%20le%20projet&body=Bonjour,%20j%27ai%20une%20question%20concernant..." target="_blank"><i class="fas fa-question"></i> Poser des questions</a></li>
-                    <li><a href="consulter_notifi.html"><i class="fas fa-bell"></i> Consulter les notifications</a></li>
                     <li><a href="profil_etud.html"><i class="fas fa-user"></i> Profil</a></li>
                 </ul>
             </nav>
         </div>
 
-        <!-- Formulaire pour consulter rapport -->
-        <div class="content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-            <form action="consulter_r_boutton.html" method="get" class="form-rapport p-4 shadow">
+        <div class="content">
+            <div class="form-container">
                 <h4 class="text-center mb-4" style="color:#8A2BE2;">Consulter un rapport</h4>
-                <div class="mb-3">
-                    <label for="casSelect" class="form-label">Choisir un cas :</label>
-                    <select class="form-select" id="casSelect" name="cas" required>
-                        <option value="" disabled selected>-- Sélectionnez un cas --</option>
-                        <option value="cas1">Cas 1 : consulter notification </option>
-                        <option value="cas2">Cas 2 : Consulter description sujet </option>
-                        <option value="cas3">Cas 3 : deposer rapport</option>
-                    </select>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-purple">Consulter Rapport</button>
-                </div>
-            </form>
+                <form action="consulter_r_boutton.html" method="get">
+                    <div class="mb-3">
+                        <label for="taskSelect" class="form-label">Choisir une tâche :</label>
+                        <select class="form-select" id="taskSelect" name="task" required>
+                            <option value="" disabled selected>-- Sélectionner une tâche --</option>
+                            <option value="tache1">Tâche 1 : Diagramme de cas d'utilisation</option>
+                            <option value="tache2">Tâche 2 : Diagramme de classe</option>
+                            <option value="tache3">Tâche 3 : Diagramme de séquence détaillé</option>
+                        </select>
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="casSelect" class="form-label">Choisir un cas :</label>
+                        <select class="form-select" id="casSelect" name="cas" required>
+                            <option value="" disabled selected>-- Sélectionnez un cas --</option>
+                            <option value="cas1">Cas 1 : Consulter notification</option>
+                            <option value="cas2">Cas 2 : Consulter description sujet</option>
+                            <option value="cas3">Cas 3 : Déposer rapport</option>
+                        </select>
+                    </div>
+    
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-purple">Consulter Rapport</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </body>
-</html>
+    </html>
