@@ -26,6 +26,7 @@ body {
     color: #BEBFC5;
     padding: 20px;
     height: 100vh;
+    overflow-y: auto;
 }
 
 .sidebar h2 {
