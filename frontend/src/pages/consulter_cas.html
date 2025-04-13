@@ -23,10 +23,6 @@
         <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
         <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
         <li><a href="mailto:belmerabetkawtar19@gmail.com?subject=Question%20concernant%20le%20projet&body=Bonjour,%20j%27ai%20une%20question%20concernant..." target="_blank"><i class="fas fa-question"></i> Poser des questions</a></li>
-<<<<<<< HEAD
-=======
-        <li><a href="consulter_notifi.html"><i class="fas fa-bell"></i> Consulter les notifications</a></li>
->>>>>>> 20036078205d3f3202437204d42985912068114a
         <li><a href="profil_etud.html"><i class="fas fa-user"></i> Profil</a></li>
       </ul>
     </nav>
@@ -38,18 +34,6 @@
       <h3 class="text-center mb-4">Mes cas :</h3>
       <div class="table-responsive">
         <table class="table table-bordered text-center">
-<<<<<<< HEAD
-=======
-          <thead class="table-light">
-            <tr>
-              <th>#</th>
-              <th>Titre du cas</th>
-              <th>Description</th>
-              <th>Date</th>
-              <th>Statut</th>
-            </tr>
-          </thead>
->>>>>>> 20036078205d3f3202437204d42985912068114a
           <tbody id="cas-table-body">
             <!-- Les cas de l'étudiant seront ajoutés ici dynamiquement -->
           </tbody>
@@ -62,25 +46,10 @@
     // Exemple temporaire de données simulées
     const casEtudiant = [
       {
-<<<<<<< HEAD
         nom: " Consulter notification",
       },
       {
         nom: "Consulter liste des cas ",
-=======
-        id: 1,
-        titre: "Cas 1",
-        description: "Description du cas 1",
-        date: "2025-04-05",
-        statut: "En attente"
-      },
-      {
-        id: 2,
-        titre: "Cas 2",
-        description: "Description du cas 2",
-        date: "2025-04-08",
-        statut: "Validé"
->>>>>>> 20036078205d3f3202437204d42985912068114a
       }
     ];
 
@@ -89,15 +58,7 @@
     casEtudiant.forEach((cas, index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-<<<<<<< HEAD
         <td>${cas.nom}</td>
-=======
-        <td>${index + 1}</td>
-        <td>${cas.titre}</td>
-        <td>${cas.description}</td>
-        <td>${cas.date}</td>
-        <td>${cas.statut}</td>
->>>>>>> 20036078205d3f3202437204d42985912068114a
       `;
       tbody.appendChild(row);
     });
