@@ -22,46 +22,52 @@
         <li><a href="consulter_rapport.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
         <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
         <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
-        <li><a href="mailto:belmerabetkawtar19@gmail.com?subject=Question%20concernant%20le%20projet&body=Bonjour,%20j%27ai%20une%20question%20concernant..." target="_blank"><i class="fas fa-question"></i> Poser des questions</a></li>
+        <li><a href="poser_question.html"><i class="fas fa-question"></i> Poser des questions</a></li>
         <li><a href="profil_etud.html"><i class="fas fa-user"></i> Profil</a></li>
       </ul>
     </nav>
   </div>
 
-  <!-- Contenu principal -->
-  <main class="content">
-    <div class="container-form">
-      <h3 class="text-center mb-4">Mes cas :</h3>
+  <main class="content" style="margin-left: 250px; padding: 40px 0; min-height: 100vh; display: flex; justify-content: center; align-items: flex-start;">
+    <div class="container" style="max-width: 700px; width: 100%;">
+      <h2 class="text-center mb-4" style="color: #8A2BE2;">Mes cas :</h2>
       <div class="table-responsive">
-        <table class="table table-bordered text-center">
+        <table class="table table-bordered table-hover text-center align-middle">
+          <thead style="background-color: #8A2BE2; color: white;">
+            <tr>
+              <th>Nom du cas</th>
+              <th>Acteur</th>
+            </tr>
+          </thead>
           <tbody id="cas-table-body">
-            <!-- Les cas de l'étudiant seront ajoutés ici dynamiquement -->
+            <!-- Contenu dynamique -->
           </tbody>
         </table>
       </div>
     </div>
   </main>
-
   <script>
-    // Exemple temporaire de données simulées
-    const casEtudiant = [
-      {
-        nom: " Consulter notification",
-      },
-      {
-        nom: "Consulter liste des cas ",
-      }
-    ];
+  const casEtudiant = [
+  {
+    nom: "Consulter notification",
+    acteur: "Étudiant"
+  },
+  {
+    nom: "Consulter liste des cas",
+    acteur: "Enseignant"
+  }
+];
 
-    const tbody = document.getElementById("cas-table-body");
+const tbody = document.getElementById("cas-table-body");
 
-    casEtudiant.forEach((cas, index) => {
-      const row = document.createElement("tr");
-      row.innerHTML = `
-        <td>${cas.nom}</td>
-      `;
-      tbody.appendChild(row);
-    });
-  </script>
+casEtudiant.forEach((cas) => {
+  const row = document.createElement("tr");
+  row.innerHTML = `
+    <td>${cas.nom}</td>
+    <td>${cas.acteur}</td>
+  `;
+  tbody.appendChild(row);
+});
+</script>
 </body>
 </html>
