@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Login Page</title>
     <link rel="stylesheet" href="../css/login.css">
+
+
 </head>
 <body>
     <div class="container">
@@ -29,8 +31,22 @@
                 </div>
                 <button type="submit" class="login-btn">Login</button>
             </form>
+
+            <div class="register-link">
+                <p>Vous n’avez pas de compte ?
+                  <button onclick="allerVersPage()" class="create-btn">Créer un compte</button>
+                </p>
+              </div>
+              
             
         </div>
     </div>
+
+
+    <script>
+function allerVersPage() {
+      window.location.href = "creer_compte.html"; // change le nom de la page ici
+    }
+    </script>
 </body>
 </html>
