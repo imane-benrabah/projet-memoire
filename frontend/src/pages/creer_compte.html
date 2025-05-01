@@ -14,13 +14,13 @@
     }
 
     body {
-      background-color:#E6E6FA;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      padding: 20px;
-    }
+  background-color: #E6E6FA;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+}
+
 
     .container {
       background: #fff;
@@ -28,9 +28,7 @@
       border-radius: 20px;
       box-shadow: 0 8px 25px rgba(0, 0, 0, #E6E6FA);
       width: 100%;
-      max-width: 420px;
-      margin-top: 50px;
-    }
+      max-width: 420px;    }
 
     h2 {
       text-align: center;
@@ -92,21 +90,83 @@
 <body>
   <div class="container">
     <h2><i class="fas fa-user-plus"></i> Créer un compte enseignant</h2>
-    <form action="/api/enseignants/register" method="POST">
+    <form id="registerForm" method="POST" enctype="multipart/form-data" autocomplete="on">
       <label for="nom">Nom :</label>
-      <input type="text" id="nom" name="nom" placeholder="Entrez votre nom" required>
+      <input type="text" id="nom" name="nom" placeholder="Entrez votre nom" required autocomplete="given-name">
 
       <label for="prenom">Prénom :</label>
-      <input type="text" id="prenom" name="prenom" placeholder="Entrez votre prénom" required>
+      <input type="text" id="prenom" name="prenom" placeholder="Entrez votre prénom" required autocomplete="family-name">
 
       <label for="email">Email :</label>
-      <input type="email" id="email" name="email" placeholder="exemple@email.com" required>
+      <input type="email" id="email" name="email" placeholder="exemple@email.com" required autocomplete="email">
 
       <label for="password">Mot de passe :</label>
-      <input type="password" id="password" name="password" placeholder="********" required>
+      <input type="password" id="password" name="password" placeholder="********" required autocomplete="current-password">
+
+      <label for="image">Image :</label>
+<input type="file" id="image" name="image" accept="image/*">
+
+<label for="bio">Bio :</label>
+<input type="text" id="bio" name="bio" placeholder="Parlez un peu de vous">
+
+<label for="sexe">Sexe :</label>
+<input type="text" id="sexe" name="sexe" placeholder="Homme / Femme">
+
+<label for="dateNaissance">Date de naissance :</label>
+<input type="date" id="dateNaissance" name="dateNaissance">
+
+
+      <label>
+        <input type="checkbox" id="isResponsable"> Responsable
+      </label>
+
+      <label>
+        <input type="checkbox" id="isPrincipal"> Principal
+      </label>
 
       <button type="submit"></i> Créer le compte</button>
     </form>
   </div>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async function (event) {
+      event.preventDefault();
+  
+      const formData = new FormData();
+      formData.append('nom', document.getElementById('nom').value);
+      formData.append('prenom', document.getElementById('prenom').value);
+      formData.append('email', document.getElementById('email').value);
+      formData.append('password', document.getElementById('password').value);
+      formData.append('bio', document.getElementById('bio').value);
+      formData.append('sexe', document.getElementById('sexe').value);
+      formData.append('dateNaissance', document.getElementById('dateNaissance').value);
+      formData.append('isResponsable', document.getElementById('isResponsable').checked);
+      formData.append('isPrincipal', document.getElementById('isPrincipal').checked);
+  
+      const imageInput = document.getElementById('image');
+      if (imageInput.files.length > 0) {
+        formData.append('image', imageInput.files[0]);
+      }
+  
+      try {
+        const response = await fetch('http://localhost:3000/api/register/enseignant', {
+          method: 'POST',
+          body: formData // Pas besoin de headers ici
+        });
+  
+        const data = await response.json();
+  
+        if (response.ok) {
+          alert('Enseignant inscrit avec succès');
+          window.location.href = 'login.html';
+        } else {
+          alert('Erreur : ' + data.message);
+        }
+      } catch (err) {
+        alert('Erreur de connexion au serveur.');
+      }
+    });
+  </script>
+  
 </body>
 </html>
