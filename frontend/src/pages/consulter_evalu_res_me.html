@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulter evaluation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/dashboard_etudiant.css">
+    <style>
+        .container-form {
+            margin-left: 450px;
+            max-width: 700px;
+        }
+
+        .card {
+            border-radius: 15px;
+            border-left: 5px solid #8A2BE2; /* Violet */
+        }
+
+        label {
+            color: #8A2BE2;
+        }
+
+        h3 {
+            font-family: 'Sarabun', sans-serif;
+            color: #8A2BE2;
+        }
+
+        .form-select {
+            border-color: #8A2BE2;
+        }
+
+        .cas-item {
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #8A2BE2;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .cas-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cas-state {
+            font-weight: bold;
+        }
+
+        .cas-item i {
+            margin-right: 8px;
+        }
+
+        .accept {
+            color: green;
+        }
+
+        .correct {
+            color: red;
+        }
+
+        .not-evaluated {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="titre">Gestion projet</h2>
+        <nav>
+            <ul>
+                <li ><a href="dashboard_etu_res.mem.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li ><a href="consulter_des_sujet_res_mem.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+        <li><a href="consulter_cas_res_mem.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+        <li><a href="consulter_rapport_res_mem.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+        <li><a href="deposer_rapport_res_mem.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+        <li class="active"><a href="consulter_evalu_res_me.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+        <li><a href="poser_question_res_mem.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+        <li><a href="consulter_r_etape_etu_r_m.html"><i class="fas fa-eye"></i> voir rapports etapes</a></li>
+        <li><a href="deposer_r_mem.html"><i class="fas fa-upload"></i> Déposer rapport memoire</a></li>
+        <li><a href="profil_etu_res_mem.html" ><i class="fas fa-user"></i> Profil</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <div class="container mt-5 container-form">
+        
+        <div class="card shadow p-4 bg-white">
+            <form>
+                <div class="mt-4">
+                    <h5>Nom du tache :</h5>
+                    <div class="cas-item" id="casClasse">
+                        <span><i class="fas fa-square"></i> Diagramme de classe</span>
+                        <span class="cas-state accept">Accepter</span>
+                    </div>
+                    <div class="cas-item" id="casSequence">
+                        <span><i class="fas fa-square"></i> Diagramme de séquence</span>
+                        <span class="cas-state correct">Corriger</span>
+                    </div>
+                    <div class="cas-item" id="casEtat">
+                        <span><i class="fas fa-square"></i> Diagramme d'état</span>
+                        <span class="cas-state not-evaluated">Non évalué</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Event listeners for each cas
+        document.getElementById('casClasse').addEventListener('click', function() {
+            window.location.href = 'accepter.html';
+        });
+
+        document.getElementById('casSequence').addEventListener('click', function() {
+            window.location.href = 'corriger.html';
+        });
+
+        document.getElementById('casEtat').addEventListener('click', function() {
+            window.location.href = 'non_evaluer.html';
+        });
+    </script>
+
+    <script src="../js/dashboard_etu.js"></script>
+</body>
+</html>

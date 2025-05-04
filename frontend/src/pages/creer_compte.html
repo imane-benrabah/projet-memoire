@@ -117,11 +117,11 @@
 
 
       <label>
-        <input type="checkbox" id="isResponsable"> Responsable
+        <input type="checkbox" id="isResponsable" name="isResponsable" value="true"> Responsable
       </label>
 
       <label>
-        <input type="checkbox" id="isPrincipal"> Principal
+        <input type="checkbox" id="isPrincipal" name="isPrincipal" value="true"> Principal
       </label>
 
       <button type="submit"></i> Créer le compte</button>
@@ -140,8 +140,10 @@
       formData.append('bio', document.getElementById('bio').value);
       formData.append('sexe', document.getElementById('sexe').value);
       formData.append('dateNaissance', document.getElementById('dateNaissance').value);
-      formData.append('isResponsable', document.getElementById('isResponsable').checked);
-      formData.append('isPrincipal', document.getElementById('isPrincipal').checked);
+      
+      // Dans votre code frontend, modifiez l'ajout au FormData :
+formData.append('isResponsable', document.getElementById('isResponsable').checked ? 'true' : 'false');
+formData.append('isPrincipal', document.getElementById('isPrincipal').checked ? 'true' : 'false');
   
       const imageInput = document.getElementById('image');
       if (imageInput.files.length > 0) {

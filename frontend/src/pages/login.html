@@ -27,7 +27,7 @@
                     <input type="password"  id="password" placeholder="mot de passe" required>
                 </div>
                 <div class="options">
-                    <label><input type="checkbox" id="rememberMe"> Remember me</label>
+                   
                     <a href="forgot_pass.html">Mot de passe oublié?</a>
                 </div>
                 <button type="submit" class="login-btn">Login</button>
@@ -45,31 +45,29 @@
 
 
     <script>
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
-            event.preventDefault();
+ document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
 
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            const rememberMe = document.getElementById('rememberMe').checked;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
 
-            // Envoi des informations au backend pour la vérification
-            const response = await fetch('http://localhost:3000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password, rememberMe }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                // Connexion réussie, rediriger vers la page d'accueil ou dashboard
-                window.location.href = "/dashboard"; // ou une autre page selon ton projet
-            } else {
-                alert('Erreur : ' + data.message);
-            }
-        });
+    fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+        window.location.href = data.redirectTo;
+      } else {
+        alert(data.message);
+      }
+    })
+    .catch((err) => console.error('Erreur de connexion:', err));
+  });
 
         // Fonction pour rediriger vers la page d'inscription
         function allerVersPage() {

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consulter rapport</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/dashboard_etudiant.css">
+  <style>
+    body {
+      background-color: #f4f4f4;
+      font-family: 'Sarabun', sans-serif;
+    }
+
+    .content {
+      margin-left: 250px;
+      padding: 100px 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      background-color: #E6E6FA;
+    }
+
+    .form-container {
+      background-color: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+    }
+
+    .btn-purple {
+      background-color: #8A2BE2;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .btn-purple:hover {
+      background-color: #8A2BE2;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sidebar">
+    <h2 class="titre">Gestion projet</h2>
+    <nav>
+      <ul>
+        <li ><a href="dashboard_etu_res.mem.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li ><a href="consulter_des_sujet_res_mem.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+        <li><a href="consulter_cas_res_mem.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+        <li class="active"><a href="consulter_rapport_res_mem.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+        <li><a href="deposer_rapport_res_mem.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+        <li><a href="consulter_evalu_res_me.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+        <li><a href="poser_question_res_mem.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+        <li><a href="consulter_r_etape_etu_r_m.html"><i class="fas fa-eye"></i> voir rapports etapes</a></li>
+        <li><a href="deposer_r_mem.html"><i class="fas fa-upload"></i> Déposer rapport memoire</a></li>
+        <li><a href="profil_etu_res_mem.html" ><i class="fas fa-user"></i> Profil</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <main class="content">
+    <div class="container" style="max-width: 600px;">
+      <div class="form-container">
+        <h4 class="text-center mb-4" style="color:#8A2BE2;">Consulter un rapport</h4>
+        <form action="consulter_r_boutton.html" method="get">
+          <div class="mb-3">
+            <label for="taskSelect" class="form-label">Choisir une tâche :</label>
+            <select class="form-select" id="taskSelect" name="task" required>
+              <option value="" disabled selected>-- Sélectionner une tâche --</option>
+              <option value="tache1">Tâche 1 : Diagramme de cas d'utilisation</option>
+              <option value="tache2">Tâche 2 : Diagramme de classe</option>
+              <option value="tache3">Tâche 3 : Diagramme de séquence détaillé</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="casSelect" class="form-label">Choisir un cas :</label>
+            <select class="form-select" id="casSelect" name="cas" required>
+              <option value="" disabled selected>-- Sélectionnez un cas --</option>
+              <option value="cas1">Cas 1 : Consulter notification</option>
+              <option value="cas2">Cas 2 : Consulter description sujet</option>
+              <option value="cas3">Cas 3 : Déposer rapport</option>
+            </select>
+          </div>
+
+          <div class="text-center">
+            <button type="submit" class="btn btn-purple">Consulter Rapport</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
