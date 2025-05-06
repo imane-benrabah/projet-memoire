@@ -2,24 +2,22 @@ const db = require('../config/dbWrapper'); // Utilisez le wrapper au lieu de db 
 
 const checkCredentials = (email, password) => {
     return new Promise((resolve, reject) => {
-      const sql = 'SELECT * FROM Compte WHERE email = ?';
-      db.mainDb.query(sql, [email], (err, results) => {
-        if (err) return reject(err);
-        
-        const user = results[0];
-  
-        if (!user) {
-          return reject(new Error('Email incorrect'));
-        }
-  
-        if (user.password !== password) {
-          return reject(new Error('Mot de passe incorrect'));
-        }
-  
-        resolve(user);
-      });
+        const sql = 'SELECT * FROM Compte WHERE email = ?';
+        db.mainDb.query(sql, [email], (err, results) => {
+            if (err) return reject(err);
+
+            const user = results[0];
+            if (!user) return reject(new Error('Email incorrect'));
+
+            if (password !== user.mot_de_passe) {
+                return reject(new Error('Mot de passe incorrect'));
+            }
+
+            resolve(user);
+        });
     });
-  };
+};
+
   
   
 const getRoles = async (userId) => {

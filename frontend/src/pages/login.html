@@ -16,11 +16,11 @@
         </div>
         <div class="login-box">
             <h2>Hello, <br> Welcome back</h2>
-            <form id="loginForm">
+            <form id="loginForm" autocomplete="on">
 
                 <div class="input-box">
                     <i class="fas fa-envelope"></i>
-                    <input type="email"  id="email" placeholder=" email" required>
+                    <input type="email"  id="email" placeholder=" email" autocomplete="on" required>
                 </div>
                 <div class="input-box">
                     <i class="fas fa-lock"></i>
@@ -45,34 +45,85 @@
 
 
     <script>
- document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
+      let activeFetchController = null;
 
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+      // Fonction pour effectuer le login
+      async function loginUser(event) {
+  event.preventDefault();
 
-    fetch('/api/auth/login', {
-      method: 'POST',
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:3000/api/auth/login", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
+        "Accept": "application/json"
       },
       body: JSON.stringify({ email, password }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      if (data.success) {
-        window.location.href = data.redirectTo;
-      } else {
-        alert(data.message);
-      }
-    })
-    .catch((err) => console.error('Erreur de connexion:', err));
-  });
+      credentials: "include",
+    });
 
-        // Fonction pour rediriger vers la page d'inscription
-        function allerVersPage() {
-            window.location.href = "creer_compte.html"; 
-        }
-    </script>
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Réponse invalide du serveur.");
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+  throw new Error("Erreur réseau lors de la connexion.");
+}
+
+if (data.success !== true) {
+  throw new Error(data.message || "Échec de la connexion.");
+}
+
+
+
+
+    const redirectPath = data.redirectTo;
+    if (!redirectPath || typeof redirectPath !== "string") {
+      throw new Error("Redirection non configurée.");
+    }
+
+    // Redirection sécurisée
+    window.location.href = redirectPath.startsWith("/src/pages/")
+      ? redirectPath
+      : `/src/pages/${redirectPath}`;
+
+  } catch (error) {
+    console.error("Erreur détectée:", error);
+    alert(error.message || "Une erreur s'est produite.");
+    document.getElementById("password").value = "";
+  }
+}
+
+
+// Gestionnaire d'événements pour la soumission du formulaire
+document.getElementById("loginForm").addEventListener("submit", loginUser);
+
+// Gestionnaire pour le bouton de création de compte
+document.querySelector('.create-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = "creer_compte.html";
+});
+
+// Annulation des requêtes lors de la fermeture de la page
+window.addEventListener('beforeunload', () => {
+    if (activeFetchController) {
+        activeFetchController.abort();
+    }
+});
+</script>
+
+
+      
 </body>
 </html>

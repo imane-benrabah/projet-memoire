@@ -85,6 +85,75 @@
         font-size: 22px;
       }
     }
+
+    /* Styles spécifiques pour les checkboxes */
+    input[type="checkbox"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #8F00FF;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  position: relative;
+  margin-right: 10px;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+  flex-shrink: 0; /* Empêche le rétrécissement */
+}
+
+/* Conteneur des options checkbox */
+label[for="isResponsable"],
+label[for="isPrincipal"] {
+  display: flex;
+  align-items: center; /* Aligne verticalement le texte et la checkbox */
+  margin-bottom: 15px;
+  color: #333;
+  cursor: pointer;
+  font-weight: normal;
+  padding-left: 5px;
+  line-height: 1.4; /* Ajuste l'espacement des lignes */
+}
+
+/* Ajustement spécifique pour l'alignement du texte */
+label[for="isResponsable"] span,
+label[for="isPrincipal"] span {
+  display: inline-block;
+  vertical-align: middle;
+  margin-top: -1px; /* Ajustement fin pour l'alignement */
+}
+input[type="checkbox"]:checked {
+  background-color: #8F00FF;
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  color: white;
+  font-size: 12px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Conteneur des options checkbox */
+label[for="isResponsable"],
+label[for="isPrincipal"] {
+  display: flex;
+  align-items: center; /* Aligne verticalement le texte et la checkbox */
+  margin-bottom: 15px;
+  color: #333;
+  cursor: pointer;
+  font-weight: normal;
+  padding-left: 5px;
+  line-height: 1.4; /* Ajuste l'espacement des lignes */
+}
+/* Style pour le bouton de soumission */
+button[type="submit"] {
+  margin-top: 15px;
+}
   </style>
 </head>
 <body>
@@ -117,11 +186,11 @@
 
 
       <label>
-        <input type="checkbox" id="isResponsable" name="isResponsable" value="true"> Responsable
+        <input type="checkbox" id="isResponsable" name="isResponsable" value="true"> <span>Responsable</span>
       </label>
 
       <label>
-        <input type="checkbox" id="isPrincipal" name="isPrincipal" value="true"> Principal
+        <input type="checkbox" id="isPrincipal" name="isPrincipal" value="true"> <span>Principal</span>
       </label>
 
       <button type="submit"></i> Créer le compte</button>
@@ -151,7 +220,7 @@ formData.append('isPrincipal', document.getElementById('isPrincipal').checked ? 
       }
   
       try {
-        const response = await fetch('http://localhost:3000/api/register/enseignant', {
+        const response = await fetch('http://localhost:3000/api/auth/register/enseignant', {
           method: 'POST',
           body: formData // Pas besoin de headers ici
         });

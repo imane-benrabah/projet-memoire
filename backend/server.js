@@ -14,20 +14,47 @@ const etudiantRoutes = require("./routes/etudiantRoutes");
 const binomeRoutes = require("./routes/binomeRoutes");
 const groupeRoutes = require("./routes/groupeRoutes");
 
-app.use('/uploads', express.static(path.join(__dirname, 'middleware/uploads')));
-app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(express.json()); // Pour parser le JSON
-app.use(express.urlencoded({ extended: true }));
+// 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
+const allowedOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500'
+];
 
-const PORT = 3000;
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204
+};
 
-// Middleware
+app.use(cors(corsOptions));
+
 app.use(cors());
 
-app.use(bodyParser.json());
 
-// Routes
+
+// 📦 Middlewares utiles
+app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+// 🔒 En-têtes CORS + Type par défaut
+
+
+
+// 📁 Fichiers statiques
+app.use('/uploads', express.static(path.join(__dirname, 'middleware/uploads')));
+const staticPath = path.join(__dirname, '..', 'frontend', 'src');
+app.use(express.static(staticPath));
+
+// 🌐 ROUTES
 app.use('/api/auth', authRoutes);
 app.use('/api/etudiants', etudiantRoutes);
 app.use('/api/binomes', binomeRoutes);
@@ -39,6 +66,8 @@ app.get('/', (req, res) => {
 });
 
 // Démarrage
+
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });

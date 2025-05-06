@@ -9,4 +9,7 @@ router.post('/register/enseignant', upload.single('image'), authController.regis
 // Route de login
 router.post('/login', authController.login);
 
+  
+
+  
 module.exports = router;
