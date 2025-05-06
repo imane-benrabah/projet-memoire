@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Etudiant = require("../models/Etudiant");
-const Binome = require("../models/Binome");
+const Binome = require("../models/binomeExterneModel");
 
 // Récupérer tous les étudiants
 router.get("/", (req, res) => {

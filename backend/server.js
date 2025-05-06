@@ -11,8 +11,12 @@ const app = express();
 const db = require("./config/db"); // Connexions principales et externes
 const authRoutes = require('./routes/authRoutes'); 
 const etudiantRoutes = require("./routes/etudiantRoutes");
-const binomeRoutes = require("./routes/binomeRoutes");
-const groupeRoutes = require("./routes/groupeRoutes");
+const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
+const groupesRoutes = require('./routes/groupesRoutes');
+
+
+
+
 
 
 // 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
@@ -32,6 +36,7 @@ const corsOptions = {
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
+
   optionsSuccessStatus: 204
 };
 
@@ -56,9 +61,8 @@ app.use(express.static(staticPath));
 
 // 🌐 ROUTES
 app.use('/api/auth', authRoutes);
-app.use('/api/etudiants', etudiantRoutes);
-app.use('/api/binomes', binomeRoutes);
-app.use('/api/groupes', groupeRoutes);
+app.use("/api", binomeExterneRoutes);
+app.use('/api', groupesRoutes);
 
 // Route de test
 app.get('/', (req, res) => {

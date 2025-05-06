@@ -41,9 +41,7 @@
             </table>
         </div>
 
-        <button id="btn-creer-groupe" class="btn btn-success mt-3" data-bs-toggle="modal" data-bs-target="#modalGroupe">
-            Créer Groupe
-        </button>
+       
     </main>
 
     <!-- Fenêtre modale pour la création de groupe -->
@@ -57,17 +55,14 @@
                 <div class="modal-body">
                     <form id="form-groupe">
                         <div class="mb-3">
-                            <label for="binome_id" class="form-label">Choisir un binôme</label>
-                            <select class="form-control" id="binome_id" required>
-                                <option value="">Sélectionnez un binôme</option>
-                            </select>
+                            <label for="binome_id" class="form-label">Numéro du binôme choisi</label>
+                            <input type="text" class="form-control" id="binome_id" readonly>
                         </div>
                         <div class="mb-3">
-                            <label for="groupe_nom" class="form-label">Choisir un Groupe</label>
-                            <select class="form-control" id="groupe_nom" required>
-                                <option value="">Sélectionnez un groupe</option>
-                            </select>
+                            <label for="groupe_nom" class="form-label">Nom du Groupe</label>
+                            <input type="text" class="form-control" id="groupe_nom" placeholder="Entrez le nom du groupe" required>
                         </div>
+                        
                         <button type="submit" class="btn btn-primary w-100" id="creer">Créer</button>
                     </form>
                 </div>
@@ -77,133 +72,91 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Gestion du menu actif
-            const menuItems = document.querySelectorAll('.sidebar nav ul li');
-            menuItems.forEach(item => {
-                item.addEventListener('click', function() {
-                    menuItems.forEach(li => li.classList.remove('active'));
-                    this.classList.add('active');
-                });
-            });
+        // === Simulation d'une connexion réussie ===
+// À SUPPRIMER UNE FOIS LE LOGIN FONCTIONNE
+if (!localStorage.getItem("userRole")) {
+    localStorage.setItem("userId", "1");  // ID fictif de l'utilisateur
+    localStorage.setItem("userRole", "enseignant_principal");
+    console.log("Connexion simulée : enseignant principal");
+   }
 
-            // Déclaration des éléments
-            const tableBody = document.getElementById("table-binomes");
-            const selectBinome = document.getElementById("binome_id");
-            const selectGroupe = document.getElementById("groupe_nom");
-            const formGroupe = document.getElementById("form-groupe");
+   document.addEventListener("DOMContentLoaded", () => {
+    fetch("http://localhost:3000/api/binomes-externe")
+    .then(res => res.json())
+    .then(data => afficherBinomes(data))
+    .catch(err => console.error("Erreur lors du chargement des binômes :", err));
 
-            // Fonction pour charger les binômes
-            function chargerBinomes() {
-                fetch("http://localhost:3000/api/binomes")
-                    .then(response => {
-                        if (!response.ok) throw new Error('Erreur réseau');
-                        return response.json();
-                    })
-                    .then(binomes => {
-                        tableBody.innerHTML = "";
-                        selectBinome.innerHTML = '<option value="">Sélectionnez un binôme</option>';
+    // Ajoute un événement pour ouvrir la modale au clic sur une ligne
+    document.querySelector("#table-binomes").addEventListener("click", (event) => {
+        const clickedRow = event.target.closest("tr");  // Trouver la ligne cliquée
 
-                        binomes.forEach(binome => {
-                            // Ajout au tableau
-                            const row1 = document.createElement("tr");
-                            row1.innerHTML = `
-                                <td rowspan="${binome.etudiant2_nom ? 2 : 1}">${binome.binome_id}</td>
-                                <td>${binome.etudiant1_matricule || "N/A"}</td>
-                                <td>${binome.etudiant1_nom || "Inconnu"}</td>
-                                <td>${binome.etudiant1_prenom || ""}</td>
-                            `;
-                            tableBody.appendChild(row1);
+        if (!clickedRow) return; // Si ce n'est pas une ligne, ne rien faire
 
-                            if (binome.etudiant2_nom) {
-                                const row2 = document.createElement("tr");
-                                row2.innerHTML = `
-                                    <td>${binome.etudiant2_matricule || "N/A"}</td>
-                                    <td>${binome.etudiant2_nom || "Inconnu"}</td>
-                                    <td>${binome.etudiant2_prenom || ""}</td>
-                                `;
-                                tableBody.appendChild(row2);
-                            }
+        const binomeId = clickedRow.querySelector("td:first-child").textContent; // Récupérer l'ID du binôme
+        // Remplir le champ du binôme dans la modale
+        document.querySelector("#binome_id").value = binomeId;
 
-                            // Ajout au select
-                            const option = document.createElement("option");
-                            option.value = binome.binome_id;
-                            option.textContent = `Binôme ${binome.binome_id}`;
-                            selectBinome.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error("Erreur lors du chargement des binômes:", error);
-                        alert("Erreur lors du chargement des binômes");
-                    });
-            }
+        // Ouvrir la modale
+        const modal = new bootstrap.Modal(document.getElementById('modalGroupe'));
+        modal.show();
+    });
+});
 
-            // Fonction pour charger les groupes
-            function chargerGroupes() {
-                fetch("http://localhost:3000/api/groupes")
-                    .then(response => {
-                        if (!response.ok) throw new Error('Erreur réseau');
-                        return response.json();
-                    })
-                    .then(groupes => {
-                        selectGroupe.innerHTML = '<option value="">Sélectionnez un groupe</option>';
-                        groupes.forEach(groupe => {
-                            const option = document.createElement("option");
-                            option.value = groupe.nom_groupe;
-                            option.textContent = groupe.nom_groupe;
-                            selectGroupe.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error("Erreur lors du chargement des groupes:", error);
-                        alert("Erreur lors du chargement des groupes");
-                    });
-            }
+function afficherBinomes(binomes) {
+    const tableBody = document.querySelector("#table-binomes");
+    tableBody.innerHTML = "";
 
-            // Gestion du formulaire
-            formGroupe.addEventListener("submit", function(event) {
-                event.preventDefault();
+    binomes.forEach(binome => {
+        const row1 = document.createElement("tr");
+        row1.innerHTML = `
+            <td rowspan="${binome.nom2 ? 2 : 1}">${binome.idBinome}</td>
+            <td>${binome.matricule1}</td>
+            <td>${binome.nom1}</td>
+            <td>${binome.prenom1}</td>
+        `;
+        tableBody.appendChild(row1);
 
-                const binomeId = selectBinome.value;
-                const groupeNom = selectGroupe.value;
+        if (binome.nom2) {
+            const row2 = document.createElement("tr");
+            row2.innerHTML = `
+                <td>${binome.matricule2}</td>
+                <td>${binome.nom2}</td>
+                <td>${binome.prenom2}</td>
+            `;
+            tableBody.appendChild(row2);
+        }
+    });
+}
 
-                if (!binomeId || !groupeNom) {
-                    alert("Veuillez sélectionner un binôme ET un groupe !");
-                    return;
-                }
+document.querySelector("#form-groupe").addEventListener("submit", function (e) {
+    e.preventDefault();
 
-                fetch("http://localhost:3000/api/binomes/associer", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        binome_id: binomeId,
-                        groupe_nom: groupeNom
-                    })
-                })
-                .then(response => {
-                    if (!response.ok) throw new Error('Erreur serveur');
-                    return response.json();
-                })
-                .then(data => {
-                    alert("Binôme associé au groupe avec succès !");
-                    // Fermer la modale
-                    const modal = bootstrap.Modal.getInstance(document.getElementById('modalGroupe'));
-                    modal.hide();
-                    // Recharger les données
-                    chargerBinomes();
-                })
-                .catch(error => {
-                    console.error("Erreur:", error);
-                    alert("Erreur lors de l'association: " + error.message);
-                });
-            });
+    const binomeId = document.querySelector("#binome_id").value;
+    const groupeNom = document.querySelector("#groupe_nom").value;
 
-            // Chargement initial
-            chargerBinomes();
-            chargerGroupes();
-        });
+    fetch("http://localhost:3000/api/groupes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "x-user-id": localStorage.getItem("userId") // identifiant de l'enseignant responsable
+        },
+        body: JSON.stringify({ binomeId, groupeNom })
+    })
+    .then(res => res.json())
+    .then(data => {
+        alert(data.message);
+        document.getElementById("form-groupe").reset();
+        const modal = bootstrap.Modal.getInstance(document.getElementById('modalGroupe'));
+        modal.hide();
+    })
+    .catch(err => {
+        console.error("Erreur lors de la création :", err);
+        alert("Erreur lors de la création du groupe.");
+    });
+});
+
+
+
     </script>
 </body>
 </html>
