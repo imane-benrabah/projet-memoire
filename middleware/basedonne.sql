@@ -300,3 +300,36 @@ CREATE TABLE BinomeExterne (
     
 
 );
+
+
+--remplir la base extere--
+
+INSERT INTO BinomeExterne (matricule1, nom1, prenom1, matricule2, nom2, prenom2) VALUES
+-- Binômes complets (2 étudiants algériens)
+('20240001', 'Boukhari', 'Mohamed', '20240002', 'Benali', 'Amina'),
+('20240003', 'Kadri', 'Karim', '20240004', 'Saadi', 'Leila'),
+('20240005', 'Mansouri', 'Yacine', '20240006', 'Bouziane', 'Fatima'),
+('20240007', 'Taleb', 'Nassim', '20240008', 'Cherif', 'Djamila'),
+
+-- Binômes incomplets (1 étudiant algérien)
+('20240009', 'Belkacem', 'Farid', NULL, NULL, NULL),
+('20240010', 'Zitouni', 'Samir', NULL, NULL, NULL),
+('20240011', 'Guerroudj', 'Hakim', NULL, NULL, NULL),
+
+-- Autres binômes complets
+('20240012', 'Dahmani', 'Adel', '20240013', 'Ouali', 'Yasmina'),
+('20240014', 'Boukella', 'Rachid', '20240015', 'Hamidou', 'Soraya'),
+('20240016', 'Lounes', 'Tarek', '20240017', 'Mammeri', 'Nadia'),
+
+-- Derniers binômes
+('20240018', 'Chaoui', 'Bilal', '20240019', 'Benyahia', 'Salima'),
+('20240020', 'Ait', 'Said', NULL, NULL, NULL);
+
+INSERT INTO Enseignants (nom, prenom, role)
+VALUES 
+  ('Benali', 'Salah', 'responsable'),
+  ('Mebarki', 'Nadia', 'principal'),
+  ('Zerari', 'Karim', 'responsable'),
+  ('Chikhi', 'Lamia', 'principal'),
+  ('Kaci', 'Yacine', 'principal'),
+  ('Belkacem', 'Amina', 'responsable');
