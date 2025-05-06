@@ -6,6 +6,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <title>Login Page</title>
     <link rel="stylesheet" href="../css/login.css">
+
+
 </head>
 <body>
     <div class="container">
@@ -14,23 +16,114 @@
         </div>
         <div class="login-box">
             <h2>Hello, <br> Welcome back</h2>
-            <form>
+            <form id="loginForm" autocomplete="on">
+
                 <div class="input-box">
                     <i class="fas fa-envelope"></i>
-                    <input type="email" placeholder=" email" required>
+                    <input type="email"  id="email" placeholder=" email" autocomplete="on" required>
                 </div>
                 <div class="input-box">
                     <i class="fas fa-lock"></i>
-                    <input type="password" placeholder="mot de passe" required>
+                    <input type="password"  id="password" placeholder="mot de passe" required>
                 </div>
                 <div class="options">
-                    <label><input type="checkbox"> Remember me</label>
+                   
                     <a href="forgot_pass.html">Mot de passe oublié?</a>
                 </div>
                 <button type="submit" class="login-btn">Login</button>
             </form>
+
+            <div class="register-link">
+                <p>Vous n’avez pas de compte ?
+                  <button onclick="allerVersPage()" class="create-btn">Créer un compte</button>
+                </p>
+            </div>
+              
             
         </div>
     </div>
+
+
+    <script>
+      let activeFetchController = null;
+
+      // Fonction pour effectuer le login
+      async function loginUser(event) {
+  event.preventDefault();
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  if (!email || !password) {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost:3000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept": "application/json"
+      },
+      body: JSON.stringify({ email, password }),
+      credentials: "include",
+    });
+
+    const contentType = response.headers.get("content-type");
+    if (!contentType || !contentType.includes("application/json")) {
+      throw new Error("Réponse invalide du serveur.");
+    }
+
+    const data = await response.json();
+
+    if (!response.ok) {
+  throw new Error("Erreur réseau lors de la connexion.");
+}
+
+if (data.success !== true) {
+  throw new Error(data.message || "Échec de la connexion.");
+}
+
+
+
+
+    const redirectPath = data.redirectTo;
+    if (!redirectPath || typeof redirectPath !== "string") {
+      throw new Error("Redirection non configurée.");
+    }
+
+    // Redirection sécurisée
+    window.location.href = redirectPath.startsWith("/src/pages/")
+      ? redirectPath
+      : `/src/pages/${redirectPath}`;
+
+  } catch (error) {
+    console.error("Erreur détectée:", error);
+    alert(error.message || "Une erreur s'est produite.");
+    document.getElementById("password").value = "";
+  }
+}
+
+
+// Gestionnaire d'événements pour la soumission du formulaire
+document.getElementById("loginForm").addEventListener("submit", loginUser);
+
+// Gestionnaire pour le bouton de création de compte
+document.querySelector('.create-btn')?.addEventListener('click', (e) => {
+    e.preventDefault();
+    window.location.href = "creer_compte.html";
+});
+
+// Annulation des requêtes lors de la fermeture de la page
+window.addEventListener('beforeunload', () => {
+    if (activeFetchController) {
+        activeFetchController.abort();
+    }
+});
+</script>
+
+
+      
 </body>
 </html>

@@ -1,6 +1,7 @@
-const mysql = require("mysql2"); // Ne pas utiliser "mysql2/promise"
+const mysql = require("mysql2");
 
-const pool = mysql.createPool({
+// Connexion à la base principale (projet)
+const mainPool = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "Imaiha123@123+=masamou",
@@ -10,17 +11,44 @@ const pool = mysql.createPool({
     queueLimit: 0
 });
 
-// Export des méthodes pour effectuer des requêtes SQL avec des callbacks
+// Connexion à la base externe (consultation)
+const externalPool = mysql.createPool({
+    host: "localhost",
+    user: "root",
+    password: "Imaiha123@123+=masamou",
+    database: "consultation",
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
+
+// Export des méthodes avec séparation entre principale et externe
 module.exports = {
-    query: (sql, params, callback) => {
-        pool.query(sql, params, (err, results, fields) => {
-            callback(err, results); // Appel du callback avec les résultats
-        });
+    mainDb: {
+        query: (sql, params, callback) => {
+            mainPool.query(sql, params, (err, results) => {
+                callback(err, results);
+            });
+        },
+        getConnection: (callback) => {
+            mainPool.getConnection((err, connection) => {
+                callback(err, connection);
+            });
+        },
+        close: () => mainPool.end()
     },
-    getConnection: (callback) => {
-        pool.getConnection((err, connection) => {
-            callback(err, connection); // Retourne la connexion avec le callback
-        });
-    },
-    close: () => pool.end()
+
+    externalDb: {
+        query: (sql, params, callback) => {
+            externalPool.query(sql, params, (err, results) => {
+                callback(err, results);
+            });
+        },
+        getConnection: (callback) => {
+            externalPool.getConnection((err, connection) => {
+                callback(err, connection);
+            });
+        },
+        close: () => externalPool.end()
+    }
 };
