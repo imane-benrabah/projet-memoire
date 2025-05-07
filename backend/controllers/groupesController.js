@@ -171,7 +171,7 @@ exports.creerGroupe = (req, res) => {
 
         res.status(201).json({
             success: true,
-            message: "Groupe utilisé ou créé avec succès, binôme et comptes étudiants associés",
+            message: " Binome associé avec succès",
             groupeId: groupeId
         });
     });

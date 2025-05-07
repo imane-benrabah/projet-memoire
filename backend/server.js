@@ -13,7 +13,6 @@ const authRoutes = require('./routes/authRoutes');
 const etudiantRoutes = require("./routes/etudiantRoutes");
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
-const affectationRoutes = require('./routes/affectationRoutes');
 
 
 
@@ -68,7 +67,6 @@ app.use(express.static(staticPath));
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
 app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
-app.use('/api/affectation', affectationRoutes);
 
 
 // Route de test
