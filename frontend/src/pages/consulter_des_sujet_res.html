@@ -93,18 +93,22 @@
         <label>Description :</label>
         <div class="text-content" id="descriptionProjet">En attente de chargement...</div>
       </div>
-      <div class="display-group">
-        <label> Reference :</label>
-        <div class="text-content" id="nomProjet">En attente de chargement...</div>
-      </div>
-      <div class="display-group">
-        <label>Prerequis :</label>
-        <div class="text-content" id="nomProjet">En attente de chargement...</div>
-      </div>
-
     </div>
   </div>
 
-  <script src="../js/dashboard_etu.js"></script>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+     fetch('http://localhost:3000/sujet')
+       .then(response => response.json())
+       .then(data => {
+         document.getElementById("nomSujet").textContent = data.titre;
+         document.getElementById("descriptionSujet").textContent = data.description;
+       })
+       .catch(error => {
+         console.error("Erreur lors de la récupération du sujet:", error);
+       });
+   });
+ </script>
 </body>
 </html>

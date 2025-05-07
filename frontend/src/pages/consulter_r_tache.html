@@ -104,13 +104,35 @@ h2 {
        
 </div>
 <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-document.getElementById("valider-theme").addEventListener("click", function() {
-    window.location.href = "selectionner_tache.html"; 
-});
-});
-</script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. جلب المراحل من الخادم
+        fetch('http://localhost:3000/etapes') // تأكد من إضافة البروتوكول والمضيف والمنفذ
+    .then(response => response.json())
+    .then(data => {
+        const selectElement = document.getElementById('rapport-select');
+        data.forEach(etape => {
+            const option = document.createElement('option');
+            option.value = etape.idEtape; // تأكد أن الاسم مطابق للقاعدة
+            option.textContent = etape.nom;
+            selectElement.appendChild(option);
+        });
+    })
+            .catch(error => console.error('Erreur lors de la récupération des étapes:', error));
+    
+        // 2. عند الضغط على "Suivant"
+        document.getElementById("valider-theme").addEventListener("click", function () {
+            const etapeId = document.getElementById("rapport-select").value;
+            if (!etapeId) {
+                alert("Veuillez sélectionner une étape !");
+                return;
+            }
+    
+            // الانتقال إلى صفحة المهام مع تمرير ID المرحلة
+            window.location.href = `selectionner_tache.html?etapeId=${etapeId}`;
+        });
+    });
+    </script>
+    
 </body>
 </html>
 

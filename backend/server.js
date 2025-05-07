@@ -13,11 +13,9 @@ const authRoutes = require('./routes/authRoutes');
 const etudiantRoutes = require("./routes/etudiantRoutes");
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
-
-
-
-
-
+const etapesRoutes = require('./routes/etapesRoutes');
+const tacheRoutes = require('./routes/tacheRoutes');
+const sujetRoutes = require('./routes/sujetRoute');
 
 // 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
 const allowedOrigins = [
@@ -35,14 +33,12 @@ const corsOptions = {
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-id'], // <-- ajoute x-user-id ici
 
   optionsSuccessStatus: 204
 };
 
 app.use(cors(corsOptions));
-
-app.use(cors());
 
 
 
@@ -59,16 +55,21 @@ app.use('/uploads', express.static(path.join(__dirname, 'middleware/uploads')));
 const staticPath = path.join(__dirname, '..', 'frontend', 'src');
 app.use(express.static(staticPath));
 
+
 // 🌐 ROUTES
+
+// ✅ Middleware temporaire pour simuler un utilisateur connecté
+app.use((req, res, next) => {
+  req.userId = "66469e362abeffbe891f80dc"; // Remplacer par un ID réel de votre base de données
+  next();
+});
+
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
 app.use('/api', groupesRoutes);
-
-// Route de test
-app.get('/', (req, res) => {
-  res.send('✅ Serveur opérationnel');
-});
-
+app.use('/etapes', etapesRoutes);
+app.use('/tache', tacheRoutes); 
+app.use('/api/sujets', sujetRoutes);
 // Démarrage
 
 const PORT = 3000;

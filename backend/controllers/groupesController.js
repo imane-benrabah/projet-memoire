@@ -1,5 +1,4 @@
 const db = require('../config/db'); // base principale
-const externalDb = require('../config/externalDb'); // base externe
 
 exports.creerGroupeEtAssocierBinome = async (req, res) => {
     const { binomeId, groupeNom } = req.body;
