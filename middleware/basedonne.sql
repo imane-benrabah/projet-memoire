@@ -49,7 +49,7 @@ CREATE TABLE EnseignantPrincipal (
 
 -- Table Binome
 CREATE TABLE Binome (
-    idB INT PRIMARY KEY AUTO_INCREMENT,
+    idB INT PRIMARY KEY ,
     responsabilite VARCHAR(50),
     idG INT,
     FOREIGN KEY (idG) REFERENCES Groupe(idG)
@@ -72,7 +72,7 @@ FOREIGN KEY (idG) REFERENCES Groupe(idG);
 
 -- Table Sujet
 CREATE TABLE Sujet (
-    idS INT PRIMARY KEY AUTO_INCREMENT,
+    idS INT PRIMARY KEY ,
     titre VARCHAR(100) NOT NULL,
     description TEXT,
     enseignantRId INT,
@@ -94,7 +94,7 @@ CREATE TABLE Annonce (
 -- Table Etudiant
 CREATE TABLE Etudiant (
     idU INT PRIMARY KEY,
-    matricle VARCHAR(20) NOT NULL UNIQUE,
+    matricule VARCHAR(20) NOT NULL UNIQUE,
     noteFinal FLOAT,
     idB INT,
     FOREIGN KEY (idU) REFERENCES Utilisateur(idU),

@@ -1,3 +1,4 @@
+
 const binomeExterneModel = require("../models/binomeExterneModel");
 
 const getAllBinomes = (req, res) => {
