@@ -12,19 +12,16 @@ const db = require("./config/db"); // Connexions principales et externes
 const authRoutes = require('./routes/authRoutes'); 
 const etudiantRoutes = require("./routes/etudiantRoutes");
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
-<<<<<<< HEAD
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
 const tacheRoutes = require('./routes/tacheRoutes');
 const sujetRoutes = require('./routes/sujetRoute');
-=======
 const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
 
 
 
 
 
->>>>>>> 7709f0521dfb336c150b42fb2cc3e1b1b5a00a39
 
 // 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
 const allowedOrigins = [
@@ -79,12 +76,10 @@ app.use((req, res, next) => {
 
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
-<<<<<<< HEAD
 app.use('/api', groupesRoutes);
 app.use('/etapes', etapesRoutes);
 app.use('/tache', tacheRoutes); 
 app.use('/api/sujets', sujetRoutes);
-=======
 app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
 
 
@@ -93,7 +88,6 @@ app.get('/', (req, res) => {
   res.send('✅ Serveur opérationnel');
 });
 
->>>>>>> 7709f0521dfb336c150b42fb2cc3e1b1b5a00a39
 // Démarrage
 
 const PORT = 3000;
