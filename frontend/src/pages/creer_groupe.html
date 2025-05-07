@@ -74,11 +74,13 @@
     <script>
         // === Simulation d'une connexion réussie ===
 // À SUPPRIMER UNE FOIS LE LOGIN FONCTIONNE
+// Simulation des données utilisateur
 if (!localStorage.getItem("userRole")) {
-    localStorage.setItem("userId", "1");  // ID fictif de l'utilisateur
+    localStorage.setItem("userId", "1"); // ID enseignant principal
     localStorage.setItem("userRole", "enseignant_principal");
-    console.log("Connexion simulée : enseignant principal");
-   }
+    localStorage.setItem("enseignantResponsableId", "2"); // ID enseignant responsable associé
+    console.log("Simulation : Enseignant principal connecté");
+}
 
    document.addEventListener("DOMContentLoaded", () => {
     fetch("http://localhost:3000/api/binomes-externe")
@@ -128,33 +130,38 @@ function afficherBinomes(binomes) {
     });
 }
 
-document.querySelector("#form-groupe").addEventListener("submit", function (e) {
+document.querySelector("#form-groupe").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const binomeId = document.querySelector("#binome_id").value;
-    const groupeNom = document.querySelector("#groupe_nom").value;
+    try {
+        const response = await fetch("http://localhost:3000/api/groupes", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "x-user-id": localStorage.getItem("userId")
+            },
+            body: JSON.stringify({
+                binomeId: document.querySelector("#binome_id").value,
+                groupeNom: document.querySelector("#groupe_nom").value
+            })
+        });
 
-    fetch("http://localhost:3000/api/groupes", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-user-id": localStorage.getItem("userId") // identifiant de l'enseignant responsable
-        },
-        body: JSON.stringify({ binomeId, groupeNom })
-    })
-    .then(res => res.json())
-    .then(data => {
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.message || "Erreur serveur");
+        }
+
+        const data = await response.json();
         alert(data.message);
-        document.getElementById("form-groupe").reset();
-        const modal = bootstrap.Modal.getInstance(document.getElementById('modalGroupe'));
-        modal.hide();
-    })
-    .catch(err => {
-        console.error("Erreur lors de la création :", err);
-        alert("Erreur lors de la création du groupe.");
-    });
-});
+        // Fermer la modale et recharger
+        bootstrap.Modal.getInstance(document.getElementById('modalGroupe')).hide();
+        window.location.reload();
 
+    } catch (err) {
+        console.error("Erreur:", err);
+        alert(err.message || "Erreur lors de la création");
+    }
+});
 
 
     </script>

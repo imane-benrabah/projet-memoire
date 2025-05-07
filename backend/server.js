@@ -12,7 +12,8 @@ const db = require("./config/db"); // Connexions principales et externes
 const authRoutes = require('./routes/authRoutes'); 
 const etudiantRoutes = require("./routes/etudiantRoutes");
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
-const groupesRoutes = require('./routes/groupesRoutes');
+const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
+const affectationRoutes = require('./routes/affectationRoutes');
 
 
 
@@ -50,6 +51,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
+  next();
+});
 // 🔒 En-têtes CORS + Type par défaut
 
 
@@ -62,7 +67,9 @@ app.use(express.static(staticPath));
 // 🌐 ROUTES
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
-app.use('/api', groupesRoutes);
+app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
+app.use('/api/affectation', affectationRoutes);
+
 
 // Route de test
 app.get('/', (req, res) => {
