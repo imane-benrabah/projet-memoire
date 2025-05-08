@@ -97,8 +97,23 @@
 
     // Redirection pour affecter un thème
     document.getElementById("affecter-theme").addEventListener("click", function () {
-        window.location.href = "affecter_theme.html";
-    });
+    const select = document.getElementById("group-select");
+    const groupeId = select.value;
+    const groupeNom = select.options[select.selectedIndex].text;
+
+    if (!groupeId) {
+        alert("Veuillez sélectionner un groupe.");
+        return;
+    }
+
+    // Stocker dans localStorage
+    localStorage.setItem("selectedGroupeId", groupeId);
+    localStorage.setItem("selectedGroupeName", groupeNom);
+
+    // Redirection vers la page d'affectation de thème
+    window.location.href = "affecter_theme.html";
+});
+
 
     // Redirection pour la page de modification
     document.getElementById("suivant").addEventListener("click", () => {

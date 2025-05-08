@@ -14,13 +14,11 @@ const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
 const tacheRoutes = require('./routes/tacheRoutes');
-const sujetRoutes = require('./routes/sujetRoute');
-const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
+const sujetRoutes = require('./routes/sujetRoutes');
 const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
 const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
 const profilRoutes = require('./routes/profilRoutes');
 const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
-const sujetRoutes = require('./routes/sujetRoutes');
 
 
 
