@@ -1,11 +1,10 @@
-// models/sujetModel.js
-const mongoose = require('mongoose');
+const { mainDb } = require('../config/db');
 
-const sujetSchema = new mongoose.Schema({
-  nom: { type: String, required: true },
-  description: { type: String, required: true },
-  reference: { type: String },
-  prerequis: { type: String }
-});
+const sujetModel = {
+  getById: (idS, callback) => {
+    const sql = 'SELECT * FROM sujets WHERE idS = ?';
+    mainDb.query(sql, [idS], callback);
+  },
+};
 
-module.exports = mongoose.model('Sujet', sujetSchema);
+module.exports = sujetModel;

@@ -5,6 +5,8 @@ const sujetController = require('../controllers/sujetController');
 
 router.post('/ajouter', sujetController.ajouterSujet);
 
-router.get('/:id', sujetController.getSujetById);
+// إضافة مسار جديد للحصول على الموضوع بناءً على الطالب
+router.get('/etudiant/:idS', sujetController.getSujetByStudent);
 
+router.get('/:idS', sujetController.getSujetById);
 module.exports = router;

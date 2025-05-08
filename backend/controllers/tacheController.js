@@ -1,18 +1,21 @@
-// controllers/tacheController.js
+// backend/controllers/tacheController.js
 
-const etapesModel = require('../models/tachemodel');
+const tachemodel = require('../models/tacheModel');
 
-// دالة getAllEtapes
-const getAllEtapes = (req, res) => {
-    etapesModel.getAllEtapes((err, tache) => {
+// Fonction pour récupérer les tâches par étape
+const getTachesByEtape = (req, res) => {
+    const id_etape = req.params.id_etape;
+
+    tachemodel.getTachesByEtape(id_etape, (err, taches) => {
         if (err) {
-            console.error('Erreur lors de la récupération des taches:', err);
+            console.error('Erreur lors de la récupération des tâches:', err);
             return res.status(500).json({ error: 'Erreur serveur' });
         }
-        res.json(tache);
+        res.json(taches);
     });
 };
 
 module.exports = {
-    getAllEtapes
+    getTachesByEtape
 };
+

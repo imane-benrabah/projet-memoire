@@ -99,16 +99,28 @@
   
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-     fetch('http://localhost:3000/sujet')
-       .then(response => response.json())
-       .then(data => {
-         document.getElementById("nomSujet").textContent = data.titre;
-         document.getElementById("descriptionSujet").textContent = data.description;
-       })
-       .catch(error => {
-         console.error("Erreur lors de la récupération du sujet:", error);
-       });
-   });
- </script>
+      const urlParams = new URLSearchParams(window.location.search);
+      const sujetId = urlParams.get('idS'); // Récupère l'ID dans l'URL
+  
+      // Vérifier si l'ID est valide
+      if (!sujetId) {
+        console.error('Aucun ID trouvé dans l\'URL');
+        return;
+      }
+  
+      // Utiliser l'ID pour récupérer les données du sujet
+      fetch(`http://localhost:3000/etudiant/${sujetId}`)
+        .then(response => response.json())
+        .then(data => {
+          // Assurez-vous que les clés sont correctement mappées à la base de données
+          document.getElementById("titreSujet").textContent = data.titre;  // Utiliser 'titre' à la place de 'nom'
+          document.getElementById("descriptionSujet").textContent = data.description;  // 'description' reste inchangé
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération du sujet:", error);
+        });
+    });
+  </script>
+  
 </body>
 </html>

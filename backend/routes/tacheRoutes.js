@@ -1,11 +1,10 @@
-// routes/tacheRoutes.js
+// backend/routes/tacheRoutes.js
 
 const express = require('express');
 const router = express.Router();
 const tachecontroller = require('../controllers/tacheController');
 
-// route: GET /etapes
-router.get('/', tachecontroller.getAllEtapes);
+// Route pour récupérer les tâches par étape
+router.get('/etape/:id_etape', tachecontroller.getTachesByEtape);
 
 module.exports = router;
-

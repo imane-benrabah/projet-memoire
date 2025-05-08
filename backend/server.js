@@ -14,6 +14,7 @@ const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
 const tacheRoutes = require('./routes/tacheRoutes');
+<<<<<<< HEAD
 const sujetRoutes = require('./routes/sujetRoute');
 const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
 const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
@@ -24,6 +25,9 @@ const sujetRoutes = require('./routes/sujetRoutes');
 
 
 
+=======
+const sujetRoutes = require('./routes/sujetRoutes');
+>>>>>>> c50128a (MODIFICATION BACKEND)
 
 
 
