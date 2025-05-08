@@ -141,12 +141,18 @@
   <div class="sidebar">
     <h2 class="titre">Gestion projet</h2>
     <nav>
-      <ul>
-        <li><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="consulter_r_tache.html"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
-        <li class="active"><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
-        <li><a href="profil_e_r.html"><i class="fas fa-user"></i> Profil</a></li>
-      </ul>
+        <ul>
+          <li ><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+          <li><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+          <li class="active"><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+          <li><a href="consulter_des_sujet_res.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+          <li><a href="consulter_cas_res.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+          <li><a href="consulter_rapport_res.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+          <li><a href="deposer_rapport_res.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+          <li><a href="consulter_evalu_res.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+          <li><a href="poser_question_res.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+          <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
+        </ul>
     </nav>
   </div>
 
@@ -158,8 +164,6 @@
       <label>    </label>
       <select id="select-etape" class="form-select" onchange="afficherAnnonceDetails()">
         <option value="">Choisir une etape...</option>
-          <option value="1"> Specification </option>
-          <option value="2"> Analyse</option>
       </select>
     </div>
 
@@ -201,23 +205,21 @@
   </div>
 
   <script>
-    document.getElementById('rapport').addEventListener('change', function () {
-      const fileName = this.files[0]?.name || 'Aucun fichier choisi';
-      document.getElementById('file-name').textContent = fileName;
+    document.addEventListener("DOMContentLoaded", function () {
+        fetch('http://localhost:3000/etapes')
+            .then(response => response.json())
+            .then(data => {
+                const selectElement = document.getElementById('select-etape');
+                data.forEach(etape => {
+                    const option = document.createElement('option');
+                    option.value = etape.idEtape;
+                    option.textContent = etape.nom;
+                    selectElement.appendChild(option);
+                });
+            })
+            .catch(error => console.error('Erreur lors de la récupération des étapes:', error));
     });
-
-    // Set the default date to today's date
-    document.getElementById('date').valueAsDate = new Date();
-
-    function submitForm() {
-      // Simulate file upload to Google Drive (this is just an example)
-      // You would need to integrate Google Drive API to handle actual file uploads
-
-      alert("Votre rapport a été soumis avec succès !");
-
-      // Open Google Drive (or any other service URL) for the user to upload manually
-      window.open("https://drive.google.com/drive/u/0/my-drive", "_blank");
-    }
-  </script>
+    </script>
+    
 </body>
 </html>

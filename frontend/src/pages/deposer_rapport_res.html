@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Deposer rapport </title>
+        
+        <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="../css/dashboard_etudiant.css">
+        
+        <style>
+            /* Style pour centrer le formulaire */
+            .form-container {
+                background-color: white;
+                border-radius: 12px;
+                max-width: 450px;
+                width: 100%;
+                padding: 20px;
+                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                margin: 50px auto;
+                margin-left: auto;  /* هذه ستدفع النموذج نحو اليمين */
+                margin-right: 220px;  /* يمكنك تعديل المسافة على اليمين */
+            }
+
+            .form-container h4 {
+                text-align: center;
+                color: #8A2BE2;
+                margin-bottom: 20px;
+            }
+
+            .form-container .form-select,
+            .form-container .form-control {
+                margin-bottom: 20px;
+            }
+
+            .form-container .btn-purple {
+                background-color: #8A2BE2;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-weight: bold;
+                border-radius: 8px;
+                width: 100%;
+                transition: background-color 0.3s ease;
+            }
+
+            .form-container .btn-purple:hover {
+                background-color: #6a1bc7;
+            }
+
+            /* Style pour la liste des cas */
+            .case-list {
+                max-height: 150px;
+                overflow-y: auto;
+                border: 1px solid #ddd;
+                padding: 10px;
+                border-radius: 8px;
+                margin-bottom: 20px;
+            }
+
+            .case-item {
+                margin-bottom: 8px;
+                padding: 5px;
+                background-color: #f9f9f9;
+                border-radius: 5px;
+                border: 1px solid #e0e0e0;
+            }
+        </style>
+    </head>
+<body>
+    <div class="sidebar">
+        <h2 class="titre">Gestion projet</h2>
+        <nav>
+            <ul>
+                <li ><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+                <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+                <li><a href="consulter_des_sujet_res.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+                <li><a href="consulter_cas_res.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+                <li class="active"><a href="consulter_rapport_res.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+                <li><a href="deposer_rapport_res.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+                <li><a href="consulter_evalu_res.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+                <li><a href="poser_question_res.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+                <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
+              </ul>
+        </nav>
+    </div>
+
+    <!-- Formulaire pour sélectionner une tâche et afficher les cas -->
+    <div class="content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+        <div class="form-container">
+            <h4>Sélectionner une tâche et consulter les cas</h4>
+
+            <form id="deposerRapportForm" onsubmit="return showSuccessMessage(event)">
+                <!-- Liste des tâches à sélectionner -->
+                <div class="mb-3">
+                    <label for="taskSelect" class="form-label">Choisir une tâche :</label>
+                    <select class="form-select" id="taskSelect" name="task" required onchange="updateCases()">
+                        <option value="" disabled selected>-- Sélectionner une tâche --</option>
+                        <option value="tache1">Tâche 1 : Diagramme de cas d'utilisation</option>
+                        <option value="tache2">Tâche 2 : Diagramme de classe</option>
+                        <option value="tache3">Tâche 3 : Diagramme de séquence détaillé</option>
+                    </select>
+                </div>
+
+                <!-- Liste des cas (pas sélectionnable) -->
+                <div class="mb-3">
+                    <label for="caseList" class="form-label">Cas associés :</label>
+                    <div class="case-list" id="caseList">
+                        <!-- Cas statiques -->
+                        <div class="case-item">Cas 1 : Consulter notification</div>
+                        <div class="case-item">Cas 2 : Consulter description sujet </div>
+                        <div class="case-item">Cas 3 : Deposer rapport</div>
+                        <div class="case-item">Cas 4 : Consulter rapport</div>
+                        <div class="case-item">Cas 5 : Analyse des séquences</div>
+                    </div>
+                </div>
+
+                <!-- Sélectionner un fichier -->
+                <div class="mb-3">
+                    <label for="fileInput" class="form-label">Sélectionner un fichier :</label>
+                    <input type="file" class="form-control" id="fileInput" name="rapport" required>
+                </div>
+
+                <button type="submit" class="btn-purple">Déposer un rapport</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+       function showSuccessMessage(event) {
+    event.preventDefault();  // منع إرسال النموذج فعليًا
+    const fileInput = document.getElementById("fileInput");
+    const file = fileInput.files[0];  // الحصول على الملف المُختار
+
+    if (file) {
+        // تحويل الملف إلى رابط يمكن مشاركته (إن كان هذا الخيار موجودًا في خادمك)
+        const fileURL = URL.createObjectURL(file);  // مثال لتحويل الملف إلى رابط
+
+        // توجيه المستخدم إلى Google Drive لرفع الملف يدويًا
+        const driveLink = "https://drive.google.com/drive/u/0/my-drive";  // رابط Google Drive
+        window.open(driveLink + "?file=" + encodeURIComponent(fileURL), "_blank");  // افتح رابط Google Drive في نافذة جديدة
+
+        alert("Vous pouvez maintenant télécharger le fichier sur Google Drive.");
+    } else {
+        alert("Veuillez sélectionner un fichier avant de soumettre.");
+    }
+
+    return false;  // منع الإرسال الفعلي للنموذج
+}
+
+    </script>
+
+    <script src="../js/dashboard_etu.js"></script>
+</body>
+</html>

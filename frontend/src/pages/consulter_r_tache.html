@@ -84,6 +84,12 @@ h2 {
         <li><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
         <li class="active"><a href="#"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
         <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+        <li><a href="consulter_des_sujet.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+        <li><a href="consulter_cas.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+        <li><a href="consulter_rapport.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+        <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+        <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+        <li><a href="poser_question.html"><i class="fas fa-question"></i> Poser des questions</a></li>
         <li><a href="profil_e_r.html"><i class="fas fa-user"></i> Profil</a></li>
       </ul>
     </nav>
@@ -98,13 +104,35 @@ h2 {
        
 </div>
 <script>
-
-document.addEventListener("DOMContentLoaded", function() {
-document.getElementById("valider-theme").addEventListener("click", function() {
-    window.location.href = "selectionner_tache.html"; 
-});
-});
-</script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. جلب المراحل من الخادم
+        fetch('http://localhost:3000/etapes') // تأكد من إضافة البروتوكول والمضيف والمنفذ
+    .then(response => response.json())
+    .then(data => {
+        const selectElement = document.getElementById('rapport-select');
+        data.forEach(etape => {
+            const option = document.createElement('option');
+            option.value = etape.idEtape; // تأكد أن الاسم مطابق للقاعدة
+            option.textContent = etape.nom;
+            selectElement.appendChild(option);
+        });
+    })
+            .catch(error => console.error('Erreur lors de la récupération des étapes:', error));
+    
+        // 2. عند الضغط على "Suivant"
+        document.getElementById("valider-theme").addEventListener("click", function () {
+            const etapeId = document.getElementById("rapport-select").value;
+            if (!etapeId) {
+                alert("Veuillez sélectionner une étape !");
+                return;
+            }
+    
+            // الانتقال إلى صفحة المهام مع تمرير ID المرحلة
+            window.location.href = `selectionner_tache.html?etapeId=${etapeId}`;
+        });
+    });
+    </script>
+    
 </body>
 </html>
 
