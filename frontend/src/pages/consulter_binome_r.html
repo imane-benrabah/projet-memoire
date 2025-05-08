@@ -91,20 +91,31 @@
        
     </div>
 </main>
+<script src="../js/simulate_login.js"></script>
+
 <script>
-    document.getElementById("affecter-theme").addEventListener("click", function () {
-        window.location.href = "affecter_theme.html"; // Redirection vers la page de sélection du thème
-    });
-    document.getElementById("suivant_1").addEventListener("click", function () {
-        const selectedGroupe = document.getElementById("groupe-select").value;
-        if (selectedGroupe) {
-            // Stocker l'ID du groupe dans le localStorage ou l'URL (ici je vais utiliser le localStorage)
-            localStorage.setItem('selectedGroupe', selectedGroupe);
-            window.location.href = "affectation_r.html"; // Redirection vers la page de modification
-        } else {
-            alert("Veuillez sélectionner un groupe.");
-        }
-    });
+   // consulter_binome_r.js
+
+document.addEventListener('DOMContentLoaded', async () => {
+    const enseignantId = localStorage.getItem('enseignantId') || '8'; // simulation fallback
+    if (!enseignantId) return;
+
+    try {
+        const res = await fetch(`/api/groupes/groupes-par-enseignant/${enseignantId}`);
+        const groupes = await res.json();
+
+        const select = document.getElementById('groupe-select');
+        groupes.forEach(groupe => {
+            const option = document.createElement('option');
+            option.value = groupe.idG;
+            option.textContent = groupe.nom;
+            select.appendChild(option);
+        });
+    } catch (err) {
+        console.error('Erreur lors du chargement des groupes :', err);
+    }
+});
+
 </script>
 
 
@@ -113,4 +124,3 @@
 <script src="../js/consulter_binome_r.js"></script>
 </body>
 </html>
-

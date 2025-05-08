@@ -182,16 +182,17 @@ const login = async (req, res) => {
 
     // Réponse de SUCCÈS claire
     return res.status(200).json({
-      success: true, // <-- Doit être true pour une connexion réussie
+      success: true,
       message: 'Authentification validée',
-      redirectTo: `/src/pages/${page}`,
-      userData: {
+      redirectTo: `/src/pages/${page}`, // ou le chemin réel
+      user: {
         id: user.idC,
         email: user.email,
         role: roles.role,
-        roleType: roles.type || 'standard'
+        type: roles.type || null
       }
     });
+
 
   } catch (err) {
     // Réponse d'ERREUR claire

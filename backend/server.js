@@ -10,9 +10,16 @@ const path = require('path');
 const app = express();
 const db = require("./config/db"); // Connexions principales et externes
 const authRoutes = require('./routes/authRoutes'); 
-const etudiantRoutes = require("./routes/etudiantRoutes");
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
+const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
+const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
+const profilRoutes = require('./routes/profilRoutes');
+const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
+const sujetRoutes = require('./routes/sujetRoutes');
+
+
+
 
 
 
@@ -67,6 +74,16 @@ app.use(express.static(staticPath));
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
 app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
+app.use('/api', chargergroupeRoutes);
+app.use('/api/groupes', etudiantinfoRoutes);
+app.use('/api//profil', profilRoutes);
+app.use('/api/groupes', groupenseignantRoutes);
+app.use('/api/sujet', sujetRoutes);
+
+
+
+
+
 
 
 // Route de test

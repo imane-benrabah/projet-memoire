@@ -33,7 +33,6 @@
                         <i class="fas fa-eye"></i> Voir groupe
                     </a>
                 </li>
-                <li ><a href="affecter_enseignant.html"><i class="fas fa-chalkboard-teacher"></i> Affecter enseignant</a></li>
 
                 <li class="active">
                     <a href="voir_profil.html">
@@ -59,6 +58,28 @@
         </div>
     </main>
 
-    <script src="../js/voir_profil.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        const res = await fetch('/api/profil');
+        const data = await res.json();
+
+        if (res.ok) {
+            document.getElementById("nomUtilisateur").textContent = `${data.nom} ${data.prenom}`;
+            document.getElementById("emailUtilisateur").textContent = data.email;
+            document.getElementById("roleUtilisateur").innerHTML = `<strong>Rôle:</strong> ${data.role}`;
+            if (data.image) {
+                document.querySelector("img").src = data.image;
+            }
+        } else {
+            alert(data.error || "Erreur lors du chargement du profil");
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Erreur de connexion au serveur");
+    }
+});
+
+    </script>
 </body>
 </html>

@@ -72,7 +72,7 @@ FOREIGN KEY (idG) REFERENCES Groupe(idG);
 
 -- Table Sujet
 CREATE TABLE Sujet (
-    idS INT PRIMARY KEY ,
+    idS INT PRIMARY KEY AUTO_INCREMENT,
     titre VARCHAR(100) NOT NULL,
     description TEXT,
     enseignantRId INT,
