@@ -94,52 +94,54 @@ h2 {
           </ul>
     </nav>
   </div>
-
-  <div class="container">
-    <select id="rapport-select" class="form-select mb-3">
-        <option value="">Sélectionner une tache </option>
-        <!-- Options chargées dynamiquement -->
+<div class="container">
+    <select id="etapeSelect" class="form-select mb-3">
+      <option value="">Sélectionner une étape</option>
     </select>
     <button class="btn btn-success" id="valider-theme">Suivant</button>
-       
-</div>
-<script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // Fonction pour récupérer les tâches depuis le backend
-        fetch('http://localhost:3000/tache') // Assurez-vous que l'URL correspond à celle de votre backend
-            .then(response => response.json()) // Parse la réponse JSON
-            .then(data => {
-                const selectElement = document.getElementById('rapport-select');
 
-                // Si des tâches sont disponibles, les ajouter au select
-                if (data && data.length > 0) {
-                    data.forEach(tache => {
-                        const option = document.createElement('option');
-                        option.value = tache.idTache; // ou autre clé unique pour l'option
-                        option.textContent = tache.nom; // ou autre propriété de la tâche
-                        selectElement.appendChild(option);
-                    });
-                } else {
-                    const option = document.createElement('option');
-                    option.textContent = "Aucune tâche disponible";
-                    selectElement.appendChild(option);
-                }
-            })
-            .catch(error => {
-                console.error('Erreur lors du chargement des tâches:', error);
-                alert("Erreur de chargement des tâches");
-            });
+    <div id="tachesContainer"></div>
+  </div>
 
-        // Action lors du clic sur le bouton "Suivant"
-        document.getElementById("valider-theme").addEventListener("click", function() {
-            const selectedTache = document.getElementById("rapport-select").value;
-            if (selectedTache) {
-                window.location.href = `page_consulter_r_t.html?tacheId=${selectedTache}`;
-            } else {
-                alert("Veuillez sélectionner une tâche");
-            }
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const tachesContainer = document.getElementById('tachesContainer');
+      const urlParams = new URLSearchParams(window.location.search);
+      const etapeId = urlParams.get('etapeId'); // الحصول على ID المرحلة من الـ URL
+    
+      if (!etapeId) {
+        alert("Aucune étape sélectionnée !");
+        return;
+      }
+    
+      // جلب المهام المرتبطة بالمرحلة
+      fetch(`http://localhost:3000/tache?etapeId=${etapeId}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.length === 0) {
+            tachesContainer.innerHTML = "<p>Aucune tâche disponible pour cette étape.</p>";
+            return;
+          }
+    
+          // عرض المهام داخل عناصر <select> أو <ul> مثلاً:
+          const select = document.createElement("select");
+          select.classList.add("form-select", "mb-3");
+    
+          data.forEach(tache => {
+            const option = document.createElement("option");
+            option.value = tache.idTache; // تأكد من صحة اسم العمود
+            option.textContent = tache.nom; // تأكد من صحة اسم العمود
+            select.appendChild(option);
+          });
+    
+          tachesContainer.appendChild(select);
+        })
+        .catch(error => {
+          console.error("Erreur lors de la récupération des tâches:", error);
+          tachesContainer.innerHTML = "<p>Erreur lors du chargement des tâches.</p>";
         });
     });
-  </script>
+    </script>    
+  
 </body>
 </html>

@@ -15,8 +15,7 @@ const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
 const tacheRoutes = require('./routes/tacheRoutes');
-const sujetRoutes = require('./routes/sujetRoute');
-const groupesRoutes = require('./routes/groupesRoutes'); // Pas de faute de frappe
+const sujetRoutes = require('./routes/sujetRoutes');
 
 
 

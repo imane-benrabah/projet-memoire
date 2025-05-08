@@ -1,13 +1,16 @@
-const db = require('../config/db');  // تأكد من المسار الصحيح
+const { mainDb } = require('../config/db'); // تأكد من المسار الصحيح إلى db.js
+
+const getTachesByEtape = (id_etape, callback) => {
+  const sql = 'SELECT * FROM tache WHERE idEtape = ?';
+  mainDb.query(sql, [id_etape], (err, results) => {
+    if (err) {
+      return callback(err);
+    }
+    callback(null, results);
+  });
+};
 
 module.exports = {
-    getAllEtapes: (callback) => {
-        db.mainDb.query('SELECT * FROM tache', (err, results) => {  // تصحيح الصيغة
-            if (err) {
-                console.error("Erreur lors de l'exécution de la requête SQL:", err);
-                return callback(err, null); // إعادة الخطأ إلى الراوتر
-            }
-            callback(null, results); // إرسال النتائج بنجاح
-        });
-    }
+  getTachesByEtape
 };
+
