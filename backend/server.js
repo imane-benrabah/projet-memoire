@@ -9,7 +9,7 @@ const path = require('path');
 
 const app = express();
 const db = require("./config/db"); // Connexions principales et externes
-const authRoutes = require('./routes/authRoutes'); 
+const authRoutes = require('./routes/authRoutes');
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
@@ -34,7 +34,9 @@ const presenceRoutes = require('./routes/presenceRoutes');
 // 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
 const allowedOrigins = [
   'http://localhost:5500',
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
 ];
 
 const corsOptions = {
@@ -46,13 +48,17 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-id'], // <-- ajoute x-user-id ici
-
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+app.use(cors({
+  origin: '*', // À remplacer en production
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 
 
@@ -70,7 +76,8 @@ app.use((req, res, next) => {
 
 // 📁 Fichiers statiques
 app.use('/uploads', express.static(path.join(__dirname, 'middleware/uploads')));
-const staticPath = path.join(__dirname, '..', 'frontend', 'src');
+const staticPath = path.join(__dirname, '..', 'frontend', 'src', 'pages');
+
 app.use(express.static(staticPath));
 
 
@@ -105,9 +112,15 @@ app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewar
 
 
 // Route de test
-app.get('/', (req, res) => {
-  res.send('✅ Serveur opérationnel');
+
+
+// Gestion des erreurs
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: err.message });
 });
+
+
 
 // Démarrage
 

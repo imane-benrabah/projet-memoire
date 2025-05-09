@@ -7,8 +7,10 @@ const upload = require('../../middleware/upload'); // <<== Ajout du middleware
 router.post('/register/enseignant', upload.single('image'), authController.registerEnseignant);
 
 // Route de login
-router.post('/login', authController.login);
-
+router.post('/login', (req, res) => {
+    console.log('Requête de login reçue'); // Ajoutez ce log
+    authController.login(req, res);
+  });
   
 
   

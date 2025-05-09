@@ -4,6 +4,7 @@ const ConsultationModel = require('../models/consultationModel');
 const authModel = require('../models/authModel');
 
 
+
 exports.registerEnseignant = async (req, res) => {
   try {
     console.log('\n=== NOUVELLE INSCRIPTION ===');
@@ -142,70 +143,85 @@ exports.registerEnseignant = async (req, res) => {
 };
 
 // Contrôleur de la connexion
-const login = async (req, res) => {
-  const { email, password } = req.body;
 
-  // Headers CORS
-  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Content-Type', 'application/json; charset=utf-8');
-
-  try {
-    // 1. Authentification stricte
-    const user = await authModel.checkCredentials(email, password);
+exports.login = (req, res) => {
+    const { email, password } = req.body;
     
-    // 2. Récupération des rôles
-    const roles = await authModel.getRoles(user.idC);
-    if (!roles || !roles.role) {
-      throw new Error('Rôle utilisateur non trouvé');
-    }
-
-    // 3. Configuration des redirections
-    const redirections = {
-      admin: 'acceuil_admin.html',
-      enseignant: {
-        principal: 'acceuil_p.html',
-        responsable: 'acceuil_res.html',
-        standard: 'acceuil_enseignant.html'
-      },
-      etudiant: {
-        responsable_memoire: 'acceuil_etu_res_mem.html',
-        responsable_etape: 'acceuil_etu_res.html',
-        standard: 'acceuil_etudiant.html'
-      }
-    };
-
-    const page = redirections[roles.role]?.[roles.type] || redirections[roles.role]?.standard;
-    if (!page) {
-      throw new Error('Page de destination non configurée');
-    }
-
-    // Réponse de SUCCÈS claire
-    return res.status(200).json({
-      success: true,
-      message: 'Authentification validée',
-      redirectTo: `/src/pages/${page}`, // ou le chemin réel
-      user: {
-        id: user.idC,
-        email: user.email,
-        role: roles.role,
-        type: roles.type || null
-      }
+    // Headers CORS
+    res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    
+    // 1. Vérification des identifiants
+    authModel.checkCredentials(email, password, (err, user) => {
+        if (err) {
+            console.error('Erreur authentification:', err.message);
+            return res.status(401).json({
+                success: false,
+                message: err.message.includes('Email') ? 'Email incorrect' : 
+                         err.message.includes('Mot de passe') ? 'Mot de passe incorrect' :
+                         'Échec de l\'authentification'
+            });
+        }
+        
+        // 2. Récupération des rôles
+        authModel.getRoles(user.idC, (err, roles) => {
+            if (err) {
+                console.error('Erreur récupération rôles:', err);
+                return res.status(500).json({
+                    success: false,
+                    message: 'Erreur serveur'
+                });
+            }
+            
+            if (roles.role === 'unknown') {
+                return res.status(403).json({
+                    success: false,
+                    message: 'Accès non autorisé'
+                });
+            }
+            
+            // 3. Configuration des redirections
+            const redirections = {
+                admin: 'acceuil_admin.html',
+                enseignant: {
+                    principal: 'acceuil_p.html',
+                    responsable: 'acceuil_res.html',
+                    standard: 'acceuil_enseignant.html'
+                },
+                etudiant: {
+                    responsable_memoire: 'acceuil_etu_res_mem.html',
+                    responsable_etape: 'acceuil_etu_res.html',
+                    standard: 'acceuil_etudiant.html'
+                }
+            };
+            
+            let redirectPage;
+            if (roles.role === 'enseignant' || roles.role === 'etudiant') {
+                redirectPage = redirections[roles.role][roles.type] || redirections[roles.role].standard;
+            } else {
+                redirectPage = redirections[roles.role];
+            }
+            
+            if (!redirectPage) {
+                return res.status(500).json({
+                    success: false,
+                    message: 'Configuration serveur invalide'
+                });
+            }
+            
+            // 4. Réponse réussie
+            res.status(200).json({
+                success: true,
+                message: 'Authentification réussie',
+                redirectTo: `/src/pages/${redirectPage}`,
+                user: {
+                    id: user.idC,
+                    email: user.email,
+                    role: roles.role,
+                    type: roles.type || null
+                }
+            });
+        });
     });
-
-
-  } catch (err) {
-    // Réponse d'ERREUR claire
-    console.error('Erreur:', err.message);
-    return res.status(401).json({
-      success: false, // <-- Doit être false pour les échecs
-      message: err.message.includes('Email') ? 'Email incorrect' : 
-               err.message.includes('Mot de passe') ? 'Mot de passe incorrect' :
-               'Échec de l\'authentification'
-    });
-  }
 };
-
-
-exports.login = login;
-
