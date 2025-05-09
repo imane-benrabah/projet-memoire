@@ -96,7 +96,7 @@
 });
 
     // Redirection pour affecter un thème
-    document.getElementById("affecter-theme").addEventListener("click", function () {
+    document.getElementById("affecter-theme").addEventListener("click", async function() {
     const select = document.getElementById("group-select");
     const groupeId = select.value;
     const groupeNom = select.options[select.selectedIndex].text;
@@ -106,14 +106,26 @@
         return;
     }
 
-    // Stocker dans localStorage
-    localStorage.setItem("selectedGroupeId", groupeId);
-    localStorage.setItem("selectedGroupeName", groupeNom);
+    // Vérifier si le groupe a déjà un sujet
+    try {
+        const response = await fetch(`http://localhost:3000/api/groupes/verifier-sujet/${groupeId}`);
+        const data = await response.json();
 
-    // Redirection vers la page d'affectation de thème
-    window.location.href = "affecter_theme.html";
+        if (data.dejaAffecte) {
+    alert(`Ce groupe a déjà le sujet "${data.sujetTitre}".`);
+    return; // On arrête ici, aucune modification possible
+}
+
+        // Stocker dans localStorage et rediriger
+        localStorage.setItem("selectedGroupeId", groupeId);
+        localStorage.setItem("selectedGroupeName", groupeNom);
+        window.location.href = "affecter_theme.html";
+
+    } catch (err) {
+        console.error("Erreur vérification sujet:", err);
+        alert("Erreur lors de la vérification du sujet");
+    }
 });
-
 
     // Redirection pour la page de modification
     document.getElementById("suivant").addEventListener("click", () => {

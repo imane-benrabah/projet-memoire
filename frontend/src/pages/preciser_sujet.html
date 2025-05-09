@@ -155,13 +155,44 @@ h2 {
         <button class="btn btn-success" id="valider-theme">Suivant</button>
            
     </div>
-<script>
-
-document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("valider-theme").addEventListener("click", function() {
-        window.location.href = "preciser_etape_r.html"; 
-    });
-});
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const idResponsable = localStorage.getItem("idResponsable");
+            const select = document.getElementById("group-select");
+        
+            if (!idResponsable) {
+                console.error("Aucun idResponsable trouvé dans localStorage");
+                return;
+            }
+        
+            // Récupérer les sujets affectés à cet enseignant
+            fetch(`http://localhost:3000/api/sujets-par-responsable/${idResponsable}`)
+            .then((res) => res.json())
+                .then((data) => {
+                    data.forEach((sujet) => {
+                        const option = document.createElement("option");
+                        option.value = sujet.idS;
+                        option.textContent = sujet.titre;
+                        select.appendChild(option);
+                    });
+                })
+                .catch((err) => {
+                    console.error("Erreur lors du chargement des sujets :", err);
+                });
+        
+            document.getElementById("valider-theme").addEventListener("click", function () {
+                const selectedSujetId = select.value;
+                if (!selectedSujetId) {
+                    alert("Veuillez sélectionner un thème");
+                    return;
+                }
+        
+                // Stocker le sujet sélectionné pour l'utiliser dans la page suivante
+                localStorage.setItem("selectedSujetId", selectedSujetId);
+                window.location.href = "preciser_etape_r.html";
+            });
+        });
+        </script>
+        
 </body>
 </html>

@@ -19,6 +19,9 @@ const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
 const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
 const profilRoutes = require('./routes/profilRoutes');
 const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
+const etapeRoutes = require('./routes/etapeRoutes'); 
+const presenceRoutes = require('./routes/presenceRoutes');
+
 
 
 
@@ -73,11 +76,7 @@ app.use(express.static(staticPath));
 
 // 🌐 ROUTES
 
-// ✅ Middleware temporaire pour simuler un utilisateur connecté
-app.use((req, res, next) => {
-  req.userId = "66469e362abeffbe891f80dc"; // Remplacer par un ID réel de votre base de données
-  next();
-});
+
 
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
@@ -91,6 +90,13 @@ app.use('/api/groupes', etudiantinfoRoutes);
 app.use('/api//profil', profilRoutes);
 app.use('/api/groupes', groupenseignantRoutes);
 app.use('/api/sujet', sujetRoutes);
+app.use('/api/sujets', sujetRoutes); 
+app.use("/api", sujetRoutes);
+app.use('/api', etapeRoutes); 
+app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
+
+
+
 
 
 
