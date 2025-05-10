@@ -22,6 +22,9 @@ const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
 const etapeRoutes = require('./routes/etapeRoutes'); 
 const presenceRoutes = require('./routes/presenceRoutes');
 const BinomeRoutes = require('./routes/BinomeRoutes');
+const reunionRoutes = require('./routes/reunionRoutes');
+
+
 
 
 
@@ -103,6 +106,8 @@ app.use("/api", sujetRoutes);
 app.use('/api', etapeRoutes); 
 app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', BinomeRoutes); // Doit être monté avant les autres middlewares
+app.use('/api', reunionRoutes);
+
 
 
 

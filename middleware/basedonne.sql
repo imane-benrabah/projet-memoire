@@ -293,6 +293,8 @@ CREATE TABLE BinomeExterne (
     matricule2 VARCHAR(20),
     nom2 VARCHAR(50),
     prenom2 VARCHAR(50),
+    email1 VARCHAR(255),
+    email2 VARCHAR(255);
     
     -- Contraintes d'unicité
     UNIQUE (matricule1),
