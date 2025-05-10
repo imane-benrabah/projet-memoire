@@ -222,4 +222,78 @@ document.getElementById("save-attendance").addEventListener("click", async funct
             btn.innerHTML = '<i class="fas fa-save"></i> Enregistrer';
         }
     }
+
+// Modifiez la partie gestion du clic et de la sélection :
+
+// Modifiez la partie gestion du clic et de la sélection :
+// Fonction pour gérer la sélection des binômes
+function setupBinomeSelection() {
+    // Écouteur de clic sur les cellules de binôme
+    document.getElementById('binome-list').addEventListener('click', function(e) {
+        const clickedCell = e.target.closest('.binome-cell');
+        if (!clickedCell) return;
+
+        const selectedNum = clickedCell.textContent.trim();
+        console.log("Binôme sélectionné:", selectedNum);
+        
+        // Mise à jour du localStorage
+        localStorage.setItem('selectedBinomeNum', selectedNum);
+        localStorage.setItem('lastSelectedBinome', selectedNum);
+        
+        updateSelectionVisual(clickedCell);
+    });
+
+    // Écouteur pour le bouton Affecter Responsabilité
+    document.querySelector('.dropdown-item[href*="affecter_responsab_r"]').addEventListener('click', function(e) {
+        const selectedNum = localStorage.getItem('selectedBinomeNum') || 
+                          localStorage.getItem('lastSelectedBinome');
+        
+        if (!selectedNum) {
+            e.preventDefault();
+            alert('Veuillez sélectionner un binôme');
+            return;
+        }
+        
+        const groupeName = document.getElementById('groupe-name').textContent.replace('groupe : ', '');
+        localStorage.setItem('selectedGroupeName', groupeName);
+    });
+
+    // Restaurer la sélection au chargement
+    restoreSelection();
+}
+
+function updateSelectionVisual(clickedCell) {
+    // Nettoyer ancienne sélection
+    document.querySelectorAll('.selected-row').forEach(row => {
+        row.classList.remove('selected-row');
+    });
+
+    // Appliquer nouvelle sélection
+    const row = clickedCell.closest('tr');
+    row.classList.add('selected-row');
+
+    if (clickedCell.hasAttribute('rowspan')) {
+        const rowspan = parseInt(clickedCell.getAttribute('rowspan'));
+        let nextRow = row.nextElementSibling;
+        
+        for (let i = 1; i < rowspan; i++) {
+            if (nextRow) {
+                nextRow.classList.add('selected-row');
+                nextRow = nextRow.nextElementSibling;
+            }
+        }
+    }
+}
+
+function restoreSelection() {
+    const selectedNum = localStorage.getItem('selectedBinomeNum');
+    if (!selectedNum) return;
+
+    const cells = document.querySelectorAll('.binome-cell');
+    cells.forEach(cell => {
+        if (cell.textContent.trim() === selectedNum) {
+            updateSelectionVisual(cell);
+        }
+    });
+}
 });

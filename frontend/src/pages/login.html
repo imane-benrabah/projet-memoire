@@ -54,9 +54,7 @@
     console.log("Tentative de connexion vers:", "http://localhost:3000/api/auth/login");
     
     try {
-        // 1. Testez d'abord la connexion au serveur
-        const healthCheck = await fetch("http://localhost:3000/api/health");
-        if (!healthCheck.ok) throw new Error("Serveur inaccessible");
+       
         
         // 2. Envoyez la requête de login
         const response = await fetch("http://localhost:3000/api/auth/login", {

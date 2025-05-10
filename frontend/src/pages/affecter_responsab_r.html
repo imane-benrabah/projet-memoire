@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/affectation_respons.css">
+   
     
 </head>
 <body>
@@ -67,20 +68,18 @@
     
     <form id="affectationForm">
         <div class="form-group">
-            <label for="binome-select">Sélectionner un binôme :</label>
-            <select id="binome-select" class="form-control" required>
-                <option value="">-- Choisir un binôme --</option>
-            </select>
+            <label for="binome-select">binôme selectionné :</label>
+            <input type="text" id="binome-input" class="form-control" readonly>
         </div>
         
         <div class="form-group">
             <label for="responsabilite-select">Affecter une responsabilité :</label>
             <select id="responsabilite-select" class="form-control" required>
                 <option value="">-- Sélectionner une responsabilité --</option>
-                <option value="chef">responsable etape</option>
+                <option value="chef">responsable étape</option>
                 <option value="dev">responsable memoire</option>
-                <option value="design">responsable sommaire</option>
-                <option value="doc">responsable resumé</option>
+                <option value="design">responsable introduction et conclusion</option>
+                <option value="doc">responsable résumé</option>
               
             </select>
         </div>
@@ -93,82 +92,76 @@
 </div>
 
 <script>
-   document.addEventListener('DOMContentLoaded', function() {
-    // Récupérer le groupe sélectionné depuis le localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    // Récupération des données
     const selectedGroupe = localStorage.getItem('selectedGroupe');
+const selectedBinomeNum = localStorage.getItem('selectedBinomeNum') || 
+                         localStorage.getItem('lastSelectedBinome');    const selectedGroupeName = localStorage.getItem('selectedGroupeName');
     
-    if (!selectedGroupe) {
-        alert('Aucun groupe sélectionné. Veuillez d\'abord sélectionner un groupe.');
+    // Vérification
+    console.log("Données du localStorage:", {
+        groupe: selectedGroupe,
+        binome: selectedBinomeNum,
+        groupeName: selectedGroupeName
+    });
+
+    if (!selectedBinomeNum) {
+        alert('Veuillez d\'abord sélectionner un binôme sur la page précédente');
+        window.location.href = 'consulter_binome_r.html';
         return;
     }
 
-    // Mettre à jour l'affichage du groupe sélectionné
-    console.log("Groupe sélectionné:", selectedGroupe);
-
-    // Récupérer uniquement les binômes du groupe sélectionné
-    fetch(`http://localhost:3000/api/binomes?group=${encodeURIComponent(selectedGroupe)}`)
-        .then(response => response.json())
-        .then(data => {
-            const binomeSelect = document.getElementById('binome-select');
-            binomeSelect.innerHTML = '<option value="">-- Choisir un binôme --</option>'; // Réinitialiser la liste
-
-            // Filtrer les binômes du groupe sélectionné
-            const filteredData = data.filter(binome => {
-                // Normaliser le groupe du binôme et le groupe sélectionné pour la comparaison
-                const normalizedGroupe = (binome.nom_groupe || "").trim().toLowerCase();
-                const normalizedSelectedGroupe = selectedGroupe.trim().toLowerCase();
-
-                return normalizedGroupe === normalizedSelectedGroupe;
-            });
-
-            // Si aucun binôme ne correspond au groupe sélectionné
-            if (filteredData.length === 0) {
-                
-                return;
-            }
-
-            // Remplir la liste déroulante avec les binômes du groupe sélectionné
-            filteredData.forEach(binome => {
-                const option = document.createElement('option');
-                option.value = binome.binome_id;
-                option.textContent = `Binôme ${binome.binome_id}`;
-                binomeSelect.appendChild(option);
-            });
-        })
-        .catch(error => {
-            console.error('Erreur de chargement des binômes:', error);
-            alert('Erreur lors de la récupération des binômes.');
-        });
-
-    // Gestion de la soumission du formulaire
-    document.getElementById('affectationForm').addEventListener('submit', function(e) {
+    // Mise à jour de l'interface
+    const title = document.querySelector('h1');
+    const binomeInput = document.getElementById('binome-input');
+    
+    if (selectedGroupeName) {
+        title.textContent = `Affectation des Responsabilités - Groupe ${selectedGroupeName}`;
+    }
+    binomeInput.value = `Binôme ${selectedBinomeNum}`;
+    
+    // Gestion du formulaire
+    const form = document.getElementById('affectationForm');
+    form.addEventListener('submit', function(e) {
         e.preventDefault();
-        const binomeId = document.getElementById('binome-select').value;
+        
         const responsabilite = document.getElementById('responsabilite-select').value;
-
-        if (!binomeId || !responsabilite) {
-            alert('Veuillez sélectionner un binôme et une responsabilité');
+        if (!responsabilite) {
+            alert('Veuillez sélectionner une responsabilité');
             return;
         }
-
-        console.log('Affectation:', {
-            binome_id: binomeId,
-            responsabilite: responsabilite,
-            groupe: selectedGroupe
+        
+        fetch('http://localhost:3000/api/affecter-responsabilite', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                binome: selectedBinomeNum,
+                responsabilite: responsabilite,
+                groupe: selectedGroupe
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Responsabilité affectée avec succès au binôme ${selectedBinomeNum}`);
+                form.reset();
+            } else {
+                throw new Error(data.message || 'Erreur lors de l\'affectation');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert(`Erreur: ${error.message}`);
         });
-
-        alert('Responsabilité affectée avec succès !');
     });
-
+    
     // Bouton Annuler
     document.querySelector('.cancel-btn').addEventListener('click', function() {
-        if (confirm("Annuler l'affectation ?")) {
-            document.getElementById('affectationForm').reset();
-        }
+        window.location.href = 'affectation_r.html'; // Correction de la faute de frappe
     });
 });
-
 </script>
+
 
 </body>
 </html>
