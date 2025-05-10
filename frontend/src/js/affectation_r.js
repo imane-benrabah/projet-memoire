@@ -102,6 +102,9 @@ function fetchGroupInfo(groupId) {
                     studentsList.appendChild(row2);
                 }
             });
+            setupBinomeSelection();
+
+
         })
         .catch(error => {
             console.error('Erreur lors de la récupération des données:', error);
@@ -223,14 +226,12 @@ document.getElementById("save-attendance").addEventListener("click", async funct
         }
     }
 
-// Modifiez la partie gestion du clic et de la sélection :
+}); 
 
-// Modifiez la partie gestion du clic et de la sélection :
-// Fonction pour gérer la sélection des binômes
 function setupBinomeSelection() {
-    // Écouteur de clic sur les cellules de binôme
+    // Écouteur de clic sur les cellules de numéro de binôme
     document.getElementById('binome-list').addEventListener('click', function(e) {
-        const clickedCell = e.target.closest('.binome-cell');
+        const clickedCell = e.target.closest('td:first-child');
         if (!clickedCell) return;
 
         const selectedNum = clickedCell.textContent.trim();
@@ -240,26 +241,9 @@ function setupBinomeSelection() {
         localStorage.setItem('selectedBinomeNum', selectedNum);
         localStorage.setItem('lastSelectedBinome', selectedNum);
         
+        // Mise en surbrillance visuelle
         updateSelectionVisual(clickedCell);
     });
-
-    // Écouteur pour le bouton Affecter Responsabilité
-    document.querySelector('.dropdown-item[href*="affecter_responsab_r"]').addEventListener('click', function(e) {
-        const selectedNum = localStorage.getItem('selectedBinomeNum') || 
-                          localStorage.getItem('lastSelectedBinome');
-        
-        if (!selectedNum) {
-            e.preventDefault();
-            alert('Veuillez sélectionner un binôme');
-            return;
-        }
-        
-        const groupeName = document.getElementById('groupe-name').textContent.replace('groupe : ', '');
-        localStorage.setItem('selectedGroupeName', groupeName);
-    });
-
-    // Restaurer la sélection au chargement
-    restoreSelection();
 }
 
 function updateSelectionVisual(clickedCell) {
@@ -272,6 +256,7 @@ function updateSelectionVisual(clickedCell) {
     const row = clickedCell.closest('tr');
     row.classList.add('selected-row');
 
+    // Si c'est un binôme avec rowspan (2 étudiants)
     if (clickedCell.hasAttribute('rowspan')) {
         const rowspan = parseInt(clickedCell.getAttribute('rowspan'));
         let nextRow = row.nextElementSibling;
@@ -284,16 +269,3 @@ function updateSelectionVisual(clickedCell) {
         }
     }
 }
-
-function restoreSelection() {
-    const selectedNum = localStorage.getItem('selectedBinomeNum');
-    if (!selectedNum) return;
-
-    const cells = document.querySelectorAll('.binome-cell');
-    cells.forEach(cell => {
-        if (cell.textContent.trim() === selectedNum) {
-            updateSelectionVisual(cell);
-        }
-    });
-}
-});

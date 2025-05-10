@@ -76,10 +76,10 @@
             <label for="responsabilite-select">Affecter une responsabilité :</label>
             <select id="responsabilite-select" class="form-control" required>
                 <option value="">-- Sélectionner une responsabilité --</option>
-                <option value="chef">responsable étape</option>
-                <option value="dev">responsable memoire</option>
-                <option value="design">responsable introduction et conclusion</option>
-                <option value="doc">responsable résumé</option>
+                <option value="responsable étape">responsable étape</option>
+                <option value="responsable mémoire">responsable memoire</option>
+                <option value="responsable introduction et conclusion">responsable introduction et conclusion</option>
+                <option value="responsable résumé">responsable résumé</option>
               
             </select>
         </div>
@@ -95,8 +95,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     // Récupération des données
     const selectedGroupe = localStorage.getItem('selectedGroupe');
-const selectedBinomeNum = localStorage.getItem('selectedBinomeNum') || 
-                         localStorage.getItem('lastSelectedBinome');    const selectedGroupeName = localStorage.getItem('selectedGroupeName');
+    const selectedBinomeNum = localStorage.getItem('selectedBinomeNum') || 
+                            localStorage.getItem('lastSelectedBinome');
+    const selectedGroupeName = localStorage.getItem('selectedGroupeName');
     
     // Vérification
     console.log("Données du localStorage:", {
@@ -118,8 +119,8 @@ const selectedBinomeNum = localStorage.getItem('selectedBinomeNum') ||
     if (selectedGroupeName) {
         title.textContent = `Affectation des Responsabilités - Groupe ${selectedGroupeName}`;
     }
-    binomeInput.value = `Binôme ${selectedBinomeNum}`;
-    
+    binomeInput.value = `${selectedBinomeNum}`;
+
     // Gestion du formulaire
     const form = document.getElementById('affectationForm');
     form.addEventListener('submit', function(e) {
@@ -160,6 +161,55 @@ const selectedBinomeNum = localStorage.getItem('selectedBinomeNum') ||
         window.location.href = 'affectation_r.html'; // Correction de la faute de frappe
     });
 });
+
+
+fetch('http://localhost:3000/api/affecter-responsabilite', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    binome: selectedBinomeNum,
+    responsabilite: responsabilite,
+    groupe: selectedGroupe
+  })
+})
+.then(response => response.json())
+.then(data => {
+  if (data.success) {
+    alert(data.message);
+    form.reset();
+  } else {
+    if (confirm(data.message + '\nVoulez-vous modifier la responsabilité existante?')) {
+      // Envoyer une requête de modification
+      fetch('http://localhost:3000/api/modifier-responsabilite', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          binome: selectedBinomeNum,
+          nouvelleResponsabilite: responsabilite,
+          groupe: selectedGroupe
+        })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          alert(data.message);
+          form.reset();
+        } else {
+          alert(data.message || 'Échec de la modification');
+        }
+      })
+      .catch(error => {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue lors de la modification');
+      });
+    }
+  }
+})
+.catch(error => {
+  console.error('Erreur:', error);
+  alert(`Erreur: ${error.message}`);
+});
+
 </script>
 
 
