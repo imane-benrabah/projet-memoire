@@ -123,9 +123,9 @@ exports.getSujetsByResponsable = (req, res) => {
     const idResponsable = req.params.id;
 
     mainDb.query(
-        `SELECT DISTINCT s.idS, s.titre, s.description 
+        `SELECT DISTINCT s.idS, s.titre, s.description
          FROM Sujet s
-         JOIN Groupe g ON s.idS = g.idS OR s.enseignantRId = g.enseignantRId
+         INNER JOIN Groupe g ON s.idS = g.idS
          WHERE g.enseignantRId = ?`,
         [idResponsable],
         (err, results) => {
