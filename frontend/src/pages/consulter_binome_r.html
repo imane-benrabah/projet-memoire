@@ -64,7 +64,7 @@
 </aside>
 <main class="content">
     <div class="container">
-        <select id="groupe-select" class="form-select mb-3">
+        <select id="groupeens-select" class="form-select mb-3">
             <option value="">Sélectionner un groupe</option>
             <!-- Options chargées dynamiquement -->
         </select>
@@ -91,26 +91,55 @@
        
     </div>
 </main>
+<script src="../js/simulate_login.js"></script>
+
 <script>
-    document.getElementById("affecter-theme").addEventListener("click", function () {
-        window.location.href = "affecter_theme.html"; // Redirection vers la page de sélection du thème
-    });
-    document.getElementById("suivant_1").addEventListener("click", function () {
-        const selectedGroupe = document.getElementById("groupe-select").value;
-        if (selectedGroupe) {
-            // Stocker l'ID du groupe dans le localStorage ou l'URL (ici je vais utiliser le localStorage)
-            localStorage.setItem('selectedGroupe', selectedGroupe);
-            window.location.href = "affectation_r.html"; // Redirection vers la page de modification
-        } else {
-            alert("Veuillez sélectionner un groupe.");
-        }
-    });
-</script>
+   // consulter_binome_r.js
+
+   document.addEventListener('DOMContentLoaded', async () => {
+    const enseignantId = localStorage.getItem('idResponsable');
+    if (!enseignantId) return;
+
+    try {
+        const res = await fetch(`http://localhost:3000/api/groupes/groupes-par-enseignant/${enseignantId}`);
+        const groupes = await res.json();
+
+        const select = document.getElementById('groupeens-select');
+        groupes.forEach(groupe => {
+            const option = document.createElement('option');
+            option.value = groupe.idG;
+            option.textContent = groupe.nom;
+            select.appendChild(option);
+        });
+    } catch (err) {
+        console.error('Erreur lors du chargement des groupes :', err);
+    }
+});
+
+
+document.getElementById('suivant_1').addEventListener('click', () => {
+    const select = document.getElementById('groupeens-select');
+    const groupeNom = select.options[select.selectedIndex].text; // Récupère le nom du groupe
+
+    const groupeId = select.value;
+
+
+    if (!groupeId) {
+        alert('Veuillez sélectionner un groupe.');
+        return;
+    }
+
+    localStorage.setItem('selectedGroupe', groupeId); // <-- stocker ici
+    localStorage.setItem('selectedGroupeName', groupeNom);
+
+
+    window.location.href = `affectation_r.html`;
+});
 
 
 </script>
 
-<script src="../js/consulter_binome_r.js"></script>
+
+
 </body>
 </html>
-

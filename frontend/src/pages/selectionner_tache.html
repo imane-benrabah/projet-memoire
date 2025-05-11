@@ -104,44 +104,12 @@ h2 {
   </div>
 
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const tachesContainer = document.getElementById('tachesContainer');
-      const urlParams = new URLSearchParams(window.location.search);
-      const etapeId = urlParams.get('etapeId'); // الحصول على ID المرحلة من الـ URL
-    
-      if (!etapeId) {
-        alert("Aucune étape sélectionnée !");
-        return;
-      }
-    
-      // جلب المهام المرتبطة بالمرحلة
-      fetch(`http://localhost:3000/tache?etapeId=${etapeId}`)
-        .then(response => response.json())
-        .then(data => {
-          if (data.length === 0) {
-            tachesContainer.innerHTML = "<p>Aucune tâche disponible pour cette étape.</p>";
-            return;
-          }
-    
-          // عرض المهام داخل عناصر <select> أو <ul> مثلاً:
-          const select = document.createElement("select");
-          select.classList.add("form-select", "mb-3");
-    
-          data.forEach(tache => {
-            const option = document.createElement("option");
-            option.value = tache.idTache; // تأكد من صحة اسم العمود
-            option.textContent = tache.nom; // تأكد من صحة اسم العمود
-            select.appendChild(option);
-          });
-    
-          tachesContainer.appendChild(select);
-        })
-        .catch(error => {
-          console.error("Erreur lors de la récupération des tâches:", error);
-          tachesContainer.innerHTML = "<p>Erreur lors du chargement des tâches.</p>";
-        });
-    });
-    </script>    
   
+ 
+
+        // Ouvrir la page de rapport pour la tâche sélectionnée
+        window.location.href = `page_consulter_r_t.html?idTache=${selectedTache}`;
+
+</script>
 </body>
 </html>

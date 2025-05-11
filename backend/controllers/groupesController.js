@@ -177,3 +177,92 @@ exports.creerGroupe = (req, res) => {
     });
 };
 
+
+exports.assignerSujetAuGroupe = (req, res) => {
+    const { idG, idS } = req.body;
+  
+    if (!idG || !idS) {
+      return res.status(400).json({ error: "idG et idS requis" });
+    }
+  
+    // 1ère requête pour vérifier si le groupe a déjà un sujet
+    mainDb.query(
+      'SELECT idS FROM Groupe WHERE idG = ?',
+      [idG],
+      (error, rows) => {
+        if (error) {
+          console.error("Erreur lors de la récupération du groupe :", error);
+          return res.status(500).json({ error: "Erreur serveur" });
+        }
+  
+        if (rows.length === 0) {
+          return res.status(404).json({ error: "Groupe introuvable" });
+        }
+  
+        // Vérifier si le groupe a déjà un sujet affecté
+        if (rows[0].idS !== null) {
+          return res.status(400).json({ error: "Ce groupe a déjà un sujet affecté" });
+        }
+  
+        // 2ème requête pour récupérer enseignantRId depuis Sujet
+        mainDb.query(
+          'SELECT enseignantRId FROM Sujet WHERE idS = ?',
+          [idS],
+          (error, rows) => {
+            if (error) {
+              console.error("Erreur lors de la récupération du sujet :", error);
+              return res.status(500).json({ error: "Erreur serveur" });
+            }
+  
+            if (rows.length === 0) {
+              return res.status(404).json({ error: "Sujet introuvable" });
+            }
+  
+            const enseignantRId = rows[0].enseignantRId;
+  
+            // 3ème requête pour mettre à jour le Groupe
+            mainDb.query(
+              'UPDATE Groupe SET idS = ?, enseignantRId = ? WHERE idG = ?',
+              [idS, enseignantRId, idG],
+              (updateError, updateResult) => {
+                if (updateError) {
+                  console.error("Erreur lors de l'affectation du sujet :", updateError);
+                  return res.status(500).json({ error: "Erreur serveur" });
+                }
+  
+                res.json({ message: "Sujet affecté au groupe avec succès" });
+              }
+            );
+          }
+        );
+      }
+    );
+  };
+  
+  
+  exports.verifierSujetGroupe = (req, res) => {
+    const idG = req.params.idG;
+
+    mainDb.query(
+        `SELECT G.idS, S.titre as sujetTitre 
+         FROM Groupe G
+         LEFT JOIN Sujet S ON G.idS = S.idS
+         WHERE G.idG = ?`,
+        [idG],
+        (error, results) => {
+            if (error) {
+                console.error("Erreur vérification sujet:", error);
+                return res.status(500).json({ error: "Erreur serveur" });
+            }
+
+            if (results.length === 0) {
+                return res.status(404).json({ error: "Groupe introuvable" });
+            }
+
+            res.json({
+                dejaAffecte: results[0].idS !== null,
+                sujetTitre: results[0].sujetTitre || null
+            });
+        }
+    );
+};

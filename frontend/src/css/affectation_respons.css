@@ -30,6 +30,8 @@ body {
     top: 0; /* Positionne-la en haut de la page */
     left: 0; /* Positionne-la sur la gauche de la page */
     transition: width 0.3s ease;
+     overflow-y: auto;
+
 }
 
 .sidebar h2 {
@@ -177,15 +179,31 @@ h1 {
         font-size: 16px;
     }
     
-    .cancel-btn {
-        background-color: #f0f0f0;
-        color: #333;
+     .cancel-btn{
+        background-color: #888;
+        color: #ffffff;
     }
+
+     .cancel-btn:hover{
+        background-color: #888;
+        color: #ffffff;
+    }
+
+   
     
     .submit-btn {
-        background-color: #4CAF50;
+        background-color: #8A2BE2;
         color: white;
     }
+
+    .submit-btn:hover {
+        background-color: #8A2BE2;
+        color: white;
+            transform: scale(1.02);
+
+    }
+
+   
 
     #responsabilite-select {
 background-color: white;

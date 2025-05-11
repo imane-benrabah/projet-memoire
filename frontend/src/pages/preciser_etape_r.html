@@ -314,6 +314,8 @@
             </div>
         </form>
     </div>
+    
+    <script src="../js/simulate_login.js"></script>
 
     <script>
         // Compteur pour les IDs
@@ -343,11 +345,11 @@
                 <div class="date-range">
                     <div>
                         <label>Date de début</label>
-                        <input type="date" required>
+                        <input type="date" class="step-start-date" required>
                     </div>
                     <div>
                         <label>Date de fin</label>
-                        <input type="date" required>
+                        <input type="date" class="step-end-date" required>
                     </div>
                 </div>
                 <div class="tasks-container" id="tasks-${stepId}"></div>
@@ -377,7 +379,7 @@
             taskElement.dataset.id = taskId;
             taskElement.innerHTML = `
                 <div class="task-header">
-                    <input type="text" placeholder="Nom de la tâche" required>
+                    <input type="text" class="task-name" placeholder="Nom de la tâche" required>
                     <button type="button" class="remove-task-btn" title="Supprimer cette tâche">
                         <i class="fas fa-times"></i>
                     </button>
@@ -385,11 +387,11 @@
                 <div class="date-range">
                     <div>
                         <label>Date de début</label>
-                        <input type="date" required>
+                        <input type="date" class="task-start-date" required>
                     </div>
                     <div>
                         <label>Date de fin</label>
-                        <input type="date" required>
+                        <input type="date" class="task-end-date" required>
                     </div>
                 </div>
             `;
@@ -404,62 +406,131 @@
         }
         
         // Gestion de l'annulation
-        document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("cancelBtn").addEventListener("click", function() {
-        window.location.href = "preciser_sujet.html"; 
-    });
-});
-        
-        // Gestion de la soumission
-        document.getElementById('stepsForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validation des dates
-            let isValid = true;
-            document.querySelectorAll('.step').forEach(step => {
-                const startDate = step.querySelector('.date-range input:first-of-type').value;
-                const endDate = step.querySelector('.date-range input:last-of-type').value;
-                
-                if (new Date(endDate) < new Date(startDate)) {
-                    alert('La date de fin doit être postérieure à la date de début pour chaque étape');
-                    isValid = false;
-                    return;
-                }
-                
-                step.querySelectorAll('.task').forEach(task => {
-                    const taskStart = task.querySelector('.date-range input:first-of-type').value;
-                    const taskEnd = task.querySelector('.date-range input:last-of-type').value;
-                    
-                    if (new Date(taskEnd) < new Date(taskStart)) {
-                        alert('La date de fin doit être postérieure à la date de début pour chaque tâche');
-                        isValid = false;
-                        return;
-                    }
-                });
-            });
-            
-            if (!isValid) return;
-            
-            // Récupérer toutes les étapes avec leurs tâches
-            const stepsData = Array.from(document.querySelectorAll('.step')).map(step => {
-                return {
-                    name: step.querySelector('.step-title').value,
-                    startDate: step.querySelector('.date-range input:first-of-type').value,
-                    endDate: step.querySelector('.date-range input:last-of-type').value,
-                    tasks: Array.from(step.querySelectorAll('.task')).map(task => {
-                        return {
-                            name: task.querySelector('input[type="text"]').value,
-                            startDate: task.querySelector('.date-range input:first-of-type').value,
-                            endDate: task.querySelector('.date-range input:last-of-type').value
-                        };
-                    })
-                };
-            });
-            
-            console.log('Données du formulaire:', stepsData);
-            alert('Planification enregistrée avec succès !');
-            // Ici vous pourriez ajouter un envoi des données au serveur
+        document.getElementById("cancelBtn").addEventListener("click", function() {
+            window.location.href = "preciser_sujet.html"; 
         });
+        document.getElementById('stepsForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    // Récupération des données SANS le token
+    const idS = localStorage.getItem('selectedSujetId');
+    const enseignantRId = parseInt(localStorage.getItem('idResponsable'));
+
+    // Vérification simplifiée
+    if (!idS || isNaN(enseignantRId)) {
+        alert(`Configuration manquante :
+               ID Sujet: ${idS || 'manquant'}
+               ID Enseignant: ${isNaN(enseignantRId) ? 'invalide' : enseignantRId}`);
+        return;
+    }
+
+    const stepsData = [];
+    let isValid = true;
+
+    // Formatage des dates au format ISO (YYYY-MM-DD)
+    const formatDate = (dateString) => {
+        if (!dateString) return null;
+        const date = new Date(dateString);
+        return date.toISOString().split('T')[0];
+    };
+
+    // Collecte des données
+    document.querySelectorAll('.step').forEach(step => {
+        const stepTitle = step.querySelector('.step-title').value;
+        const startDate = formatDate(step.querySelector('.step-start-date').value);
+        const endDate = formatDate(step.querySelector('.step-end-date').value);
+
+        // Validation
+        if (!stepTitle || !startDate || !endDate) {
+            isValid = false;
+            step.style.border = "1px solid red";
+            return;
+        }
+
+        if (new Date(startDate) > new Date(endDate)) {
+            isValid = false;
+            step.querySelector('.step-end-date').style.border = "1px solid red";
+            alert(`Erreur: La date de fin doit être après la date de début pour l'étape "${stepTitle}"`);
+            return;
+        }
+
+        const tasks = [];
+        step.querySelectorAll('.task').forEach(task => {
+            const taskName = task.querySelector('.task-name').value;
+            const taskStart = formatDate(task.querySelector('.task-start-date').value);
+            const taskEnd = formatDate(task.querySelector('.task-end-date').value);
+
+            if (!taskName || !taskStart || !taskEnd) {
+                isValid = false;
+                task.style.border = "1px solid red";
+                return;
+            }
+
+            // Validation des dates des tâches
+            if (new Date(taskStart) < new Date(startDate) || new Date(taskEnd) > new Date(endDate)) {
+                isValid = false;
+                alert(`La tâche "${taskName}" doit avoir des dates comprises entre ${startDate} et ${endDate}`);
+                return;
+            }
+
+            tasks.push({
+                nom: taskName,
+                dateDebut: taskStart,
+                dateFin: taskEnd
+            });
+        });
+
+        stepsData.push({
+            nom: stepTitle,
+            dateDebut: startDate,
+            dateFin: endDate,
+            taches: tasks
+        });
+    });
+
+    if (!isValid) {
+        alert("Veuillez corriger les erreurs avant soumission");
+        return;
+    }
+
+    if (stepsData.length === 0) {
+        alert("Aucune étape à enregistrer");
+        return;
+    }
+
+    try {
+        // Envoi des données au serveur
+        const response = await fetch('http://localhost:3000/api/etapes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                etapes: stepsData,
+                enseignantRId: enseignantRId,
+                idS: idS
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            throw new Error(result.message || `Erreur HTTP ${response.status}`);
+        }
+
+        console.log('Succès:', result);
+        alert(result.message || "Enregistrement réussi !");
+        window.location.href = "preciser_sujet.html";
+
+    } catch (error) {
+        console.error('Échec de la requête:', {
+            error: error.message,
+            stack: error.stack,
+            requestData: stepsData
+        });
+        alert(`Échec de l'enregistrement: ${error.message}`);
+    }
+});
     </script>
-</body>
-</html>
+    </body>
+    </html>

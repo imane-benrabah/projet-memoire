@@ -45,82 +45,60 @@
 
 
     <script>
-      let activeFetchController = null;
+ async function loginUser(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-      // Fonction pour effectuer le login
-      async function loginUser(event) {
-  event.preventDefault();
+    console.log("Tentative de connexion vers:", "http://localhost:3000/api/auth/login");
+    
+    try {
+       
+        
+        // 2. Envoyez la requête de login
+        const response = await fetch("http://localhost:3000/api/auth/login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+        console.log("Statut de la réponse:", response.status);
+        
+        if (!response.ok) {
+            const error = await response.text();
+            throw new Error(error || "Échec de la connexion");
+        }
 
-  if (!email || !password) {
-    alert("Veuillez remplir tous les champs.");
-    return;
-  }
-
-  try {
-    const response = await fetch("http://localhost:3000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify({ email, password }),
-      credentials: "include",
-    });
-
-    const contentType = response.headers.get("content-type");
-    if (!contentType || !contentType.includes("application/json")) {
-      throw new Error("Réponse invalide du serveur.");
+        const data = await response.json();
+        console.log("Réponse du serveur:", data);
+        
+        if (data.redirectTo) {
+            window.location.href = data.redirectTo;
+        }
+    } catch (error) {
+        console.error("Erreur complète:", {
+            message: error.message,
+            stack: error.stack
+        });
+        alert(`ERREUR: ${error.message}\nVoir la console (F12) pour plus de détails`);
     }
-
-    const data = await response.json();
-
-    if (!response.ok) {
-  throw new Error("Erreur réseau lors de la connexion.");
 }
 
-if (data.success !== true) {
-  throw new Error(data.message || "Échec de la connexion.");
-}
-
-
-
-
-    const redirectPath = data.redirectTo;
-    if (!redirectPath || typeof redirectPath !== "string") {
-      throw new Error("Redirection non configurée.");
-    }
-
-    // Redirection sécurisée
-    window.location.href = redirectPath.startsWith("/src/pages/")
-      ? redirectPath
-      : `/src/pages/${redirectPath}`;
-
-  } catch (error) {
-    console.error("Erreur détectée:", error);
-    alert(error.message || "Une erreur s'est produite.");
-    document.getElementById("password").value = "";
-  }
-}
-
-
-// Gestionnaire d'événements pour la soumission du formulaire
 document.getElementById("loginForm").addEventListener("submit", loginUser);
 
-// Gestionnaire pour le bouton de création de compte
-document.querySelector('.create-btn')?.addEventListener('click', (e) => {
-    e.preventDefault();
-    window.location.href = "creer_compte.html";
-});
+function allerVersPage() {
+    
+        const pageDestination = '../pages/creer_compte.html'; 
 
-// Annulation des requêtes lors de la fermeture de la page
-window.addEventListener('beforeunload', () => {
-    if (activeFetchController) {
-        activeFetchController.abort();
-    }
-});
+    // Redirection simple
+    window.location.href = pageDestination;
+    
+  
+}
 </script>
 </body>
 </html>

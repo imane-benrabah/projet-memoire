@@ -25,7 +25,6 @@
                 </a>
             </li>
 
-            <li ><a href="affecter_enseignant.html"><i class="fas fa-chalkboard-teacher"></i> Affecter enseignant</a></li>
 
             <li  class="active">
                 <a href="voir_groupe.html">
@@ -66,31 +65,95 @@
                 <!-- Étudiants chargés dynamiquement -->
             </tbody>
         </table>
-        <button class="btn btn-success" id="ajouter">Ajouter</button>
-        <button class="btn btn-warning" id="modifier">Modifier</button>
-        <button class="btn btn-danger" id="supprimer">Supprimer</button>
+       
     </div>
 </main>
 <script>
-    document.getElementById("affecter-theme").addEventListener("click", function () {
-        window.location.href = "affecter_theme.html"; // Redirection vers la page de sélection du thème
-    });
-    document.getElementById("suivant").addEventListener("click", function () {
-        const selectedGroupe = document.getElementById("group-select").value;
-        if (selectedGroupe) {
-            // Stocker l'ID du groupe dans le localStorage ou l'URL (ici je vais utiliser le localStorage)
-            localStorage.setItem('selectedGroupe', selectedGroupe);
-            window.location.href = "modification_groupe.html"; // Redirection vers la page de modification
-        } else {
-            alert("Veuillez sélectionner un groupe.");
-        }
-    });
+    // Charger les groupes depuis l'API
+    document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('http://localhost:3000/api/groupes');
+        const groupes = await response.json();
+
+        const selectGroupe = document.getElementById('group-select');
+        console.log("✅ Groupes reçus :", groupes);
+
+        // Vider d'abord les options
+        selectGroupe.innerHTML = `<option value="">Sélectionner un groupe</option>`;
+
+        groupes.forEach(groupe => {
+            console.log("➕ Ajout du groupe :", groupe.idG, groupe.nom);
+            const option = document.createElement("option");
+            option.value = groupe.idG;
+            option.textContent = groupe.nom;
+            selectGroupe.appendChild(option);
+        });
+
+    } catch (err) {
+        console.error('Erreur lors du chargement des groupes:', err);
+        alert('Erreur lors du chargement des groupes.');
+    }
+});
+
+    // Redirection pour affecter un thème
+    document.getElementById("affecter-theme").addEventListener("click", async function() {
+    const select = document.getElementById("group-select");
+    const groupeId = select.value;
+    const groupeNom = select.options[select.selectedIndex].text;
+
+    if (!groupeId) {
+        alert("Veuillez sélectionner un groupe.");
+        return;
+    }
+
+    // Vérifier si le groupe a déjà un sujet
+    try {
+        const response = await fetch(`http://localhost:3000/api/groupes/verifier-sujet/${groupeId}`);
+        const data = await response.json();
+
+        if (data.dejaAffecte) {
+    alert(`Ce groupe a déjà le sujet "${data.sujetTitre}".`);
+    return; // On arrête ici, aucune modification possible
+}
+
+        // Stocker dans localStorage et rediriger
+        localStorage.setItem("selectedGroupeId", groupeId);
+        localStorage.setItem("selectedGroupeName", groupeNom);
+        window.location.href = "affecter_theme.html";
+
+    } catch (err) {
+        console.error("Erreur vérification sujet:", err);
+        alert("Erreur lors de la vérification du sujet");
+    }
+});
+
+    // Redirection pour la page de modification
+    document.getElementById("suivant").addEventListener("click", () => {
+    const select = document.getElementById("group-select");
+    const groupeId = select.value;
+    const groupeNom = select.options[select.selectedIndex].text;  // Récupère le texte de l'option sélectionnée (nom du groupe)
+
+
+    if (!groupeId) {
+        alert("Veuillez sélectionner un groupe.");
+        return;
+    }
+
+    // Stocker dans localStorage
+    localStorage.setItem("selectedGroupeId", groupeId);
+    localStorage.setItem("selectedGroupeName", groupeNom );
+
+
+    // Redirection vers la page de modification
+    window.location.href = "modification_groupe.html";
+});
+
 </script>
 
 
+
 </script>
 
-<script src="../js/voir_groupe.js"></script>
 </body>
 </html>
 

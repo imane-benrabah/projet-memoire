@@ -244,6 +244,8 @@
             </div>
         </form>
     </div>
+    <script src="../js/simulate_login.js"></script>
+
 
     <script>
         // Ajouter une référence
@@ -294,13 +296,13 @@
                 // Réinitialiser les champs multiples
                 document.getElementById('references-container').innerHTML = `
                     <div class="multi-field">
-                        <input type="text" name="references[]" placeholder="Ajouter une référence">
+                        <input type="text" name="references[]" class="reference" placeholder="Ajouter une référence">
                         <button type="button" class="remove-btn">-</button>
                     </div>
                 `;
                 document.getElementById('prerequisites-container').innerHTML = `
                     <div class="multi-field">
-                        <input type="text" name="prerequisites[]" placeholder="Ajouter un prérequis">
+                        <input type="text" name="prerequisites[]" class="prerequis" placeholder="Ajouter un prérequis">
                         <button type="button" class="remove-btn">-</button>
                     </div>
                 `;
@@ -308,20 +310,62 @@
         });
         
         // Gestion de la soumission
-        document.getElementById('subjectForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Récupérer les données du formulaire
-            const formData = {
-                projectName: document.getElementById('projectName').value,
-                description: document.getElementById('description').value,
-                references: Array.from(document.querySelectorAll('input[name="references[]"]')).map(input => input.value),
-                prerequisites: Array.from(document.querySelectorAll('input[name="prerequisites[]"]')).map(input => input.value)
-            };
-            
-            console.log('Données du formulaire:', formData);
-            alert('Le formulaire a été soumis avec succès !');
-        });
+        document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("subjectForm");
+    const enseignantRId = parseInt(localStorage.getItem('idResponsable')); 
+    if (isNaN(enseignantRId)) {
+        alert("Erreur: ID enseignant non trouvé ou invalide");
+        console.error("ID enseignant dans localStorage:", localStorage.getItem('idResponsable'));
+        return;
+    }
+
+
+    form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const titre = document.getElementById('projectName').value;
+        const description = document.getElementById("description").value;
+
+        // Récupérer les références et prérequis
+        const references = Array.from(document.querySelectorAll('input[name="references[]"]'))
+            .map(input => input.value.trim())
+            .filter(val => val !== "");
+        
+        const prerequis = Array.from(document.querySelectorAll('input[name="prerequisites[]"]'))
+            .map(input => input.value.trim())
+            .filter(val => val !== "");
+
+        const data = {
+            titre,
+            description,
+            enseignantRId, // Ajout de l'ID de l'enseignant
+            references,
+            prerequis // Changement de nom pour correspondre au backend
+        };
+
+        try {
+            const response = await fetch('http://localhost:3000/api/sujet/ajouter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                alert("Sujet enregistré avec succès !");
+                form.reset();
+            } else {
+                const err = await response.json();
+                alert("Erreur lors de l'enregistrement : " + (err.message || response.status));
+            }
+        } catch (error) {
+            console.error("Erreur:", error);
+            alert("Une erreur s'est produite. Veuillez réessayer.");
+        }
+    });
+});
+
     </script>
 </body>
 </html> 

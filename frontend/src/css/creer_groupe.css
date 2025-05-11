@@ -58,14 +58,19 @@ body {
 }
 
 main h1{
-    font-size: 2.5rem; /* Taille de police plus grande */
-    font-weight: bold; /* Mettre en gras */
-    text-align: center; /* Centrer le texte */
-    color: #4666FF; /* Couleur violet moderne */
-    text-transform: uppercase; /* Tout en majuscules pour plus de modernité */
-    letter-spacing: 2px; /* Espacement léger entre les lettres */
-    padding: 10px 0; /* Un peu d'espace autour du texte */
-    animation: fadeInUp 1s ease-out; /* Animation d'apparition */
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #4B0082; /* Indigo doux */
+    background-color: #f4f4fb; /* Couleur de fond légère */
+    text-align: left; /* Alignement du texte à gauche */
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-right: auto;
+    margin-left:  350px; ;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+    width: fit-content; 
 }
 
 

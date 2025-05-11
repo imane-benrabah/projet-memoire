@@ -113,8 +113,9 @@ main h1 {
 .table-bordered {
     width: 80%;
     border-collapse: collapse;
-    margin: 40px auto; /* Centrer la table et ajouter de l'espacement autour */
+    margin: 0px auto; /* Centrer la table et ajouter de l'espacement autour */
     border-radius: 8px;
+    margin-top: 0px;
     background-color: #ffffff;
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
 }
@@ -216,29 +217,23 @@ main {
 
 /* Titre principal */
 #group-name {
-    text-align: center;
-    font-size: 2rem;
-    font-weight: bold;
-    color: black;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    padding: 10px;
-    margin-top: 10px; /* Ajuster la marge pour déplacer le titre du groupe */
-    margin-bottom: 20px; /* Espacement entre le titre et le prochain élément */
-    width: 100%;
-    display: block;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: #4B0082; /* Indigo doux */
+    background-color: #f4f4fb; /* Couleur de fond légère */
+    text-align: left; /* Alignement du texte à gauche */
+    padding: 12px 20px;
+    border-radius: 10px;
+    margin-right: auto;
+    margin-left:  100px; ;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    margin-bottom: 0px;
+    letter-spacing: 1px;
+    width: fit-content; /* Pour que le bloc ne prenne que la largeur du contenu */
 }
 
-/* Ligne décorative sous le titre */
-#group-name::after {
-    content: "";
-    display: block;
-    width: 80px;
-    height: 4px;
-    background-color: black;
-    margin: 10px auto 0;
-    border-radius: 2px;
-}
+
+
 
 .titre1 {
     font-size: 2.5rem;

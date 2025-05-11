@@ -9,13 +9,28 @@ const path = require('path');
 
 const app = express();
 const db = require("./config/db"); // Connexions principales et externes
-const authRoutes = require('./routes/authRoutes'); 
-const etudiantRoutes = require("./routes/etudiantRoutes");
+const authRoutes = require('./routes/authRoutes');
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
 const tacheRoutes = require('./routes/tacheRoutes');
 const sujetRoutes = require('./routes/sujetRoutes');
+const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
+const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
+const profilRoutes = require('./routes/profilRoutes');
+const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
+const rapportRoutes = require('./routes/rapportRoutes');
+const casRoutes = require('./routes/casRoutes');
+const etapeRoutes = require('./routes/etapeRoutes'); 
+const presenceRoutes = require('./routes/presenceRoutes');
+const BinomeRoutes = require('./routes/BinomeRoutes');
+const reunionRoutes = require('./routes/reunionRoutes');
+
+
+
+
+
+
 
 
 
@@ -25,7 +40,9 @@ const sujetRoutes = require('./routes/sujetRoutes');
 // 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
 const allowedOrigins = [
   'http://localhost:5500',
-  'http://127.0.0.1:5500'
+  'http://127.0.0.1:5500',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
 ];
 
 const corsOptions = {
@@ -37,13 +54,17 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-id'], // <-- ajoute x-user-id ici
-
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
+
+app.use(cors({
+  origin: '*', // À remplacer en production
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 
 
 
@@ -61,31 +82,55 @@ app.use((req, res, next) => {
 
 // 📁 Fichiers statiques
 app.use('/uploads', express.static(path.join(__dirname, 'middleware/uploads')));
-const staticPath = path.join(__dirname, '..', 'frontend', 'src');
-app.use(express.static(staticPath));
+const staticPath = path.join(__dirname, '..', 'frontend', 'src', 'pages');
 
+app.use(express.static(staticPath));
 
 // 🌐 ROUTES
 
-// ✅ Middleware temporaire pour simuler un utilisateur connecté
-app.use((req, res, next) => {
-  req.userId = "66469e362abeffbe891f80dc"; // Remplacer par un ID réel de votre base de données
-  next();
-});
+
 
 app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
 app.use('/api', groupesRoutes);
 app.use('/etapes', etapesRoutes);
 app.use('/tache', tacheRoutes); 
-app.use('/api/sujets', sujetRoutes);
 app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
+app.use('/api', chargergroupeRoutes);
+app.use('/api/groupes', etudiantinfoRoutes);
+app.use('/api//profil', profilRoutes);
+app.use('/api/groupes', groupenseignantRoutes);
+app.use('/api/sujet', sujetRoutes);
+app.use('/api', casRoutes);
+app.use('/api', rapportRoutes);
+app.use('/api/sujets', sujetRoutes); 
+app.use("/api", sujetRoutes);
+app.use('/api', etapeRoutes); 
+app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
+app.use('/api', BinomeRoutes); // Doit être monté avant les autres middlewares
+app.use('/api', reunionRoutes);
+
+
+
+
+
+
+
+
+
+
 
 
 // Route de test
-app.get('/', (req, res) => {
-  res.send('✅ Serveur opérationnel');
+
+
+// Gestion des erreurs
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ error: err.message });
 });
+
+
 
 // Démarrage
 

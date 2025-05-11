@@ -47,26 +47,33 @@
     </div>
   </main>
   <script>
-  const casEtudiant = [
-  {
-    nom: "Consulter notification",
-    acteur: "Étudiant"
-  },
-  {
-    nom: "Consulter liste des cas",
-    acteur: "Enseignant"
+document.addEventListener("DOMContentLoaded", () => {
+  let idEtudiant = localStorage.getItem('idEtudiant');
+  
+  if (!idEtudiant) {
+    console.log("L'ID de l'étudiant n'est pas défini, je vais le définir.");
+    localStorage.setItem('idEtudiant', '12');  // تعيين id هنا مباشرة إذا لم يكن موجودًا
+    idEtudiant = '12'; // تعيين قيمة مؤقتة
   }
-];
 
-const tbody = document.getElementById("cas-table-body");
+  fetch(`http://localhost:3000/api/cas/${idEtudiant}`)
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.getElementById("cas-table-body");
+      tbody.innerHTML = "";
 
-casEtudiant.forEach((cas) => {
-  const row = document.createElement("tr");
-  row.innerHTML = `
-    <td>${cas.nom}</td>
-    <td>${cas.acteur}</td>
-  `;
-  tbody.appendChild(row);
+      data.forEach(cas => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${cas.cas}</td>
+          <td>${cas.acteur}</td>
+        `;
+        tbody.appendChild(row);
+      });
+    })
+    .catch(error => {
+      console.error("Erreur lors de la récupération des cas:", error);
+    });
 });
 </script>
 </body>
