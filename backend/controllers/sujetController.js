@@ -123,7 +123,10 @@ exports.getSujetsByResponsable = (req, res) => {
     const idResponsable = req.params.id;
 
     mainDb.query(
-        "SELECT idS, titre FROM Sujet WHERE enseignantRId = ?",
+        `SELECT DISTINCT s.idS, s.titre, s.description 
+         FROM Sujet s
+         JOIN Groupe g ON s.idS = g.idS OR s.enseignantRId = g.enseignantRId
+         WHERE g.enseignantRId = ?`,
         [idResponsable],
         (err, results) => {
             if (err) {
