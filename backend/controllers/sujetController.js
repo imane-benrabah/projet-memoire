@@ -153,6 +153,10 @@ exports.getAllSujets = (req, res) => {
 
 
 
+
+
+
+
     exports.getSujetById = async (req, res) => {
         try {
             const sujet = await Sujet.findById(req.params.id);
