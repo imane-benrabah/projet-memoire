@@ -13,7 +13,6 @@ const authRoutes = require('./routes/authRoutes');
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
 const groupesRoutes = require('./routes/groupesRoutes');
 const etapesRoutes = require('./routes/etapesRoutes');
-const tacheRoutes = require('./routes/tacheRoutes');
 const sujetRoutes = require('./routes/sujetRoutes');
 const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
 const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
@@ -81,7 +80,8 @@ app.use((req, res, next) => {
 
 
 // 📁 Fichiers statiques
-app.use('/uploads', express.static(path.join(__dirname, 'middleware/uploads')));
+const upload = require(path.join(__dirname, '../middleware/upload'));
+
 const staticPath = path.join(__dirname, '..', 'frontend', 'src', 'pages');
 
 app.use(express.static(staticPath));
@@ -94,7 +94,6 @@ app.use('/api/auth', authRoutes);
 app.use("/api", binomeExterneRoutes);
 app.use('/api', groupesRoutes);
 app.use('/etapes', etapesRoutes);
-app.use('/tache', tacheRoutes); 
 app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
 app.use('/api', chargergroupeRoutes);
 app.use('/api/groupes', etudiantinfoRoutes);
