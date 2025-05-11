@@ -6,5 +6,4 @@ const sujetModel = {
     mainDb.query(sql, [idS], callback);
   },
 };
-
 module.exports = sujetModel;

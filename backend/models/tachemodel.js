@@ -1,7 +1,15 @@
-const { mainDb } = require('../config/db'); // تأكد من المسار الصحيح إلى db.js
+const { mainDb } = require('../config/db');
 
-const getTachesByEtape = (id_etape, callback) => {
-  const sql = 'SELECT * FROM tache WHERE idEtape = ?';
+// Fonction pour récupérer les tâches par étape avec l'évaluation
+const getTachesByEtapeWithEvaluation = (id_etape, callback) => {
+  // استعلام SQL لجلب المهام مع التقييمات
+  const sql = `
+    SELECT t.idTache, t.nom, IFNULL(er.description, 'Non évalué') AS evaluation
+    FROM tache t
+    LEFT JOIN EvaluationRapport er ON t.idR = er.idR
+    WHERE t.idEtape = ?
+  `;
+  
   mainDb.query(sql, [id_etape], (err, results) => {
     if (err) {
       return callback(err);
@@ -11,6 +19,6 @@ const getTachesByEtape = (id_etape, callback) => {
 };
 
 module.exports = {
-  getTachesByEtape
+  getTachesByEtapeWithEvaluation
 };
 

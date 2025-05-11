@@ -158,7 +158,14 @@
 
   <div class="form-container">
     <h1>Formulaire</h1>
-<!-- ... نفس المقدمة السابقة ... -->
+  <div class="form-group">
+  <label>
+    <input type="checkbox" id="simulate" />
+    Simuler l'envoi (ne pas télécharger le fichier)
+  </label>
+</div>
+
+
 
 <!-- Sélecteur d'étapes -->
 <div class="form-group">
@@ -197,10 +204,11 @@
   <button type="button" class="submit-btn" id="submit-btn">Envoyer</button>
 </div>
 
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     // جلب المراحل من الخادم
-    fetch('http://localhost:3000/api/etapes')
+     fetch('http://localhost:3000/etapes') 
       .then(response => response.json())
       .then(data => {
         const select = document.getElementById('select-etape');
@@ -212,49 +220,66 @@
         });
       })
       .catch(error => console.error('Erreur de chargement des étapes:', error));
-  });
 
-  // عرض اسم الملف
-  document.getElementById('rapport').addEventListener('change', function () {
-    const fileName = this.files[0]?.name || "Aucun fichier choisi";
-    document.getElementById('file-name').textContent = fileName;
-  });
+    // عرض اسم الملف عند اختياره
+    document.getElementById('rapport').addEventListener('change', function () {
+      const fileName = this.files[0]?.name || "Aucun fichier choisi";
+      document.getElementById('file-name').textContent = fileName;
+    });
 
-  // عند الضغط على إرسال
-  document.getElementById('submit-btn').addEventListener('click', async function () {
-    const etapeId = document.getElementById('select-etape').value;
-    const description = document.getElementById('description').value;
-    const rapportFile = document.getElementById('rapport').files[0];
-    const dateDepot = document.getElementById('dateDepot').value;
-    const dateEtape = document.getElementById('dateEtape').value;
+    // عند الضغط على زر الإرسال
+    document.getElementById('submit-btn').addEventListener('click', async function () {
+      const etapeId = document.getElementById('select-etape').value;
+      const description = document.getElementById('description').value;
+      const rapportFile = document.getElementById('rapport').files[0];
+      const dateDepot = document.getElementById('dateDepot').value;
+      const dateEtape = document.getElementById('dateEtape').value;
+      const simulate = document.getElementById('simulate').checked; // <-- simulate checkbox
 
-    if (!etapeId || !description || !rapportFile || !dateDepot || !dateEtape) {
-      alert("Veuillez remplir tous les champs.");
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('etapeId', etapeId);
-    formData.append('description', description);
-    formData.append('rapport', rapportFile);
-    formData.append('dateDepot', dateDepot);
-    formData.append('dateEtape', dateEtape);
-
-    try {
-      const response = await fetch('http://localhost:3000/api/rapport', {
-        method: 'POST',
-        body: formData
-      });
-
-      if (response.ok) {
-        alert('Rapport envoyé avec succès !');
-      } else {
-        alert('Erreur lors de l\'envoi du rapport.');
+      if (!etapeId || !description || (!simulate && !rapportFile) || !dateDepot || !dateEtape) {
+        alert("Veuillez remplir tous les champs.");
+        return;
       }
-    } catch (error) {
-      console.error('Erreur:', error);
-    }
+
+      const formData = new FormData();
+      formData.append('etapeId', etapeId);
+      formData.append('description', description);
+      formData.append('dateDepot', dateDepot);
+      formData.append('dateEtape', dateEtape);
+      formData.append('simulate', simulate);
+
+      if (!simulate) {
+        formData.append('rapport', rapportFile);
+      }
+
+      try {
+        const response = await fetch('http://localhost:3000/api/rapport', {
+          method: 'POST',
+          body: formData
+        });
+
+        if (response.ok) {
+          alert('Rapport envoyé avec succès !');
+          // إعادة تعيين النموذج
+          document.getElementById('description').value = '';
+          document.getElementById('rapport').value = '';
+          document.getElementById('file-name').textContent = 'Aucun fichier choisi';
+          document.getElementById('dateDepot').value = '';
+          document.getElementById('dateEtape').value = '';
+          document.getElementById('simulate').checked = false;
+        } else {
+          alert('Erreur lors de l\'envoi du rapport.');
+        }
+      } catch (error) {
+        console.error('Erreur:', error);
+      }
+    });
   });
+  document.getElementById('cancelBtn').addEventListener('click', function () {
+  // reset form or redirect
+  window.location.href = "dashb_etud_res.html";
+});
+
 </script>
     
 </body>

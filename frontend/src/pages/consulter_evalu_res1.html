@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulter evaluation</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="../css/dashboard_etudiant.css">
+    <style>
+        .container-form {
+            margin-left: 450px;
+            max-width: 700px;
+        }
+
+        .card {
+            border-radius: 15px;
+            border-left: 5px solid #8A2BE2; /* Violet */
+        }
+
+        label {
+            color: #8A2BE2;
+        }
+
+        h3 {
+            font-family: 'Sarabun', sans-serif;
+            color: #8A2BE2;
+        }
+
+        .form-select {
+            border-color: #8A2BE2;
+        }
+
+        .cas-item {
+            cursor: pointer;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border: 1px solid #8A2BE2;
+            border-radius: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .cas-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .cas-state {
+            font-weight: bold;
+        }
+
+        .cas-item i {
+            margin-right: 8px;
+        }
+
+        .accept {
+            color: green;
+        }
+
+        .correct {
+            color: red;
+        }
+
+        .not-evaluated {
+            color: orange;
+        }
+    </style>
+</head>
+<body>
+    <div class="sidebar">
+        <h2 class="titre">Gestion projet</h2>
+      <nav>
+      <ul>
+        <li ><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+        <li><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+        <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+        <li><a href="consulter_des_sujet_res.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+        <li><a href="consulter_cas_res.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+        <li><a href="consulter_rapport_res.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+        <li><a href="deposer_rapport_res.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+        <li class="active"><a href="consulter_evalu_res.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+        <li><a href="poser_question_res.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+        <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
+      </ul>
+    </nav>
+    </div>
+       <div class="container mt-5 container-form">
+        <h3 class="mb-4">Évaluation de votre projet</h3>
+        <div class="card shadow p-4 bg-white">
+            <div id="tachesContainer"></div> <!-- سيتم عرض المهام هنا -->
+        </div>
+        <button id="valider-theme" class="btn btn-primary mt-4">Valider</button>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const tachesContainer = document.getElementById('tachesContainer');
+        const urlParams = new URLSearchParams(window.location.search);
+        const etapeId = urlParams.get('etapeId'); // الحصول على ID المرحلة من الـ URL
+
+        if (!etapeId) {
+            alert("Aucune étape sélectionnée !");
+            return;
+        }
+
+        // جلب المهام المرتبطة بالمرحلة
+        fetch(`http://localhost:3000/tache/etape/${etapeId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.length === 0) {
+                    tachesContainer.innerHTML = "<p>Aucune tâche disponible pour cette étape.</p>";
+                    return;
+                }
+
+                // عرض المهام كعناوين مع حالة التقييم وزر لاختيار المهمة
+                data.forEach(tache => {
+                    const taskItem = document.createElement("div");
+                    taskItem.classList.add("task-item");
+
+                    const taskTitle = document.createElement("span");
+                    taskTitle.textContent = tache.nom;
+
+                    const taskEvaluation = document.createElement("span");
+                    taskEvaluation.classList.add("evaluation");
+                    taskEvaluation.textContent = tache.evaluation;
+
+                    const selectButton = document.createElement("button");
+                    selectButton.textContent = "Sélectionner";
+                    selectButton.classList.add("btn", "btn-secondary");
+
+                    // عند الضغط على الزر، يتم اختيار المهمة
+                    selectButton.addEventListener("click", () => {
+                        taskItem.classList.toggle("selected"); // إضافة/إزالة حالة التحديد
+                    });
+
+                    taskItem.appendChild(taskTitle);
+                    taskItem.appendChild(taskEvaluation);
+                    taskItem.appendChild(selectButton);
+
+                    tachesContainer.appendChild(taskItem);
+                });
+            })
+            .catch(error => {
+                console.error("Erreur lors de la récupération des tâches:", error);
+                tachesContainer.innerHTML = "<p>Erreur lors du chargement des tâches.</p>";
+            });
+    });
+
+    // حدث الزر "Valider" للتحقق من المهمة المختارة
+    document.getElementById('valider-theme').addEventListener('click', function() {
+        const selectedTask = document.querySelector('.task-item.selected'); // التحقق من المهمة المحددة
+
+        if (!selectedTask) {
+            alert("Veuillez sélectionner une tâche.");
+            return;
+        }
+
+        const taskTitle = selectedTask.querySelector("span").textContent; // أخذ عنوان المهمة
+
+        alert(`Tâche validée: ${taskTitle}`);
+    });
+</script>
+</body>
+</html>
