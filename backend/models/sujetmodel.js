@@ -7,3 +7,4 @@ const sujetModel = {
   },
 };
 module.exports = sujetModel;
+

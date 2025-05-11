@@ -30,6 +30,8 @@ body {
     top: 0; /* Positionne-la en haut de la page */
     left: 0; /* Positionne-la sur la gauche de la page */
     transition: width 0.3s ease;
+    overflow-y: auto;
+
 }
 
 .sidebar h2 {
@@ -415,8 +417,9 @@ main {
     padding: 10px 25px;
     font-size: 1rem;
     margin-top: -80px;
-    margin-right: 25px;
-    
+    margin-right: 350px;
+    background-color: #2281e7;
+    border: none;
 }
 
 #save-attendance i {

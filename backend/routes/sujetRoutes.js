@@ -9,4 +9,13 @@ router.post('/ajouter', sujetController.ajouterSujet);
 router.get('/etudiant/:idS', sujetController.getSujetByStudent);
 
 router.get('/:idS', sujetController.getSujetById);
+router.get('/sujets', sujetController.getAllSujets);
+
+router.get("/sujets-par-responsable/:id", sujetController.getSujetsByResponsable);
+
+
+
+router.get('/:id', sujetController.getSujetById);
+
+
 module.exports = router;

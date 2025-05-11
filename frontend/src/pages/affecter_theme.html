@@ -44,16 +44,71 @@
     <div class="container">
         <select id="group-select" class="form-select mb-3">
             <option value="">Sélectionner un théme</option>
+
             <!-- Options chargées dynamiquement -->
+
         </select>
-        <button class="btn btn-success" id="valider-theme">Valider</button>
+        <button class="btn btn-success" id="valider">Valider</button>
             <button class="btn btn-danger" id="annuler-theme">Annuler</button>
     </div>
        
-    <script src="../js/affecter_theme.js"></script>
-   
-    </body>
-    </html>
+   <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    fetch('http://localhost:3000/api/sujets/sujets')
+        .then(response => response.json())
+        .then(data => {
+            const select = document.getElementById('group-select');
+            data.forEach(sujet => {
+                const option = document.createElement('option');
+                option.value = sujet.idS;
+                option.textContent = sujet.titre;
+                select.appendChild(option);
+            });
+        })
+        .catch(error => console.error('Erreur lors du chargement des sujets:', error));
+});
+
+document.getElementById('valider').addEventListener('click', async () => {
+  const idS = document.getElementById('group-select').value;
+  const idG = localStorage.getItem('selectedGroupeId');
+
+  if (!idS || !idG) {
+    alert("Sujet ou groupe non sélectionné.");
+    return;
+  }
+
+  try {
+    const response = await fetch('http://localhost:3000/api/groupes/assigner-sujet', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ idG, idS }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert("Sujet affecté avec succès !");
+      // Tu peux rediriger ou rafraîchir ici
+    } else {
+      alert("Erreur : " + result.error);
+    }
+  } catch (err) {
+    console.error("Erreur réseau :", err);
+    alert("Erreur lors de l'affectation.");
+  }
+});
+
+
+document.getElementById("annuler-theme").addEventListener("click", () => {
+
+    // Redirection vers la page de modification
+    window.location.href = "voir_groupe.html";
+});
+
+
+   </script>
     
 
        

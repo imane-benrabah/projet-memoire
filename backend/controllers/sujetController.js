@@ -1,4 +1,5 @@
 const db = require('../config/db'); // استيراد الاتصال بقاعدة البيانات
+const Sujet = require('../models/sujetModel');
 
 // جلب الموضوع بناءً على الطالب
 exports.getSujetByStudent = async (req, res) => {
@@ -168,3 +169,55 @@ exports.ajouterSujet = (req, res) => {
         }
     );
 };
+
+// controllers/sujetController.js
+
+exports.getSujetsByResponsable = (req, res) => {
+    const idResponsable = req.params.id;
+
+    mainDb.query(
+        "SELECT idS, titre FROM Sujet WHERE enseignantRId = ?",
+        [idResponsable],
+        (err, results) => {
+            if (err) {
+                console.error("Erreur récupération des sujets :", err);
+                return res.status(500).json({ error: "Erreur serveur" });
+            }
+
+            res.json(results);
+        }
+    );
+};
+
+
+
+
+
+exports.getAllSujets = (req, res) => {
+    const sql = "SELECT idS, titre FROM Sujet";
+    mainDb.query(sql, (err, results) => {
+        if (err) {
+            console.error("Erreur lors de la récupération des sujets :", err);
+            return res.status(500).json({ error: "Erreur serveur" });
+        }
+        res.json(results);
+    });
+};
+
+
+
+
+
+
+
+    exports.getSujetById = async (req, res) => {
+        try {
+            const sujet = await Sujet.findById(req.params.id);
+            if (!sujet) {
+                return res.status(404).json({ message: 'Sujet non trouvé' });
+            }
+            res.json(sujet);
+        } catch (error) {
+            res.status(500).json({ message: 'Erreur serveur', error });
+        }
+    };
