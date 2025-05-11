@@ -166,19 +166,20 @@ h2 {
             }
         
             // Récupérer les sujets affectés à cet enseignant
-            fetch(`http://localhost:3000/api/sujets-par-responsable/${idResponsable}`)
-            .then((res) => res.json())
-                .then((data) => {
-                    data.forEach((sujet) => {
-                        const option = document.createElement("option");
-                        option.value = sujet.idS;
-                        option.textContent = sujet.titre;
-                        select.appendChild(option);
-                    });
-                })
-                .catch((err) => {
-                    console.error("Erreur lors du chargement des sujets :", err);
-                });
+    fetch(`http://localhost:3000/api/sujets-par-responsable/${idResponsable}`)
+      .then((res) => res.json())
+     .then((data) => {
+      data.forEach((sujet) => {
+       const option = document.createElement("option");
+       option.value = sujet.idS;
+       option.textContent = sujet.titre;
+       select.appendChild(option);
+    });
+  })
+  .catch((err) => {
+    console.error("Erreur lors du chargement des sujets :", err);
+  });
+
         
             document.getElementById("valider-theme").addEventListener("click", function () {
                 const selectedSujetId = select.value;

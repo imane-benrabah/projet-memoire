@@ -3,130 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Consulter evaluation</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
-    <link rel="stylesheet" href="../css/dashboard_etudiant.css">
+    <title>Consulter les rapports des taches </title>
+    
+    <link rel="stylesheet" href="../css/dashboard_etud_res.css">
     <style>
-        .container-form {
-            margin-left: 450px;
-            max-width: 700px;
-        }
+        
+        .container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    text-align: center;
+    margin-top: 119px;
+    margin-right: 110px;
+    height: 37vh;
+    transition: box-shadow 0.3s ease-in-out; 
+}
 
-        .card {
-            border-radius: 15px;
-            border-left: 5px solid #8A2BE2; /* Violet */
-        }
+.container:hover {
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15); 
+}
 
-        label {
-            color: #8A2BE2;
-        }
+        
+        button {
+    margin: 80px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    top: 200px;
+    display: inline-block;
+    color: white;
+    font-size: 16px;
+}
 
-        h3 {
-            font-family: 'Sarabun', sans-serif;
-            color: #8A2BE2;
-        }
+/* Bouton Valider */
+.btn-success {
+    background-color: #8F00FF;
+    transform: scale(1.02);
+    position: absolute;
+    left: 940px;
+    border: none;
+    transition: background 0.3s, transform 0.2s;
+    
+}
 
-        .form-select {
-            border-color: #8A2BE2;
-        }
+.btn-success:hover {
+    background-color: #6F00FF;
+    transform: scale(1.04);
+}
 
-        .cas-item {
-            cursor: pointer;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border: 1px solid #8A2BE2;
-            border-radius: 8px;
-            transition: background-color 0.3s;
-        }
+/* Titre */
+h2 {
+    color: #8A2BE2;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
 
-        .cas-item:hover {
-            background-color: #f0f0f0;
-        }
+#rapport-select{
+    position:absolute;
+    top: 160px;
+    width:55%;
+    right: 165px;
+}
 
-        .cas-state {
-            font-weight: bold;
-        }
 
-        .cas-item i {
-            margin-right: 8px;
-        }
-
-        .accept {
-            color: green;
-        }
-
-        .correct {
-            color: red;
-        }
-
-        .not-evaluated {
-            color: orange;
-        }
     </style>
 </head>
 <body>
-    <div class="sidebar">
-        <h2 class="titre">Gestion projet</h2>
-        <nav>
-            <ul>
-                <li ><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-        <li><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
-        <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
-        <li><a href="consulter_des_sujet_res.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
-        <li><a href="consulter_cas_res.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
-        <li><a href="consulter_rapport_res.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
-        <li><a href="deposer_rapport_res.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
-        <li class="active"><a href="consulter_evalu_res.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
-        <li ><a href="poser_question_res.html"><i class="fas fa-question"></i> Poser des questions</a></li>
-        <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
-            </ul>
-        </nav>
-    </div>
+  <div class="sidebar">
+    <h2 class="titre">Gestion projet</h2>
+    <nav>
+      <ul>
+    <li ><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+    <li ><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+    <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+    <li><a href="consulter_des_sujet_res.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+    <li><a href="consulter_cas_res.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+    <li ><a href="consulter_rapport_res.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+    <li><a href="deposer_rapport_res.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+    <li class="active"><a href="consulter_evalu_res.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+    <li ><a href="poser_question_res.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+    <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
+      </ul>
+    </nav>
+  </div>
 
-    <div class="container mt-5 container-form">
-        <h3 class="mb-4">Évaluation de votre projet</h3>
-        <div class="card shadow p-4 bg-white">
-            <form>
-                <div class="mt-4">
-                    <h5>Nom du tache :</h5>
-                    <div class="cas-item" id="casClasse">
-                        <span><i class="fas fa-square"></i> Diagramme de classe</span>
-                        <span class="cas-state accept">Accepter</span>
-                    </div>
-                    <div class="cas-item" id="casSequence">
-                        <span><i class="fas fa-square"></i> Diagramme de séquence</span>
-                        <span class="cas-state correct">Corriger</span>
-                    </div>
-                    <div class="cas-item" id="casEtat">
-                        <span><i class="fas fa-square"></i> Diagramme d'état</span>
-                        <span class="cas-state not-evaluated">Non évalué</span>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <script>
-        // Event listeners for each cas
-        document.getElementById('casClasse').addEventListener('click', function() {
-            window.location.href = 'accepter.html';
+  <div class="container">
+    <select id="rapport-select" class="form-select mb-3">
+        <option value="">Sélectionner une etape </option>
+        <!-- Options chargées dynamiquement -->
+    </select>
+    <button class="btn btn-success" id="valider-theme">Suivant</button>
+       
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // 1. جلب المراحل من الخادم
+        fetch('http://localhost:3000/etapes') // تأكد من إضافة البروتوكول والمضيف والمنفذ
+    .then(response => response.json())
+    .then(data => {
+        const selectElement = document.getElementById('rapport-select');
+        data.forEach(etape => {
+            const option = document.createElement('option');
+            option.value = etape.idEtape; // تأكد أن الاسم مطابق للقاعدة
+            option.textContent = etape.nom;
+            selectElement.appendChild(option);
         });
+    })
+            .catch(error => console.error('Erreur lors de la récupération des étapes:', error));
+    
+        // 2. عند الضغط على "Suivant"
+        document.getElementById("valider-theme").addEventListener("click", function () {
+            const etapeId = document.getElementById("rapport-select").value;
+            if (!etapeId) {
+                alert("Veuillez sélectionner une étape !");
+                return;
+            }
+    
+            // الانتقال إلى صفحة المهام مع تمرير ID المرحلة
+            window.location.href = `consulter_evalu_res1.html?etapeId=${etapeId}`;
 
-        document.getElementById('casSequence').addEventListener('click', function() {
-            window.location.href = 'corriger.html';
         });
-
-        document.getElementById('casEtat').addEventListener('click', function() {
-            window.location.href = 'non_evaluer.html';
-        });
+    });
     </script>
-
-    <script src="../js/dashboard_etu.js"></script>
+    
 </body>
 </html>
+

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
-const upload = require('../../middleware/upload'); // <<== Ajout du middleware
+const upload = require('../middlewares/upload'); // <<== Ajout du middleware
 
 // Route d'enregistrement avec upload d'image
 router.post('/register/enseignant', upload.single('image'), authController.registerEnseignant);

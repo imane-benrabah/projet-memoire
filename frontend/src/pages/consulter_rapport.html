@@ -64,31 +64,30 @@
       </ul>
     </nav>
   </div>
-
-  <main class="content">
+<main class="content">
     <div class="container" style="max-width: 600px;">
       <div class="form-container">
         <h4 class="text-center mb-4" style="color:#8A2BE2;">Consulter un rapport</h4>
-        <form action="consulter_r_boutton.html" method="get">
+          <div class="mb-3">
+            <label for="taskSelect" class="form-label">Choisir une etape :</label>
+            <select class="form-select" id="taskSelect" name="task" required>
+              <option value="" disabled selected>-- Sélectionner une etape --</option>
+            </select>
+          </div>
           <div class="mb-3">
             <label for="taskSelect" class="form-label">Choisir une tâche :</label>
             <select class="form-select" id="taskSelect" name="task" required>
               <option value="" disabled selected>-- Sélectionner une tâche --</option>
-              <option value="tache1">Tâche 1 : Diagramme de cas d'utilisation</option>
-              <option value="tache2">Tâche 2 : Diagramme de classe</option>
-              <option value="tache3">Tâche 3 : Diagramme de séquence détaillé</option>
             </select>
           </div>
 
-          <div class="mb-3">
+          <!-- Supprimer اختيار "cas" -->
+          <!-- <div class="mb-3">
             <label for="casSelect" class="form-label">Choisir un cas :</label>
             <select class="form-select" id="casSelect" name="cas" required>
               <option value="" disabled selected>-- Sélectionnez un cas --</option>
-              <option value="cas1">Cas 1 : Consulter notification</option>
-              <option value="cas2">Cas 2 : Consulter description sujet</option>
-              <option value="cas3">Cas 3 : Déposer rapport</option>
             </select>
-          </div>
+          </div> -->
 
           <div class="text-center">
             <button type="submit" class="btn btn-purple">Consulter Rapport</button>
@@ -97,5 +96,83 @@
       </div>
     </div>
   </main>
-</body>
-</html>
+
+ <script>
+  // عند تحميل الصفحة: جلب جميع étapes
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("http://localhost:3000/etapes") // <-- تحتاج backend يعيد قائمة étapes
+      .then(res => res.json())
+      .then(etapes => {
+        const etapeSelect = document.getElementById("etapeSelect");
+        etapes.forEach(etape => {
+          const option = document.createElement("option");
+          option.value = etape.idEtape;
+          option.textContent = etape.nom;
+          etapeSelect.appendChild(option);
+        });
+      })
+      .catch(err => {
+        console.error("Erreur chargement étapes", err);
+      });
+  });
+
+  // عند تغيير étape، جلب المهام التابعة لها
+  document.getElementById("etapeSelect").addEventListener("change", function () {
+    const etapeId = this.value;
+    const taskSelect = document.getElementById("taskSelect");
+    taskSelect.innerHTML = '<option disabled selected>Chargement des tâches...</option>';
+
+    fetch(`http://localhost:3000/tache?etapeId=${etapeId}`)
+      .then(response => response.json())
+      .then(data => {
+        taskSelect.innerHTML = '<option value="" disabled selected>-- Sélectionner une tâche --</option>';
+        data.forEach(tache => {
+          const option = document.createElement("option");
+          option.value = tache.idTache;
+          option.textContent = tache.nom;
+          taskSelect.appendChild(option);
+        });
+      })
+      .catch(error => {
+        console.error("Erreur lors de la récupération des tâches:", error);
+        taskSelect.innerHTML = "<option>Erreur lors du chargement des tâches.</option>";
+      });
+  });
+
+  // عند الضغط على "Consulter Rapport"
+  document.getElementById("rapportForm").addEventListener("submit", function (event) {
+    event.preventDefault();
+    const taskId = document.getElementById("taskSelect").value;
+    if (!taskId) {
+      alert("Veuillez sélectionner une tâche.");
+      return;
+    }
+
+    // جلب rapport المرتبط بالتاسك
+    fetch(`http://localhost:3000/rapport/${taskId}`)
+      .then(res => res.json())
+      .then(rapport => {
+        if (!rapport || !rapport.idR) {
+          alert("Aucun rapport trouvé.");
+          return;
+        }
+
+        const idR = rapport.idR;
+
+        // جلب آخر نسخة من rapport
+        fetch(`http://localhost:3000/versionrapport/latest?idR=${idR}`)
+          .then(res => res.json())
+          .then(version => {
+            if (version && version.lien) {
+              window.open(version.lien, "_blank"); // فتح رابط Google Drive
+            } else {
+              alert("Aucune version trouvée pour ce rapport.");
+            }
+          });
+      })
+      .catch(err => {
+        console.error("Erreur rapport:", err);
+        alert("Erreur lors du chargement du rapport.");
+      });
+  });
+</script>

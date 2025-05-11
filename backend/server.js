@@ -19,6 +19,8 @@ const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
 const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
 const profilRoutes = require('./routes/profilRoutes');
 const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
+const rapportRoutes = require('./routes/rapportRoutes');
+const casRoutes = require('./routes/casRoutes');
 const etapeRoutes = require('./routes/etapeRoutes'); 
 const presenceRoutes = require('./routes/presenceRoutes');
 const BinomeRoutes = require('./routes/BinomeRoutes');
@@ -84,7 +86,6 @@ const staticPath = path.join(__dirname, '..', 'frontend', 'src', 'pages');
 
 app.use(express.static(staticPath));
 
-
 // 🌐 ROUTES
 
 
@@ -94,19 +95,21 @@ app.use("/api", binomeExterneRoutes);
 app.use('/api', groupesRoutes);
 app.use('/etapes', etapesRoutes);
 app.use('/tache', tacheRoutes); 
-app.use('/api/sujets', sujetRoutes);
 app.use('/api/groupes', groupesRoutes); // Doit matcher l'URL du fetch
 app.use('/api', chargergroupeRoutes);
 app.use('/api/groupes', etudiantinfoRoutes);
 app.use('/api//profil', profilRoutes);
 app.use('/api/groupes', groupenseignantRoutes);
 app.use('/api/sujet', sujetRoutes);
+app.use('/api', casRoutes);
+app.use('/api', rapportRoutes);
 app.use('/api/sujets', sujetRoutes); 
 app.use("/api", sujetRoutes);
 app.use('/api', etapeRoutes); 
 app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', BinomeRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', reunionRoutes);
+
 
 
 
