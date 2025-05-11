@@ -101,10 +101,8 @@ app.use('/api/groupes', etudiantinfoRoutes);
 app.use('/api//profil', profilRoutes);
 app.use('/api/groupes', groupenseignantRoutes);
 app.use('/api/sujet', sujetRoutes);
-<<<<<<< HEAD
 app.use('/api', casRoutes);
 app.use('/api', rapportRoutes);
-=======
 app.use('/api/sujets', sujetRoutes); 
 app.use("/api", sujetRoutes);
 app.use('/api', etapeRoutes); 
