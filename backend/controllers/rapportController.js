@@ -1,71 +1,143 @@
-const pool = require('../config/db');
-const Rapport = require('../models/rapportModel');
-const Tache = require('../models/tacheModel');
-const VersionRapport = require('../models/VersionRapportModel');
+const RapportModel = require('../models/rapportModel');
 
-class RapportController {
-    async deposerRapport(req, res) {
-        const connection = await pool.getConnection();
-        await connection.beginTransaction();
+// Fonction utilitaire pour valider les liens Google Drive
+const isValidGoogleDriveLink = (link) => {
+    try {
+        const url = new URL(link);
+        return url.hostname === 'drive.google.com';
+    } catch (e) {
+        return false;
+    }
+};
 
+const RapportController = {
+    // Récupère les tâches d'un étudiant
+    getStudentTasks: (req, res) => {
+        const idEtudiant = req.params.idEtudiant;
+
+        if (!idEtudiant) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'ID étudiant manquant' 
+            });
+        }
+
+        RapportModel.getTasksByStudent(idEtudiant, (err, tasks) => {
+            if (err) {
+                console.error('Erreur getStudentTasks:', err);
+                return res.status(500).json({ 
+                    success: false, 
+                    message: 'Erreur serveur',
+                    error: err.message 
+                });
+            }
+            
+            if (!tasks || tasks.length === 0) {
+                return res.status(404).json({ 
+                    success: true, 
+                    message: 'Aucune tâche disponible',
+                    taches: []
+                });
+            }
+
+            res.status(200).json({ 
+                success: true, 
+                taches: tasks 
+            });
+        });
+    },
+
+    // Soumet un nouveau rapport
+    submitReport: (req, res) => {
         try {
-            const { idTache, titre, description, lien, idEtudiant } = req.body;
+            const { titre, description, lien, idTache, idEtudiant } = req.body;
 
-            if (!idTache || !titre || !description || !lien || !idEtudiant) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Tous les champs sont obligatoires'
+            // Validation
+            if (!titre || !description || !lien || !idTache || !idEtudiant) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Tous les champs sont requis',
+                    requiredFields: ['titre', 'description', 'lien', 'idTache', 'idEtudiant']
                 });
             }
 
-            if (!lien.includes('drive.google.com')) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Veuillez fournir un lien Google Drive valide'
+            if (!isValidGoogleDriveLink(lien)) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: 'Lien Google Drive invalide',
+                    expectedFormat: 'https://drive.google.com/...'
                 });
             }
 
-            // Récupérer binôme
-            const [binome] = await connection.query(
-                'SELECT idB FROM Etudiant WHERE idU = ?',
-                [idEtudiant]
-            );
-            if (binome.length === 0) throw new Error('Étudiant non trouvé');
+            // Processus
+            RapportModel.getStudentBinome(idEtudiant, (err, idB) => {
+                if (err) {
+                    console.error('Erreur getStudentBinome:', err);
+                    return res.status(500).json({ 
+                        success: false, 
+                        message: 'Erreur lors de la récupération du binôme',
+                        error: err.message
+                    });
+                }
 
-            const idB = binome[0].idB;
+                if (!idB) {
+                    return res.status(404).json({ 
+                        success: false, 
+                        message: 'Binôme non trouvé pour cet étudiant' 
+                    });
+                }
 
-            // Créer les objets
-            const rapportModel = new Rapport(connection);
-            const tacheModel = new Tache(connection);
-            const versionModel = new VersionRapport(connection);
+                RapportModel.createReport(titre, idB, (err, idR) => {
+                    if (err) {
+                        console.error('Erreur createReport:', err);
+                        return res.status(500).json({ 
+                            success: false, 
+                            message: 'Erreur lors de la création du rapport',
+                            error: err.message
+                        });
+                    }
 
-            // Créer rapport
-            const idR = await rapportModel.create(titre, idB);
-            await rapportModel.createRapportTache(idR);
+                    RapportModel.linkReportToTask(idR, idTache, (err) => {
+                        if (err) {
+                            console.error('Erreur linkReportToTask:', err);
+                            return res.status(500).json({ 
+                                success: false, 
+                                message: 'Erreur lors de la liaison du rapport à la tâche',
+                                error: err.message
+                            });
+                        }
 
-            // Lier tâche au rapport
-            await tacheModel.linkToRapport(idTache, idR);
+                        RapportModel.createReportVersion(description, lien, idR, (err, idVR) => {
+                            if (err) {
+                                console.error('Erreur createReportVersion:', err);
+                                return res.status(500).json({ 
+                                    success: false, 
+                                    message: 'Erreur lors de la création de la version du rapport',
+                                    error: err.message
+                                });
+                            }
 
-            // Ajouter la version
-            await versionModel.create(description, lien, idR);
-
-            await connection.commit();
-            res.json({
-                success: true,
-                message: 'Rapport déposé avec succès',
-                idR
+                            res.status(201).json({ 
+                                success: true, 
+                                message: 'Rapport déposé avec succès',
+                                data: {
+                                    idRapport: idR,
+                                    idVersion: idVR
+                                }
+                            });
+                        });
+                    });
+                });
             });
         } catch (error) {
-            await connection.rollback();
-            console.error('Erreur RapportController:', error);
-            res.status(500).json({
-                success: false,
-                message: error.message || 'Erreur serveur'
+            console.error('Erreur inattendue submitReport:', error);
+            res.status(500).json({ 
+                success: false, 
+                message: 'Erreur serveur inattendue',
+                error: error.message 
             });
-        } finally {
-            connection.release();
         }
     }
-}
+};
 
 module.exports = RapportController;

@@ -124,155 +124,113 @@
         </div>
     </div>
  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Récupérer l'ID de l'étudiant depuis le localStorage
-        const idEtudiant = localStorage.getItem('idEtudiant');
-        if (!idEtudiant) {
-            showMessage('Vous devez être connecté pour accéder à cette page', 'danger');
-            return;
-        }
+// Fonction pour afficher les messages
+function showMessage(message, type) {
+    const messageContainer = document.getElementById('messageContainer');
+    messageContainer.innerHTML = `
+        <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    `;
 
-        // Charger les tâches de l'étudiant
-        loadTasks(idEtudiant);
-
-        // Gérer la soumission du formulaire
-        document.getElementById('deposerRapportForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            submitReport(idEtudiant);
-        });
-    });
-
-   function loadTasks(idEtudiant) {
-    fetch(`http://127.0.0.1:3000/api/taches/etudiant/${idEtudiant}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(tasks => {
-            const select = document.getElementById('taskSelect');
-            select.innerHTML = '<option value="" disabled selected>-- Sélectionner une tâche --</option>';
-            
-            if (tasks.data && tasks.data.length > 0) {
-                tasks.data.forEach(task => {
-                    const option = document.createElement('option');
-                    option.value = task.idTache;
-                    option.textContent = `${task.nom} (${formatDate(task.dateDebut)} - ${formatDate(task.dateFin)})`;
-                    select.appendChild(option);
-                });
-            } else {
-                showMessage('Aucune tâche disponible pour le moment', 'info');
-            }
-        })
-        .catch(error => console.error('Erreur API:', error));
-}
-function loadTasks(idEtudiant) {
-    fetch(`http://127.0.0.1:3000/api/taches/etudiant/${idEtudiant}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`Erreur HTTP: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(tasks => {
-            const select = document.getElementById('taskSelect');
-            select.innerHTML = '<option value="" disabled selected>-- Sélectionner une tâche --</option>';
-            
-            if (tasks.data && tasks.data.length > 0) {
-                tasks.data.forEach(task => {
-                    const option = document.createElement('option');
-                    option.value = task.idTache;
-                    option.textContent = `${task.nom} (${formatDate(task.dateDebut)} - ${formatDate(task.dateFin)})`;
-                    select.appendChild(option);
-                });
-            } else {
-                showMessage('Aucune tâche disponible pour le moment', 'info');
-            }
-        })
-        .catch(error => console.error('Erreur API:', error));
+    setTimeout(() => {
+        const alert = messageContainer.querySelector('.alert');
+        if (alert) alert.remove();
+    }, 5000);
 }
 
-    function submitReport(idEtudiant) {
-        const form = document.getElementById('deposerRapportForm');
-        const formData = new FormData(form);
-        
-        // Vérifier que tous les champs sont remplis
-        if (!formData.get('taskId') || !formData.get('titre') || !formData.get('description') || !formData.get('lien')) {
-            showMessage('Veuillez remplir tous les champs', 'danger');
-            return;
-        }
+// Fonction de formatage de date
+function formatDate(dateString) {
+    if (!dateString) return 'Non spécifiée';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('fr-FR');
+}
 
-        // Vérifier que le lien est un lien Google Drive valide
-        const lien = formData.get('lien');
-        if (!lien.includes('drive.google.com')) {
-            showMessage('Veuillez fournir un lien Google Drive valide', 'danger');
-            return;
-        }
+document.addEventListener('DOMContentLoaded', function() {
+    const idEtudiant = 6;
+    if (!idEtudiant) {
+        showMessage('Vous devez être connecté pour accéder à cette page', 'danger');
+        return;
+    }
 
-        // Créer l'objet à envoyer
-        const reportData = {
-            idTache: formData.get('taskId'),
-            titre: formData.get('titre'),
-            description: formData.get('description'),
-            lien: formData.get('lien'),
-            idEtudiant: idEtudiant
-        };
-
-        // Envoyer les données au serveur
-        fetch('/api/rapports/deposer', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(reportData)
-        })
+    // Charger les tâches
+    fetch(`http://localhost:3000/api/etudiants/${idEtudiant}/taches`)
         .then(response => {
             if (!response.ok) {
-                return response.json().then(err => { throw new Error(err.message); });
+                throw new Error('Erreur réseau');
             }
             return response.json();
         })
         .then(data => {
-            showMessage('Rapport déposé avec succès!', 'success');
-            form.reset();
-            // Recharger les tâches après dépôt
-            loadTasks(idEtudiant);
+            if (!data.success) {
+                throw new Error(data.message || 'Erreur inconnue');
+            }
+
+            const select = document.getElementById('taskSelect');
+            select.innerHTML = '<option value="" disabled selected>-- Sélectionner une tâche --</option>';
+
+            if (data.taches && data.taches.length > 0) {
+                data.taches.forEach(task => {
+                    const option = document.createElement('option');
+                    option.value = task.idTache;
+                    option.textContent = `${task.nom} `;
+                    select.appendChild(option);
+                });
+            } else {
+                showMessage('Aucune tâche disponible pour le moment', 'info');
+            }
         })
         .catch(error => {
-            showMessage(`Erreur lors du dépôt: ${error.message}`, 'danger');
             console.error('Erreur:', error);
+            showMessage(error.message || 'Erreur lors du chargement des tâches', 'danger');
         });
+
+    // Gérer la soumission
+    document.getElementById('deposerRapportForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const formData = {
+            titre: document.getElementById('titre').value,
+            description: document.getElementById('description').value,
+            lien: document.getElementById('lien').value,
+            idTache: document.getElementById('taskSelect').value,
+            idEtudiant: idEtudiant
+        };
+
+      fetch('http://localhost:3000/api/rapports/deposer', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData)
+})
+.then(async response => {
+    const contentType = response.headers.get("content-type");
+    let data;
+    if (contentType && contentType.includes("application/json")) {
+        data = await response.json();
+    } else {
+        throw new Error('Erreur interne du serveur (réponse non JSON)');
     }
 
-    function showMessage(message, type) {
-        const messageContainer = document.getElementById('messageContainer');
-        messageContainer.innerHTML = `
-            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                ${message}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        `;
-        
-        // Fermer l'alerte après 5 secondes
-        setTimeout(() => {
-            const alert = messageContainer.querySelector('.alert');
-            if (alert) {
-                alert.remove();
-            }
-        }, 5000);
+    if (!response.ok) {
+        throw new Error(data.message || 'Erreur lors du dépôt');
     }
 
-    function formatDate(dateString) {
-        if (!dateString) return 'Non spécifiée';
-        const date = new Date(dateString);
-        return date.toLocaleDateString('fr-FR', {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        });
+    if (data.success) {
+        showMessage(data.message || 'Rapport déposé avec succès!', 'success');
+        document.getElementById('deposerRapportForm').reset();
+    } else {
+        throw new Error(data.message || 'Erreur lors du dépôt');
     }
+})
+.catch(error => {
+    showMessage(error.message, 'error');
+});
+
+    });
+});
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

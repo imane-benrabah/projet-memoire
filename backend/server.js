@@ -24,7 +24,6 @@ const presenceRoutes = require('./routes/presenceRoutes');
 const BinomeRoutes = require('./routes/BinomeRoutes');
 const reunionRoutes = require('./routes/reunionRoutes');
 const rapportRoutes = require('./routes/rapportRoutes');
-const tacheRoutes = require('./routes/tacheRoutes');
 
 
 
@@ -107,8 +106,8 @@ app.use('/api', etapeRoutes);
 app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', BinomeRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', reunionRoutes);
-app.use('/api/rapports', rapportRoutes);
-app.use('/api/taches', tacheRoutes);
+app.use('/api/rapports', require('./routes/rapportRoutes'));
+
 
 
 
