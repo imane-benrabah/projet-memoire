@@ -1,36 +1,71 @@
-const Rapport = require('../models/rapportModel'); // تأكد من استيراد النموذج بشكل صحيح
+const pool = require('../config/db');
+const Rapport = require('../models/rapportModel');
+const Tache = require('../models/tacheModel');
+const VersionRapport = require('../models/VersionRapportModel');
 
-const ajouterRapport = (req, res) => {
-  const { etapeId, description, dateDepot, dateEtape, simulate } = req.body;
+class RapportController {
+    async deposerRapport(req, res) {
+        const connection = await pool.getConnection();
+        await connection.beginTransaction();
 
-  let filePath = null;
+        try {
+            const { idTache, titre, description, lien, idEtudiant } = req.body;
 
-  // إذا كان simulate موجودًا، لن نقوم بتحميل الملف
-  if (!simulate) {
-    const file = req.file;
-    if (!file) {
-      return res.status(400).json({ error: 'Le fichier est requis.' });
+            if (!idTache || !titre || !description || !lien || !idEtudiant) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Tous les champs sont obligatoires'
+                });
+            }
+
+            if (!lien.includes('drive.google.com')) {
+                return res.status(400).json({
+                    success: false,
+                    message: 'Veuillez fournir un lien Google Drive valide'
+                });
+            }
+
+            // Récupérer binôme
+            const [binome] = await connection.query(
+                'SELECT idB FROM Etudiant WHERE idU = ?',
+                [idEtudiant]
+            );
+            if (binome.length === 0) throw new Error('Étudiant non trouvé');
+
+            const idB = binome[0].idB;
+
+            // Créer les objets
+            const rapportModel = new Rapport(connection);
+            const tacheModel = new Tache(connection);
+            const versionModel = new VersionRapport(connection);
+
+            // Créer rapport
+            const idR = await rapportModel.create(titre, idB);
+            await rapportModel.createRapportTache(idR);
+
+            // Lier tâche au rapport
+            await tacheModel.linkToRapport(idTache, idR);
+
+            // Ajouter la version
+            await versionModel.create(description, lien, idR);
+
+            await connection.commit();
+            res.json({
+                success: true,
+                message: 'Rapport déposé avec succès',
+                idR
+            });
+        } catch (error) {
+            await connection.rollback();
+            console.error('Erreur RapportController:', error);
+            res.status(500).json({
+                success: false,
+                message: error.message || 'Erreur serveur'
+            });
+        } finally {
+            connection.release();
+        }
     }
-    filePath = file.path.replace(/\\/g, '/'); // مسار الملف
-  }
+}
 
-  // تحديد التاريخ الحالي لإنشاء الـ createdAt
-  const createdAt = new Date();
-
-  // إنشاء التقرير الجديد
-  const nouveauRapport = new Rapport({
-    etapeId,
-    description,
-    dateDepot,
-    dateEtape,
-    fichier: filePath,
-    createdAt, // إضافة التاريخ الحالي
-  });
-
-  // حفظ التقرير في قاعدة البيانات
-  nouveauRapport.save()
-    .then(() => res.status(201).json({ message: 'Rapport ajouté avec succès.' }))
-    .catch((error) => res.status(500).json({ error: 'Erreur lors de l\'enregistrement du rapport.', details: error }));
-};
-
-module.exports = { ajouterRapport };
+module.exports = RapportController;

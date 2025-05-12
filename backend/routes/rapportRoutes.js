@@ -1,9 +1,10 @@
-const upload = require('../../middleware/upload'); // تأكد من أن المسار صحيح
-const rapportController = require('../controllers/rapportController'); // التأكد من الاستيراد الصحيح
-const router = require('express').Router();
+const express = require('express');
+const router = express.Router();
+const RapportController = require('../controllers/rapportController');
 
-// مسار POST لإضافة تقرير
-router.post('/rapport', upload.single('rapport'), rapportController.ajouterRapport);
+const controller = new RapportController();
+
+// حذف middleware الخاص بالتوثيق
+router.post('/deposer', controller.deposerRapport.bind(controller));
 
 module.exports = router;
-

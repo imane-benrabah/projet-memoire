@@ -335,3 +335,5 @@ VALUES
   ('Chikhi', 'Lamia', 'principal'),
   ('Kaci', 'Yacine', 'principal'),
   ('Belkacem', 'Amina', 'responsable');
+  ALTER TABLE Rapport 
+MODIFY COLUMN createdAt DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP;
