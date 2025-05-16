@@ -7,13 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
     <link rel="stylesheet" href="../css/dashboard_r.css">
     
     <style>
         body {
             font-family: Arial, sans-serif;
-            background:#E6E6FA ;
+            background:#E6E6FA;
             margin: 0;
             padding: 20px;
             display: flex;
@@ -101,9 +100,7 @@
             background-color: #6F00FF;
             transform: scale(1.02);
             color: white;
-}
-
-
+        }
         
         .multi-field {
             display: flex;
@@ -136,11 +133,10 @@
             color: white;
             border: none;
             border-radius: 4px;
-            padding: 1px ;
+            padding: 1px;
             cursor: pointer;
             height: 30px;
             width: 30px;
-
         }
         
         .remove-btn:hover {
@@ -157,45 +153,41 @@
         <ul>
             <li>
                 <a href="dashboard_r.html">
-                    <i class="fas fa-tachometer-alt"></i>  Dashboard
+                    <i class="fas fa-tachometer-alt"></i> Dashboard
                 </a>
             </li>
             <li>
-                <a href="consulter_binome_r.html" >
-                    <i class="fas fa-users"></i>  Voir Binomes
+                <a href="consulter_binome_r.html">
+                    <i class="fas fa-users"></i> Voir Binomes
                 </a>
             </li>
-            <li >
+            <li>
                 <a href="decrire_sujet.html">
                     <i class="fas fa-file-alt"></i> Décrire Sujet
                 </a>
             </li>
-
             <li>
                 <a href="preciser_sujet.html">
                     <i class="fas fa-tasks"></i> Gestion Etape
                 </a>
             </li>
-
             <li class="active">
                 <a href="preciser_cas.html">
                     <i class="fas fa-tasks"></i> Preciser cas
                 </a>
             </li>
-            <li >
+            <li>
                 <a href="organiser_reunion.html">
                     <i class="fas fa-calendar-check"></i> Organiser Reunion
                 </a>
             </li>
-            <li  >
+            <li>
                 <a href="consulter_rap_ens_res.html">
                     <i class="fas fa-eye"></i> Voir Rapport
                 </a>
             </li>
-            <li ><a href="consulter_question.html"><i class="fas fa-comments"></i> Voir Question</a></li>
-
-
-            <li >
+            <li><a href="consulter_question.html"><i class="fas fa-comments"></i> Voir Question</a></li>
+            <li>
                 <a href="voir_profil_r.html">
                     <i class="fas fa-user"></i> Voir profil
                 </a>
@@ -203,156 +195,168 @@
         </ul>
     </nav>
 </aside>
+
 <div class="form-container">
-    <h1>Diagramme de cas d’utilisation</h1>
-
-    <!-- Zone d'affichage du diagramme (image ou svg depuis la base) -->
-    <div id="diagramme-container" style="text-align: center; margin-bottom: 30px;">
-        <img src="../images/diagramme_placeholder.svg" alt="Diagramme de cas d’utilisation" style="max-width: 100%; border: 1px solid #ccc; border-radius: 8px;">
-        <!-- Remplace src avec le chemin réel du diagramme récupéré dynamiquement -->
-    </div>
-
+    <h1>Diagramme de cas d'utilisation</h1>
     <hr>
-
     <form id="subjectForm">
-       
         <div id="actors-container"></div>
-  
         <div class="d-grid mb-3">
-          <button type="button" class="btn btn-outline-primary add-btn" id="add-actor-btn">
-            <i class="fas fa-user-plus"></i> Ajouter un acteur
-          </button>
+            <button type="button" class="btn btn-outline-primary add-btn" id="add-actor-btn">
+                <i class="fas fa-user-plus"></i> Ajouter un acteur
+            </button>
         </div>
-  
         <div class="button-group">
             <button type="button" class="btn cancel-btn" id="cancelBtn">
-                 Annuler
+                Annuler
             </button>
             <button type="submit" class="btn submit-btn">
                 Terminer
             </button>
         </div>
-      </form>
-    </div>
-  
-    <script>
-      function createActorBlock() {
+    </form>
+</div>
+
+<script src="../js/simulate_login.js"></script>
+
+<script>
+    function createActorBlock() {
         const actorBlock = document.createElement('div');
         actorBlock.className = 'actor-block';
         actorBlock.innerHTML = `
-          <div class="mb-3">
-            <label class="form-label">Acteur</label>
-            <input type="text" name="actor[]" class="form-control" placeholder="Nom de l'acteur" required>
-          </div>
-          <div class="cases-container mb-3">
-            <label class="form-label">Cas d'utilisation</label>
-            <div class="multi-field d-flex gap-2 mb-2">
-              <input type="text" name="cases[]" class="form-control" placeholder="Nom du cas">
-              <button type="button" class="btn btn-danger remove-btn"><i class="fas fa-minus"></i></button>
+            <div class="mb-3">
+                <label class="form-label">Acteur</label>
+                <input type="text" name="actor[]" class="form-control" placeholder="Nom de l'acteur" required>
             </div>
-          </div>
-          <div class="d-grid mb-3">
-            <button type="button" class="btn btn-outline-secondary add-case-btn">
-              <i class="fas fa-plus"></i> Ajouter un cas
-            </button>
-          </div>
-          <div class="d-grid mb-3">
-  <button type="button" class="btn btn-outline-danger remove-actor-btn">
-    <i class="fas fa-user-minus"></i> Supprimer l’acteur
-  </button>
-</div>
-          <hr />
+            <div class="cases-container mb-3">
+                <label class="form-label">Cas d'utilisation</label>
+                <div class="multi-field d-flex gap-2 mb-2">
+                    <input type="text" name="cases[]" class="form-control" placeholder="Nom du cas">
+                    <button type="button" class="btn btn-danger remove-btn"><i class="fas fa-minus"></i></button>
+                </div>
+            </div>
+            <div class="d-grid mb-3">
+                <button type="button" class="btn btn-outline-secondary add-case-btn">
+                    <i class="fas fa-plus"></i> Ajouter un cas
+                </button>
+            </div>
+            <div class="d-grid mb-3">
+                <button type="button" class="btn btn-outline-danger remove-actor-btn">
+                    <i class="fas fa-user-minus"></i> Supprimer l'acteur
+                </button>
+            </div>
+            <hr />
         `;
         return actorBlock;
-      }
-  
-      function initializeForm() {
+    }
+
+    function attachCaseListeners(context) {
+        // Ajouter un cas
+        context.querySelectorAll('.add-case-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const container = btn.closest('.actor-block').querySelector('.cases-container');
+                const field = document.createElement('div');
+                field.className = 'multi-field d-flex gap-2 mb-2';
+                field.innerHTML = `
+                    <input type="text" name="cases[]" class="form-control" placeholder="Nom du cas">
+                    <button type="button" class="btn btn-danger remove-btn"><i class="fas fa-minus"></i></button>
+                `;
+                container.appendChild(field);
+                field.querySelector('.remove-btn').addEventListener('click', () => field.remove());
+            });
+        });
+
+        // Supprimer un cas
+        context.querySelectorAll('.remove-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.closest('.multi-field').remove();
+            });
+        });
+
+        // Supprimer un acteur
+        context.querySelectorAll('.remove-actor-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                if (confirm("Voulez-vous vraiment supprimer cet acteur ?")) {
+                    context.remove();
+                }
+            });
+        });
+    }
+
+    function initializeForm() {
         const container = document.getElementById('actors-container');
         document.getElementById('add-actor-btn').addEventListener('click', () => {
-          const block = createActorBlock();
-          container.appendChild(block);
-          attachCaseListeners(block);
+            const block = createActorBlock();
+            container.appendChild(block);
+            attachCaseListeners(block);
         });
         const firstBlock = createActorBlock();
         container.appendChild(firstBlock);
         attachCaseListeners(firstBlock);
-      }
-  
-      function attachCaseListeners(context) {
-  // Ajouter un cas
-  context.querySelectorAll('.add-case-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const container = btn.closest('.actor-block').querySelector('.cases-container');
-      const field = document.createElement('div');
-      field.className = 'multi-field d-flex gap-2 mb-2';
-      field.innerHTML = `
-        <input type="text" name="cases[]" class="form-control" placeholder="Nom du cas">
-        <button type="button" class="btn btn-danger remove-btn"><i class="fas fa-minus"></i></button>
-      `;
-      container.appendChild(field);
-      field.querySelector('.remove-btn').addEventListener('click', () => field.remove());
-    });
-  });
+    }
 
-  // Supprimer un cas
-  context.querySelectorAll('.remove-btn').forEach(btn => {
-    btn.addEventListener('click', function () {
-      this.closest('.multi-field').remove();
-    });
-  });
-
-  // Supprimer un acteur
-  context.querySelectorAll('.remove-actor-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      if (confirm("Voulez-vous vraiment supprimer cet acteur ?")) {
-        context.remove();
-      }
-    });
-  });
-}
-
-  
-      document.getElementById('subjectForm').addEventListener('submit', function (e) {
+    document.getElementById('subjectForm').addEventListener('submit', function(e) {
         e.preventDefault();
+        
+        const idS = localStorage.getItem("selectedSujetIdCas");
+        const idResponsable = localStorage.getItem("idResponsable");
         const result = [];
+        
         document.querySelectorAll('.actor-block').forEach(block => {
-          const actor = block.querySelector('input[name="actor[]"]').value;
-          const cases = Array.from(block.querySelectorAll('input[name="cases[]"]')).map(c => c.value);
-          result.push({ acteur: actor, cas: cases });
+            const actor = block.querySelector('input[name="actor[]"]').value;
+            const cases = Array.from(block.querySelectorAll('input[name="cases[]"]'))
+                            .map(c => c.value)
+                            .filter(c => c.trim() !== ''); // Filtre les cas vides
+            
+            if (actor.trim() !== '' && cases.length > 0) {
+                result.push({ acteur: actor, cas: cases });
+            }
         });
-        console.log('Soumis :', result);
-        alert('Formulaire soumis avec succès !');
-      });
-  
-      document.getElementById('cancelBtn').addEventListener('click', () => {
-        if (confirm("Voulez-vous vraiment annuler ?")) {
-          const container = document.getElementById('actors-container');
-          container.innerHTML = '';
-          const block = createActorBlock();
-          container.appendChild(block);
-          attachCaseListeners(block);
+
+        if (result.length === 0) {
+            alert("Veuillez ajouter au moins un acteur avec des cas d'utilisation");
+            return;
         }
-      });
+
+        fetch(`http://localhost:3000/api/sujets/${idS}/cas-sujet?idResponsable=${idResponsable}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('token') || ''
+            },
+            body: JSON.stringify({ acteurs: result })
+        })
+        .then(async response => {
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.error || "Erreur inconnue");
+            }
+            return data;
+        })
+        .then(data => {
+            alert(data.message);
+        })
+        .catch(err => {
+            console.error("Erreur:", err);
+            alert("Erreur: " + err.message);
+        });
+    });
+
   
-      window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+        if (confirm("Voulez-vous vraiment annuler ?")) {
+            const container = document.getElementById('actors-container');
+            container.innerHTML = '';
+            const block = createActorBlock();
+            container.appendChild(block);
+            attachCaseListeners(block);
+        }
+    });
+  
+    window.addEventListener('DOMContentLoaded', () => {
         initializeForm();
-        fetch('/api/diagramme')
-          .then(res => res.json())
-          .then(data => {
-            const container = document.getElementById("diagramme-container");
-            container.innerHTML = `<img src="${data.url}" class="img-fluid rounded" alt="Diagramme de cas">`;
-          })
-          .catch(err => console.error('Erreur chargement diagramme:', err));
-      });
-
-
-     
-
-
-    </script>
-
-
- 
+    });
+</script>
 
 </body>
-</html> 
+</html>

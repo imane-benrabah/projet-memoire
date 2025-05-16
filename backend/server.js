@@ -52,6 +52,7 @@ const reunionRoutes = require('./routes/reunionRoutes');
 
 
 
+
 // 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
 const allowedOrigins = [
   'http://localhost:5500',
@@ -147,7 +148,7 @@ app.use('/api/groupes', etudiantinfoRoutes);
 app.use('/api//profil', profilRoutes);
 app.use('/api/groupes', groupenseignantRoutes);
 app.use('/api/sujet', sujetRoutes);
-app.use('/api', casRoutes);
+app.use('/api', casRoutes); // Cela préfixera toutes les routes avec /api
 app.use('/api/sujets', sujetRoutes); 
 app.use("/api", sujetRoutes);
 app.use('/api', etapeRoutes); 

@@ -10,7 +10,55 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../css/affecter_cas_r.css">
     <style>
-   
+   .case-item {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.case-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.case-affecte {
+    background-color: #f8f9fa;
+    color: #6c757d;
+}
+
+#selected-cases ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+#selected-cases li {
+    padding: 8px;
+    background-color: #e9ecef;
+    margin-bottom: 5px;
+    border-radius: 4px;
+}
+
+.affectation-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.list-container, .selected-container {
+    flex: 1;
+    padding: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.btn-container {
+    margin-top: 20px;
+    text-align: right;
+}
+
 
 
     </style>
@@ -42,119 +90,218 @@
     </nav>
     </div>
 
-    <div class="content">
-        <div class="binome-selection">
-            <label for="binome-select">binôme selectionné :</label>
-            <input type="text" id="binome-input" class="form-control" readonly>
-        </div>
-        
-        <div class="affectation-container">
-            <div class="list-container">
-                <!-- Cas disponibles avec checkbox -->
-                <div id="case-list">
-                 <!-- ajouter dynamiquement -->
+     <div class="content">
+            <div class="binome-selection">
+                <label for="binome-select">Binôme sélectionné :</label>
+                <input type="text" id="binome-input" class="form-control" readonly>
+            </div>
+            <div class="acteur-selection">
+                <label for="acteur-select"></label>
+                <select id="acteur-select" class="form-control" required>
+                    <option value="">Sélectionner un acteur</option>
+                    <!-- Options seront ajoutées dynamiquement -->
+                </select>
+            </div>
+            
+            <div class="affectation-container">
+                <div class="list-container">
+                    <h5>Cas disponibles :</h5>
+                    <div id="case-list">
+                        <!-- Cas seront ajoutés dynamiquement -->
+                    </div>
+                </div>
+                <div class="selected-container">
+                    <h5>Cas sélectionnés :</h5>
+                    <div id="selected-cases"></div>
                 </div>
             </div>
-            <div class="selected-container">
-                <!-- Cas sélectionnés -->
-                <h5>Cas sélectionnés:</h5>
-                <div id="selected-cases"></div>
+            
+            <div class="btn-container">
+                <button id="envoyer-btn" class="btn btn-primary">Envoyer</button>
+                <button id="annuler-btn" class="btn btn-secondary">Annuler</button>
             </div>
         </div>
-        
-        <div class="btn-container">
-            <button onclick="envoyer()">Envoyer</button>
-            <button class="cancel-btn" onclick="annuler()">Annuler</button>
-        </div>
     </div>
-
    <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Récupération des données
-    const selectedBinomeNum = localStorage.getItem('selectedBinomeNum') || 
-                            localStorage.getItem('lastSelectedBinome');
-    const selectedGroupeName = localStorage.getItem('selectedGroupeName');
-    
-    // Vérification
-    console.log("Données du localStorage:", {
-        binome: selectedBinomeNum,
-        groupeName: selectedGroupeName
-    });
+    // Éléments du DOM
+    const binomeInput = document.getElementById('binome-input');
+    const acteurSelect = document.getElementById('acteur-select');
+    const caseList = document.getElementById('case-list');
+    const selectedCasesDiv = document.getElementById('selected-cases');
+    const envoyerBtn = document.getElementById('envoyer-btn');
+    const annulerBtn = document.getElementById('annuler-btn');
 
-    if (!selectedBinomeNum) {
-        alert('Veuillez d\'abord sélectionner un binôme sur la page précédente');
-        window.location.href = 'consulter_binome_r.html';
-        return;
+    // Variables globales
+    let selectedBinomeId = null;
+    let availableCases = [];
+    let availableActeurs = [];
+
+    // Initialisation
+    initPage();
+
+    // Événements
+    acteurSelect.addEventListener('change', filterCasesByActeur);
+    envoyerBtn.addEventListener('click', envoyerAffectation);
+    annulerBtn.addEventListener('click', annuler);
+
+    // Fonctions
+    function initPage() {
+        selectedBinomeId = localStorage.getItem('selectedBinomeNum');
+        
+        if (!selectedBinomeId) {
+            alert('Veuillez d\'abord sélectionner un binôme');
+            window.location.href = 'consulter_binome_r.html';
+            return;
+        }
+
+        binomeInput.value = `Binôme ${selectedBinomeId}`;
+        
+        // Charger les cas et acteurs disponibles
+        chargerCasEtActeurs();
     }
 
-    // Mise à jour de l'interface
-    const binomeInput = document.getElementById('binome-input');
-    binomeInput.value = `${selectedBinomeNum}`;
-    
-    // Charger les cas disponibles pour ce binôme
-    chargerCasDisponibles(selectedBinomeNum);
-});
+    function chargerCasEtActeurs() {
+        fetch(`http://localhost:3000/api/cas-et-acteurs?binome=${selectedBinomeId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    availableCases = data.data.cas;
+                    availableActeurs = data.data.acteurs;
+                    
+                    // Remplir le selecteur d'acteurs
+                    populateActeurSelect();
+                    
+                    // Afficher tous les cas initialement
+                    displayCases(availableCases);
+                } else {
+                    throw new Error(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+                alert('Erreur lors du chargement des données');
+            });
+    }
 
-function chargerCasDisponibles(binomeId) {
-    fetch(`http://localhost:3000/api/cas-disponibles?binome=${binomeId}`)
+    function populateActeurSelect() {
+        acteurSelect.innerHTML = '<option value="">Tous les acteurs</option>';
+        
+        availableActeurs.forEach(acteur => {
+            const option = document.createElement('option');
+            option.value = acteur;
+            option.textContent = acteur;
+            acteurSelect.appendChild(option);
+        });
+    }
+
+    function filterCasesByActeur() {
+        const selectedActeur = acteurSelect.value;
+        
+        if (!selectedActeur) {
+            displayCases(availableCases);
+            return;
+        }
+        
+        const filteredCases = availableCases.filter(cas => cas.acteur === selectedActeur);
+        displayCases(filteredCases);
+    }
+
+    function displayCases(cases) {
+        caseList.innerHTML = '';
+        
+        if (cases.length === 0) {
+            caseList.innerHTML = '<p>Aucun cas disponible</p>';
+            return;
+        }
+        
+        cases.forEach(cas => {
+            const div = document.createElement('div');
+            div.className = 'case-item';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `cas-${cas.idCas}`;
+            checkbox.value = cas.idCas;
+            checkbox.dataset.cas = JSON.stringify(cas);
+            
+            const label = document.createElement('label');
+            label.htmlFor = `cas-${cas.idCas}`;
+        label.textContent = cas.cas;
+            
+            if (cas.statut === 'affecté') {
+                checkbox.disabled = true;
+                div.classList.add('case-affecte');
+                label.textContent += ' (Déjà affecté)';
+            }
+            
+            checkbox.addEventListener('change', updateSelectedCases);
+            
+            div.appendChild(checkbox);
+            div.appendChild(label);
+            caseList.appendChild(div);
+        });
+    }
+
+    function updateSelectedCases() {
+        selectedCasesDiv.innerHTML = '';
+        const checkboxes = document.querySelectorAll('#case-list input[type="checkbox"]:checked:not(:disabled)');
+        
+        if (checkboxes.length === 0) {
+            selectedCasesDiv.innerHTML = '<p>Aucun cas sélectionné</p>';
+            return;
+        }
+        
+        const ul = document.createElement('ul');
+        checkboxes.forEach(checkbox => {
+            const cas = JSON.parse(checkbox.dataset.cas);
+            const li = document.createElement('li');
+            li.textContent = `${cas.acteur}: ${cas.cas}`;
+            ul.appendChild(li);
+        });
+        
+        selectedCasesDiv.appendChild(ul);
+    }
+
+    function envoyerAffectation() {
+        const checkboxes = document.querySelectorAll('#case-list input[type="checkbox"]:checked:not(:disabled)');
+        
+        if (checkboxes.length === 0) {
+            alert('Veuillez sélectionner au moins un cas');
+            return;
+        }
+        
+        const casesToAffect = Array.from(checkboxes).map(checkbox => checkbox.value);
+        
+        fetch('http://localhost:3000/api/affecter-cas', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                binome: selectedBinomeId,
+                cas: casesToAffect
+            })
+        })
         .then(response => response.json())
         .then(data => {
-            const caseList = document.getElementById('case-list');
-            caseList.innerHTML = '';
-            
-            data.forEach(cas => {
-                const div = document.createElement('div');
-                div.className = 'case-item';
-                div.innerHTML = `
-                    <input type="checkbox" id="cas-${cas.id}" value="${cas.id}">
-                    <label for="cas-${cas.id}">${cas.nom}</label>
-                `;
-                caseList.appendChild(div);
-            });
+            if (data.success) {
+                alert(data.message);
+                // Recharger les données
+                chargerCasEtActeurs();
+                selectedCasesDiv.innerHTML = '<p>Aucun cas sélectionné</p>';
+            } else {
+                throw new Error(data.message);
+            }
         })
         .catch(error => {
             console.error('Erreur:', error);
-            alert('Erreur lors du chargement des cas disponibles');
+            alert(`Erreur: ${error.message}`);
         });
-}
-
-function envoyer() {
-    const selectedCases = Array.from(document.querySelectorAll('#case-list input[type="checkbox"]:checked'))
-        .map(checkbox => checkbox.value);
-    
-    const binomeId = localStorage.getItem('selectedBinomeNum');
-    
-    if (selectedCases.length === 0) {
-        alert('Veuillez sélectionner au moins un cas');
-        return;
     }
 
-    fetch('http://localhost:3000/api/affecter-cas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            binome: binomeId,
-            cas: selectedCases
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            window.location.reload();
-        } else {
-            throw new Error(data.message || 'Erreur lors de l\'affectation');
-        }
-    })
-    .catch(error => {
-        console.error('Erreur:', error);
-        alert(`Erreur: ${error.message}`);
-    });
-}
-
-function annuler() {
-    window.location.href = 'consulter_binome_r.html';
-}
+    function annuler() {
+        window.location.href = 'consulter_binome_r.html';
+    }
+});
 </script>
 
 </body>
