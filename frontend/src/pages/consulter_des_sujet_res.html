@@ -17,21 +17,21 @@
     }
 
     .main-content {
-      margin-left: 280px;
-      padding: 40px 80px 30px 130px; /* زادت المسافة للأسفل ولليمين */
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-start;
-    }
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding-top: 700px;
+  padding-left: 100px;
+}
 
     .form-container {
-      background-color: white;
-      padding: 30px;
-      border-radius: 15px;
-      width: 700px;
-      margin-left: auto;
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-    }
+  background-color: white;
+  padding: 30px;
+  border-radius: 15px;
+  width: 700px;
+  margin: 40px auto 0 400px; /* من الأعلى والأسفل واليسار */
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
 
     h1 {
       color: #8a2be2;
@@ -79,45 +79,78 @@
       </ul>
     </nav>
   </div>
+<div class="form-container">
+  <h1>Description du Sujet</h1>
 
-  <div class="main-content">
-    <div class="form-container">
-      <h1>Description du Sujet</h1>
-
-      <div class="display-group">
-        <label>Nom du sujet :</label>
-        <div class="text-content" id="nomProjet">En attente de chargement...</div>
-      </div>
-
-      <div class="display-group">
-        <label>Description :</label>
-        <div class="text-content" id="descriptionProjet">En attente de chargement...</div>
-      </div>
-    </div>
+  <div class="display-group">
+    <label>Nom du sujet :</label>
+    <div class="text-content" id="titreSujet"></div>
   </div>
 
+  <div class="display-group">
+    <label>Description :</label>
+    <div class="text-content" id="descriptionSujet"></div>
+  </div>
   
+  <div class="display-group">
+    <label>Reference :</label>
+    <div class="text-content" id="referenceSujet"></div>
+  </div>
+  
+  <div class="display-group">
+    <label>Prerequis :</label>
+    <div class="text-content" id="prerequisSujet"></div>
+  </div>
+</div>
+
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const urlParams = new URLSearchParams(window.location.search);
-      const sujetId = urlParams.get('idS'); // Récupère l'ID dans l'URL
-  
-      // Vérifier si l'ID est valide
-      if (!sujetId) {
-        console.error('Aucun ID trouvé dans l\'URL');
+    document.addEventListener('DOMContentLoaded', function() {
+      const idEtudiant = localStorage.getItem('idEtudiant');
+      
+      if (!idEtudiant) {
+        console.error('ID étudiant non trouvé');
+        alert('Veuillez vous connecter');
+        window.location.href = 'login.html';
         return;
       }
-  
-      // Utiliser l'ID pour récupérer les données du sujet
-      fetch(`http://localhost:3000/etudiant/${sujetId}`)
-        .then(response => response.json())
+
+      fetch(`http://localhost:3000/api/sujet/etudiant/${idEtudiant}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+          }
+          return response.json();
+        })
         .then(data => {
-          // Assurez-vous que les clés sont correctement mappées à la base de données
-          document.getElementById("titreSujet").textContent = data.titre;  // Utiliser 'titre' à la place de 'nom'
-          document.getElementById("descriptionSujet").textContent = data.description;  // 'description' reste inchangé
+          console.log('Données reçues:', data);
+          
+          document.getElementById('titreSujet').textContent = data.titre || 'Non spécifié';
+          document.getElementById('descriptionSujet').textContent = data.description || 'Non spécifié';
+          
+          // Afficher les références
+          const refElement = document.getElementById('referenceSujet');
+          if (data.references && data.references.length > 0) {
+            refElement.textContent = data.references.join('\n');
+          } else {
+            refElement.textContent = 'Aucune référence disponible';
+          }
+          
+          // Afficher les prérequis
+          const preElement = document.getElementById('prerequisSujet');
+          if (data.prerequis && data.prerequis.length > 0) {
+            preElement.textContent = data.prerequis.join('\n');
+          } else {
+            preElement.textContent = 'Aucun prérequis disponible';
+          }
         })
         .catch(error => {
-          console.error("Erreur lors de la récupération du sujet:", error);
+          console.error('Erreur:', error);
+          alert(`Erreur lors du chargement des données: ${error.message}`);
+          
+          document.getElementById('titreSujet').textContent = 'Erreur de chargement';
+          document.getElementById('descriptionSujet').textContent = error.message;
+          document.getElementById('referenceSujet').textContent = 'Non disponible';
+          document.getElementById('prerequisSujet').textContent = 'Non disponible';
         });
     });
   </script>

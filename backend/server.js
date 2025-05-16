@@ -36,7 +36,6 @@ const chargergroupeRoutes = require('./routes/chargergroupeRoutes');
 const etudiantinfoRoutes = require('./routes/etudiantinfoRoutes');
 const profilRoutes = require('./routes/profilRoutes');
 const groupenseignantRoutes = require('./routes/groupenseignantRoutes');
-const rapportRoutes = require('./routes/rapportRoutes');
 const casRoutes = require('./routes/casRoutes');
 const etapeRoutes = require('./routes/etapeRoutes'); 
 const presenceRoutes = require('./routes/presenceRoutes');
@@ -50,6 +49,40 @@ const reunionRoutes = require('./routes/reunionRoutes');
 
 
 
+
+
+
+// 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
+const allowedOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000'
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  optionsSuccessStatus: 200
+};
+
+app.use(cors(corsOptions));
+
+app.use(cors({
+  origin: '*', // À remplacer en production
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
+
+
+
 // 📦 Middlewares utiles
 app.use(bodyParser.json());
 app.use(express.json());
@@ -59,12 +92,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// Configuration CORS (à mettre EN HAUT, juste après la création de l'app Express)
-const allowedOrigins = [
-  'http://localhost:5500',
-  'http://127.0.0.1:5500',
-  'http://localhost:3000'
-];
+
 
 app.use(cors({
   origin: function (origin, callback) {
@@ -120,15 +148,13 @@ app.use('/api//profil', profilRoutes);
 app.use('/api/groupes', groupenseignantRoutes);
 app.use('/api/sujet', sujetRoutes);
 app.use('/api', casRoutes);
-app.use('/api', rapportRoutes);
 app.use('/api/sujets', sujetRoutes); 
 app.use("/api", sujetRoutes);
 app.use('/api', etapeRoutes); 
 app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', BinomeRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', reunionRoutes);
-
-
+app.use('/api', require('./routes/tacheRoutes'));
 
 
 
@@ -166,3 +192,4 @@ app.listen(PORT, () => {
 
 
 module.exports = app;
+ 
