@@ -169,77 +169,44 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Fonction pour charger les tâches de l'étudiant
     function chargerTaches(idEtudiant) {
-        afficherMessage('Chargement des tâches...', 'info');
-        fetch(`http://127.0.0.1:3000/api/rapports/etudiants/${idEtudiant}/taches `)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`Erreur HTTP: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Supprimer le message de chargement
-                document.getElementById('messageContainer').innerHTML = '';
+    afficherMessage('Chargement des tâches...', 'info');
+    fetch(`http://127.0.0.1:3000/api/rapports/etudiants/${idEtudiant}/taches`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Supprimer le message de chargement
+            document.getElementById('messageContainer').innerHTML = '';
+            
+            const select = document.getElementById('taskSelect');
+            if (!select) return;
+            
+            // Réinitialiser la liste déroulante
+            select.innerHTML = '<option value="" disabled selected>-- Sélectionner une tâche --</option>';
+            
+            if (data.success && data.taches && data.taches.length > 0) {
+                // Trier les tâches par nom
+                const tachesTriees = data.taches.sort((a, b) => a.nom.localeCompare(b.nom));
                 
-                const select = document.getElementById('taskSelect');
-                if (!select) return;
-                
-                // Réinitialiser la liste déroulante
-                select.innerHTML = '<option value="" disabled selected>-- Sélectionner une tâche --</option>';
-                
-                if (data.success && data.taches && data.taches.length > 0) {
-                    // Trier les tâches par étape puis par nom
-                    const tachesTriees = data.taches.sort((a, b) => {
-                        if (a.nomEtape === b.nomEtape) {
-                            return a.nom.localeCompare(b.nom);
-                        }
-                        return a.nomEtape?.localeCompare(b.nomEtape || '');
-                    });
-                    
-                    // Grouper les tâches par étape
-                    const tachesParEtape = {};
-                    tachesTriees.forEach(tache => {
-                        const etape = tache.nomEtape || 'Sans étape';
-                        if (!tachesParEtape[etape]) {
-                            tachesParEtape[etape] = [];
-                        }
-                        tachesParEtape[etape].push(tache);
-                    });
-                    
-                    // Créer les options groupées
-                    Object.keys(tachesParEtape).forEach(etape => {
-                        const optgroup = document.createElement('optgroup');
-                        optgroup.label = etape;
-                        
-                        tachesParEtape[etape].forEach(tache => {
-                            const option = document.createElement('option');
-                            option.value = tache.idTache;
-                            
-                            // Ajouter les dates si disponibles
-                            let dateInfo = '';
-                            if (tache.dateDebut && tache.dateFin) {
-                                dateInfo = ` (${tache.dateDebut} à ${tache.dateFin})`;
-                            } else if (tache.dateDebut) {
-                                dateInfo = ` (débute le ${tache.dateDebut})`;
-                            } else if (tache.dateFin) {
-                                dateInfo = ` (jusqu'au ${tache.dateFin})`;
-                            }
-                            
-                            option.textContent = `${tache.nom}${dateInfo}`;
-                            optgroup.appendChild(option);
-                        });
-                        
-                        select.appendChild(optgroup);
-                    });
-                } else {
-                    afficherMessage('Aucune tâche disponible pour le moment.', 'warning');
-                }
-            })
-            .catch(error => {
-                console.error('Erreur lors du chargement des tâches:', error);
-                afficherMessage(`Erreur lors du chargement des tâches: ${error.message}`, 'danger');
-            });
-    }
+                // Ajouter chaque tâche comme une option simple
+                tachesTriees.forEach(tache => {
+                    const option = document.createElement('option');
+                    option.value = tache.idTache;
+                    option.textContent = tache.nom; // Seulement le nom de la tâche
+                    select.appendChild(option);
+                });
+            } else {
+                afficherMessage('Aucune tâche disponible pour le moment.', 'warning');
+            }
+        })
+        .catch(error => {
+            console.error('Erreur lors du chargement des tâches:', error);
+            afficherMessage(`Erreur lors du chargement des tâches: ${error.message}`, 'danger');
+        });
+}
 
     // Fonction pour soumettre le formulaire
     function configurerFormulaire(idEtudiant) {

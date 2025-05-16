@@ -1,4 +1,4 @@
 // simulate_login.js
-localStorage.setItem('idResponsable', '8');
-localStorage.setItem("idEtudiant", "16"); 
+localStorage.setItem('idResponsable', '9');
+localStorage.setItem("idEtudiant", "27"); 
 
