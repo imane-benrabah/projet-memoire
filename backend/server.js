@@ -4,10 +4,28 @@ const mysql = require('mysql2');
 const router = express.Router();
 const bodyParser = require('body-parser');
 const path = require('path');
-
-
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+require('dotenv').config(); // Charge les variables d'environnement
 
 const app = express();
+
+// Security Middlewares
+app.use(helmet());
+app.use(express.json({ limit: '10kb' }));
+app.use(express.urlencoded({ extended: true, limit: '10kb' }));
+
+// Rate Limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+  message: "Too many requests from this IP, please try again later"
+});
+app.use('/api/', limiter);
+
+
+
+
 const db = require("./config/db"); // Connexions principales et externes
 const authRoutes = require('./routes/authRoutes');
 const binomeExterneRoutes = require("./routes/binomeExterneRoutes");
@@ -32,41 +50,6 @@ const reunionRoutes = require('./routes/reunionRoutes');
 
 
 
-
-
-
-
-// 🔧 CONFIGURATION CORS UNE SEULE FOIS ET EN HAUT
-const allowedOrigins = [
-  'http://localhost:5500',
-  'http://127.0.0.1:5500',
-  'http://localhost:3000',
-  'http://127.0.0.1:3000'
-];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  optionsSuccessStatus: 200
-};
-
-app.use(cors(corsOptions));
-
-app.use(cors({
-  origin: '*', // À remplacer en production
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
-}));
-
-
-
 // 📦 Middlewares utiles
 app.use(bodyParser.json());
 app.use(express.json());
@@ -75,7 +58,43 @@ app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} ${req.method} ${req.url}`);
   next();
 });
-// 🔒 En-têtes CORS + Type par défaut
+
+// Configuration CORS (à mettre EN HAUT, juste après la création de l'app Express)
+const allowedOrigins = [
+  'http://localhost:5500',
+  'http://127.0.0.1:5500',
+  'http://localhost:3000'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Autoriser les requêtes sans origine (comme Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.error('CORS blocked for:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+}));
+
+// Gestion explicite des pré-requêtes OPTIONS
+app.options('*', cors());
+
+// Middleware pour les headers CORS
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', req.headers.origin || '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 
 
 
@@ -86,7 +105,7 @@ const staticPath = path.join(__dirname, '..', 'frontend', 'src', 'pages');
 
 app.use(express.static(staticPath));
 
-// 🌐 ROUTES
+//  ROUTES
 
 
 
@@ -120,7 +139,10 @@ app.use('/api', reunionRoutes);
 
 
 
-// Route de test
+
+
+
+
 
 
 // Gestion des erreurs
@@ -137,3 +159,10 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
 });
+
+
+
+
+
+
+module.exports = app;

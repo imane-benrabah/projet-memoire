@@ -187,64 +187,114 @@
     </div>
 
     <!-- Formulaire pour sélectionner une tâche et afficher les cas -->
-    <div class="content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-        <div class="form-container">
+   <!-- Formulaire pour sélectionner une tâche et déposer un rapport -->
+<div class="content d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="form-container">
+        <form id="deposerRapportForm" onsubmit="return handleRapportSubmission(event)">
+            <!-- Sélection de la tâche -->
+            <div class="mb-3">
+                <label for="taskSelect" class="form-label">Choisir une tâche :</label>
+                <select class="form-select" id="taskSelect" name="task" required>
+                    <option value="" disabled selected>Sélectionner une tâche</option>
+                    <!-- Options dynamiques chargées via JavaScript -->
+                </select>
+            </div>
 
-            <form id="deposerRapportForm" onsubmit="return showSuccessMessage(event)">
-                <!-- Liste des tâches à sélectionner -->
-                <div class="mb-3">
-                    <label for="taskSelect" class="form-label">Choisir une tâche :</label>
-                    <select class="form-select" id="taskSelect" name="task" required onchange="updateCases()">
-                        <option value="" disabled selected> Sélectionner une tâche </option>
-                       
-                    </select>
-                </div>
-                     
-                <div class="form-group">
-        <label for="titre">Titre</label>
-        <input type="text" id="titre_rap_fin" name="titre_rap_fin" required />
-          
-        </select>
-      </div>
+            <!-- Titre et description -->
+            <div class="form-group">
+                <label for="titre_rap_fin">Titre</label>
+                <input type="text" id="titre_rap_fin" name="titre_rap_fin" required />
+            </div>
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" name="description" required></textarea>
+            </div>
 
-      <div class="form-group">
-        <label for="description">Description</label>
-        <textarea id="description" name="description" required></textarea>
-      </div>
-               
+            <!-- Lien Google Drive (remplace le fichier uploadé) -->
+            <div class="mb-3">
+                <label for="driveLink" class="form-label">Lien Google Drive du rapport :</label>
+                <input type="url" class="form-control" id="driveLink" name="driveLink" 
+                       placeholder="https://drive.google.com/file/d/..." required>
+            </div>
 
-                <!-- Sélectionner un fichier -->
-                <div class="mb-3">
-                    <label for="fileInput" class="form-label">Sélectionner un fichier :</label>
-                    <input type="file" class="form-control" id="fileInput" name="rapport" required>
-                </div>
-
-                <button type="submit" class="btn-purple">Déposer un rapport</button>
-            </form>
-        </div>
+            <button type="submit" class="btn-purple">Enregistrer le rapport</button>
+        </form>
     </div>
+</div>
 
     <script>
-       function showSuccessMessage(event) {
-    event.preventDefault();  // منع إرسال النموذج فعليًا
-    const fileInput = document.getElementById("fileInput");
-    const file = fileInput.files[0];  // الحصول على الملف المُختار
-
-    if (file) {
-        // تحويل الملف إلى رابط يمكن مشاركته (إن كان هذا الخيار موجودًا في خادمك)
-        const fileURL = URL.createObjectURL(file);  // مثال لتحويل الملف إلى رابط
-
-        // توجيه المستخدم إلى Google Drive لرفع الملف يدويًا
-        const driveLink = "https://drive.google.com/drive/u/0/my-drive";  // رابط Google Drive
-        window.open(driveLink + "?file=" + encodeURIComponent(fileURL), "_blank");  // افتح رابط Google Drive في نافذة جديدة
-
-        alert("Vous pouvez maintenant télécharger le fichier sur Google Drive.");
-    } else {
-        alert("Veuillez sélectionner un fichier avant de soumettre.");
+    // Fonction pour charger les tâches disponibles
+async function loadTasks() {
+    try {
+        const response = await fetch('/api/rapports/taches', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            }
+        });
+        
+        if (!response.ok) throw new Error('Erreur réseau');
+        
+        const data = await response.json();
+        const taskSelect = document.getElementById('taskSelect');
+        
+        // Vider les options existantes
+        taskSelect.innerHTML = '<option value="" disabled selected>Sélectionner une tâche</option>';
+        
+        // Ajouter les nouvelles options
+        data.data.forEach(task => {
+            const option = document.createElement('option');
+            option.value = task.idTache;
+            option.textContent = task.nom;
+            taskSelect.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors du chargement des tâches');
     }
-
-    return false;  // منع الإرسال الفعلي للنموذج
 }
+
+// Fonction pour gérer la soumission du rapport
+async function handleRapportSubmission(event) {
+    event.preventDefault();
+
+    const taskId = document.getElementById('taskSelect').value;
+    const titre = document.getElementById('titre_rap_fin').value;
+    const description = document.getElementById('description').value;
+    const driveLink = document.getElementById('driveLink').value;
+
+    try {
+        const response = await fetch('/api/rapports/deposer', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({
+                idTache: taskId,
+                titre,
+                description,
+                lienDrive: driveLink
+            })
+        });
+
+        const result = await response.json();
+        
+        if (response.ok) {
+            alert(result.message || 'Rapport enregistré avec succès !');
+            window.location.reload();
+        } else {
+            alert(result.message || 'Erreur lors de l\'enregistrement');
+        }
+    } catch (error) {
+        console.error('Erreur:', error);
+        alert('Une erreur est survenue');
+    }
+}
+
+// Initialisation
+document.addEventListener('DOMContentLoaded', () => {
+    loadTasks();
+});
 
     </script>
 
