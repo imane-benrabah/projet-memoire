@@ -23,7 +23,6 @@ const etapeRoutes = require('./routes/etapeRoutes');
 const presenceRoutes = require('./routes/presenceRoutes');
 const BinomeRoutes = require('./routes/BinomeRoutes');
 const reunionRoutes = require('./routes/reunionRoutes');
-const rapportRoutes = require('./routes/rapportRoutes');
 
 
 
@@ -106,9 +105,7 @@ app.use('/api', etapeRoutes);
 app.use('/api', presenceRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', BinomeRoutes); // Doit être monté avant les autres middlewares
 app.use('/api', reunionRoutes);
-app.use('/api/rapports', require('./routes/rapportRoutes'));
-
-
+app.use('/api', require('./routes/tacheRoutes'));
 
 
 
@@ -135,4 +132,4 @@ app.use((err, req, res, next) => {
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur démarré sur http://localhost:${PORT}`);
-});
+}); 

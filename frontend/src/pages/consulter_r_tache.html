@@ -10,7 +10,16 @@
     
     <link rel="stylesheet" href="../css/dashboard_etud_res.css">
     <style>
-        
+  
+
+
+.rapport-info {
+    margin-top: 15px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
         .container {
     background: white;
     padding: 20px;
@@ -80,60 +89,34 @@ h2 {
   <div class="sidebar">
     <h2 class="titre">Gestion projet</h2>
     <nav>
-      <ul>
-    <li ><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-    <li class="active"><a href="consulter_r_tache.html" id="consulterTache"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
-    <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
-    <li><a href="consulter_des_sujet_res.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
-    <li><a href="consulter_cas_res.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
-    <li ><a href="consulter_rapport_res.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
-    <li><a href="deposer_rapport_res.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
-    <li><a href="consulter_evalu_res.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
-    <li ><a href="poser_question_res.html"><i class="fas fa-question"></i> Poser des questions</a></li>
-    <li><a href="profil_e_r.html" id="profil"><i class="fas fa-user"></i> Profil</a></li>
-      </ul>
+        <ul>
+            <li><a href="dashb_etud_res.html"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+            <li class="active"><a href="#"><i class="fas fa-tasks"></i> Consulter les rapports des tâches</a></li>
+            <li><a href="deposer_r_e.html"><i class="fas fa-upload"></i> Déposer rapport d'étape</a></li>
+            <li><a href="consulter_des_sujet.html"><i class="fas fa-book"></i> Consulter la description des sujets</a></li>
+            <li><a href="consulter_cas.html"><i class="fas fa-eye"></i> Consulter les cas</a></li>
+            <li><a href="consulter_rapport.html"><i class="fas fa-file-alt"></i> Consulter rapport</a></li>
+            <li><a href="deposer_rapport.html"><i class="fas fa-upload"></i> Déposer un rapport</a></li>
+            <li><a href="consulter_evalu.html"><i class="fas fa-star"></i> Consulter l'évaluation</a></li>
+            <li><a href="poser_question.html"><i class="fas fa-question"></i> Poser des questions</a></li>
+            <li><a href="profil_e_r.html"><i class="fas fa-user"></i> Profil</a></li>
+          </ul>
     </nav>
   </div>
-
-  <div class="container">
-    <select id="rapport-select" class="form-select mb-3">
-        <option value="">Sélectionner une etape </option>
-        <!-- Options chargées dynamiquement -->
+<div class="container">
+    <select id="etapeSelect" class="form-select mb-3">
+      <option value="">Sélectionner une tache </option>
     </select>
     <button class="btn btn-success" id="valider-theme">Suivant</button>
-       
-</div>
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // 1. جلب المراحل من الخادم
-        fetch('http://localhost:3000/etapes') // تأكد من إضافة البروتوكول والمضيف والمنفذ
-    .then(response => response.json())
-    .then(data => {
-        const selectElement = document.getElementById('rapport-select');
-        data.forEach(etape => {
-            const option = document.createElement('option');
-            option.value = etape.idEtape; // تأكد أن الاسم مطابق للقاعدة
-            option.textContent = etape.nom;
-            selectElement.appendChild(option);
-        });
-    })
-            .catch(error => console.error('Erreur lors de la récupération des étapes:', error));
-    
-        // 2. عند الضغط على "Suivant"
-        document.getElementById("valider-theme").addEventListener("click", function () {
-            const etapeId = document.getElementById("rapport-select").value;
-            if (!etapeId) {
-                alert("Veuillez sélectionner une étape !");
-                return;
-            }
-    
-            // الانتقال إلى صفحة المهام مع تمرير ID المرحلة
-            window.location.href = `selectionner_tache.html?etapeId=${etapeId}`;
 
-        });
-    });
-    </script>
-    
+    <div id="tachesContainer"></div>
+  </div>
+
+  <!-- Ajoutez ce script à la fin de votre body -->
+<script>
+
+       
+
+</script>
 </body>
 </html>
-

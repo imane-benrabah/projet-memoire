@@ -135,6 +135,20 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
+    .form-container .btn-purple {
+                background-color: #8A2BE2;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                font-weight: bold;
+                border-radius: 8px;
+                width: 100%;
+                transition: background-color 0.3s ease;
+            }
+
+            .form-container .btn-purple:hover {
+                background-color: #6a1bc7;
+            }
   </style>
 </head>
 <body>
@@ -158,55 +172,38 @@
 
   <div class="form-container">
     <h1>Formulaire</h1>
-<<<<<<< HEAD
-<!-- ... نفس المقدمة السابقة ... -->
-=======
-  <div class="form-group">
-  <label>
-    <input type="checkbox" id="simulate" />
-    Simuler l'envoi (ne pas télécharger le fichier)
-  </label>
-</div>
 
 
->>>>>>> fix-commit
 
 <!-- Sélecteur d'étapes -->
 <div class="form-group">
-  <label for="select-etape">Étape</label>
+  <label for="select-etape">Étapes :</label>
   <select id="select-etape" class="form-select" required>
     <option value="">Choisir une étape...</option>
   </select>
 </div>
 
-<div class="form-group">
-  <label for="description">Description</label>
-  <textarea id="description" name="description" required></textarea>
-</div>
+ <div class="mb-3">
+ <label for="titre" class="form-label">Titre du rapport :</label>
+    <input type="text" class="form-control" id="titre" name="titre" required>
+   </div>
 
-<div class="form-group">
-  <label for="rapport">Importer le rapport</label>
-  <div class="custom-file-upload">
-    <button type="button" class="upload-btn" onclick="document.getElementById('rapport').click()">Choisir un fichier</button>
-    <span id="file-name">Aucun fichier choisi</span>
-    <input type="file" id="rapport" name="rapport" accept=".pdf,.doc,.docx" required hidden />
-  </div>
-</div>
+ <!-- Description -->
+   <div class="mb-3">
+      <label for="description" class="form-label">Description :</label>
+    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+    </div>
 
-<div class="form-group">
-  <label for="dateDepot">Date du dépôt</label>
-  <input type="date" id="dateDepot" name="dateDepot" required />
-</div>
+    <!-- Lien Google Drive -->
+   <div class="mb-3">
+   <label for="lien" class="form-label">Lien Google Drive :</label>
+   <input type="url" class="form-control" id="lien" name="lien" required placeholder="https://drive.google.com/...">
+     </div>
+ <button type="submit" class="btn-purple">Déposer le rapport</button>
 
-<div class="form-group">
-  <label for="dateEtape">Date de l'étape</label>
-  <input type="date" id="dateEtape" name="dateEtape" required />
-</div>
 
-<div class="button-group">
-  <button type="button" class="cancel-btn" id="cancelBtn">Annuler</button>
-  <button type="button" class="submit-btn" id="submit-btn">Envoyer</button>
-</div>
+
+
 
 
 <script>

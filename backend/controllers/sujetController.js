@@ -139,35 +139,182 @@ exports.getSujetsByResponsable = (req, res) => {
     );
 };
 
-
-
-
-
 exports.getAllSujets = (req, res) => {
-    const sql = "SELECT idS, titre FROM Sujet";
-    mainDb.query(sql, (err, results) => {
-        if (err) {
-            console.error("Erreur lors de la récupération des sujets :", err);
-            return res.status(500).json({ error: "Erreur serveur" });
+    mainDb.query(
+        "SELECT idS, titre FROM Sujet",
+        (err, results) => {
+            if (err) {
+                console.error("Erreur récupération des sujets :", err);
+                return res.status(500).json({ error: "Erreur serveur" });
+            }
+            res.status(200).json(results);
         }
-        res.json(results);
-    });
+    );
+};
+exports.getSujetById = (req, res) => {
+    const idS = req.params.id;
+
+    if (isNaN(idS)) {
+        return res.status(400).json({ error: "ID sujet invalide" });
+    }
+
+    mainDb.query(
+        'SELECT * FROM Sujet WHERE idS = ?',
+        [idS],
+        (err, results) => {
+            if (err) {
+                console.error("Erreur récupération sujet :", err);
+                return res.status(500).json({ error: "Erreur serveur" });
+            }
+            if (results.length === 0) {
+                return res.status(404).json({ error: "Sujet non trouvé" });
+            }
+
+            // Récupération des références
+            mainDb.query(
+                'SELECT reference FROM RefrencesSujet WHERE idS = ?',
+                [idS],
+                (err, refResults) => {
+                    let references = [];
+                    if (!err && refResults) {
+                        references = refResults.map(r => r.reference);
+                    } else if (err) {
+                        console.error("Erreur récupération références:", err);
+                    }
+
+                    // Récupération des prérequis
+                    mainDb.query(
+                        'SELECT prerequis FROM PrerequisSujet WHERE idS = ?',
+                        [idS],
+                        (err, preResults) => {
+                            let prerequis = [];
+                            if (!err && preResults) {
+                                prerequis = preResults.map(p => p.prerequis);
+                            } else if (err) {
+                                console.error("Erreur récupération prérequis:", err);
+                            }
+
+                            const response = {
+                                ...results[0],
+                                references: references,
+                                prerequis: prerequis
+                            };
+
+                            res.status(200).json(response);
+                        }
+                    );
+                }
+            );
+        }
+    );
 };
 
+exports.getSujetByEtudiantId = (req, res) => {
+    const idEtudiant = req.params.id;
+    
+    if (isNaN(idEtudiant)) {
+        return res.status(400).json({ error: "ID étudiant invalide" });
+    }
 
-
-
-
-
-
-    exports.getSujetById = async (req, res) => {
-        try {
-            const sujet = await Sujet.findById(req.params.id);
-            if (!sujet) {
-                return res.status(404).json({ message: 'Sujet non trouvé' });
+    mainDb.query(
+        `SELECT s.* 
+         FROM Sujet s
+         JOIN Groupe g ON s.idS = g.idS
+         JOIN Binome b ON g.idG = b.idG
+         JOIN Etudiant e ON b.idB = e.idB
+         WHERE e.idU = ?`,
+        [idEtudiant],
+        (err, sujetResults) => {
+            if (err) {
+                console.error("Erreur récupération sujet:", err);
+                return res.status(500).json({ error: "Erreur serveur" });
             }
-            res.json(sujet);
-        } catch (error) {
-            res.status(500).json({ message: 'Erreur serveur', error });
+            
+            if (sujetResults.length === 0) {
+                return res.status(404).json({ error: "Aucun sujet trouvé pour cet étudiant" });
+            }
+
+            const sujet = sujetResults[0];
+            const idS = sujet.idS;
+
+            mainDb.query(
+                'SELECT reference FROM RefrencesSujet WHERE idS = ?',
+                [idS],
+                (err, refResults) => {
+                    let references = [];
+                    if (!err && refResults) {
+                        references = refResults.map(r => r.reference);
+                    } else if (err) {
+                        console.error("Erreur récupération références:", err);
+                    }
+
+                    mainDb.query(
+                        'SELECT prerequis FROM PrerequisSujet WHERE idS = ?',
+                        [idS],
+                        (err, preResults) => {
+                            let prerequis = [];
+                            if (!err && preResults) {
+                                prerequis = preResults.map(p => p.prerequis);
+                            } else if (err) {
+                                console.error("Erreur récupération prérequis:", err);
+                            }
+
+                            const response = {
+                                ...sujet,
+                                references: references,
+                                prerequis: prerequis
+                            };
+
+                            res.status(200).json(response);
+                        }
+                    );
+                }
+            );
         }
-    };
+    );
+};
+
+// Nouvelles fonctions pour récupérer les références et prérequis par ID de sujet
+exports.getReferencesBySujetId = (req, res) => {
+    const idS = req.params.id;
+    
+    if (isNaN(idS)) {
+        return res.status(400).json({ error: "ID sujet invalide" });
+    }
+    
+    mainDb.query(
+        'SELECT reference FROM RefrencesSujet WHERE idS = ?',
+        [idS],
+        (err, results) => {
+            if (err) {
+                console.error("Erreur récupération références:", err);
+                return res.status(500).json({ error: "Erreur serveur" });
+            }
+            
+            const references = results.map(r => r.reference);
+            res.status(200).json(references);
+        }
+    );
+};
+
+exports.getPrerequisBySujetId = (req, res) => {
+    const idS = req.params.id;
+    
+    if (isNaN(idS)) {
+        return res.status(400).json({ error: "ID sujet invalide" });
+    }
+    
+    mainDb.query(
+        'SELECT prerequis FROM PrerequisSujet WHERE idS = ?',
+        [idS],
+        (err, results) => {
+            if (err) {
+                console.error("Erreur récupération prérequis:", err);
+                return res.status(500).json({ error: "Erreur serveur" });
+            }
+            
+            const prerequis = results.map(p => p.prerequis);
+            res.status(200).json(prerequis);
+        }
+    );
+};
